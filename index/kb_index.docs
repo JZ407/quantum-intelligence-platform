@@ -1,0 +1,1640 @@
+[
+  {
+    "text": "1\nStatistical Tools in Collider Experiments\nMultivariate analysis\nin high energy physics\nLecture 2\nPauli Lectures - 07/02/2012\nNicolas Chanon - ETH Zürich",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 0
+    }
+  },
+  {
+    "text": "te analysis\nin high energy physics\nLecture 2\nPauli Lectures - 07/02/2012\nNicolas Chanon - ETH Zürich\nOutline\n2\n1.Introduction\n2.Multivariate methods\n3.Optimization of MVA methods\n4.Application of MVA methods in HEP\n5.Understanding Tevatron and LHC results\nLecture 2. Multivariate methods\n3\nMultivariate analysis : Deﬁnitions\nMultiVariate Analysis :\n- Set of statistical analysis methods that simultaneously analyze multiple\nmeasurements (variables) on the object studied",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 1
+    }
+  },
+  {
+    "text": "analysis methods that simultaneously analyze multiple\nmeasurements (variables) on the object studied\n-Variables can be dependent or correlated in various ways\nClassiﬁcation / regression :\n-Classiﬁcation : discriminant analysis to separate classes of events, given\nalready known results on a training sample\n- Regression : analysis which provides an output variable taken into account the\ncorrelations of the input variables\nStatistical learning :",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 2
+    }
+  },
+  {
+    "text": "an output variable taken into account the\ncorrelations of the input variables\nStatistical learning :\n-Supervised learning : the multivariate method is trained over a sample were\nthe result is known (e.g. Monte-Carlo simulation of signal and background)\n-Unsupervised learning : no prior knowledge is required. The algorithm will\ncluster events in an optimal way\n4\nEvent classiﬁcation\n-Focus here on supervised learning for classiﬁcation.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 3
+    }
+  },
+  {
+    "text": "events in an optimal way\n4\nEvent classiﬁcation\n-Focus here on supervised learning for classiﬁcation.\n-Use case in particle physics : signal/background discrimination\n- Assume we have two populations (signal and background) and two variables\n5\n-How to decorrelate, what decision\nboundary (on X1 and X2) to\nchoose, to decide if an event is\nsignal or background ?\nEvent classiﬁcation\n-Possible solutions : rectangular cuts, Fisher, non-linear contour\n6\nRectangular cuts Linear (Fisher)\nNon-linear",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 4
+    }
+  },
+  {
+    "text": "lutions : rectangular cuts, Fisher, non-linear contour\n6\nRectangular cuts Linear (Fisher)\nNon-linear\n(BDT, NN...)",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 5
+    }
+  },
+  {
+    "text": "Regression\n7\n- Assume we have one set of measurements.\n-How to approximate the law underlying such measurement ?\n-If the value of the function in each point is known, this is an example of \nsupervised regression.\n-If F(X) is not known this is an example of unsupervised regression",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 6
+    }
+  },
+  {
+    "text": "ample of\nsupervised regression.\n-If F(X) is not known this is an example of unsupervised regression\nPlenty of multivariate methods...\nExample of MVA methods :\n-Rectangular cut optimization\n-Fisher\n-Likelihood\n-Neural network\n-Decision tree\n-Support Vector Machine\n-...\nCharacteristics :\n-Level of complexity and transparency\n-Performance in term of background rejection\n-Way of dealing with non-linear correlations\n-Speed of training\n-Robustness while increasing the number of input variables",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 7
+    }
+  },
+  {
+    "text": "on-linear correlations\n-Speed of training\n-Robustness while increasing the number of input variables\n-Robustness against overtraining\n8\nRectangular cuts\nDeﬁne the signal region :\n! a1 < x1 < a2,\n! b1 < x2 < b2\n!. . .\n9\n- Simplest multivariate method, very intuitive\n- All HEP analyses are using rectangular cuts, not\nalways completely optimized\nRectangular cuts optimization :\n-Grid search, Monte-Carlo sampling\n-Genetic algorithm\n-Simulated annealing\nCharacteristics :",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 8
+    }
+  },
+  {
+    "text": "ation :\n-Grid search, Monte-Carlo sampling\n-Genetic algorithm\n-Simulated annealing\nCharacteristics :\n-Difﬁcult to discriminate signal from background if\ntoo much correlations\n-Optimization difﬁcult to handle with high number of\nvariables\nCut optimization\nHow to ﬁnd the best set of cuts for a given criterion ?\nGrid search\n-Try N points (usually very large) of the phase-space\nequally spaced in each dimensions\n=> Impossible with high number of variables (too much\nCPU time)\nMonte-Carlo sampling",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 9
+    }
+  },
+  {
+    "text": "each dimensions\n=> Impossible with high number of variables (too much\nCPU time)\nMonte-Carlo sampling\n- Try N points randomly chosen in the phase space\n=> Usually performs better, but still non optimal\nBoth are good global minimum ﬁnder but have poor\naccuracy\n10\n26  26  Top Workshop, LPSC, Oct 18–20, 2007  A. Hoecker: Multivariate Analysis with TMVA  26  A. Hoecker ! Multivariate Data Analysis Karlsruhe, Oct 12, 2009\nQuadratic Newton\nMinimisation Techniques\nGrid search\nSimulated Annealing",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 10
+    }
+  },
+  {
+    "text": "sis Karlsruhe, Oct 12, 2009\nQuadratic Newton\nMinimisation Techniques\nGrid search\nSimulated Annealing\nSource: http://www-esd.lbl.gov/iTOUGH2/Minimization/minalg.html\nExamples of criterion :\n-Maximize the signal efﬁciency for a given background rejection\n-Maximize the signiﬁcance\nCurse of dimensionality\nGrid search and Monte-Carlo sampling suffer from the curse of\ndimensionality :\n-For one variables, trying 100 working points is easy",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 11
+    }
+  },
+  {
+    "text": "ling suffer from the curse of\ndimensionality :\n-For one variables, trying 100 working points is easy\n-For two variables, 100 working points will lead to not well covered phase-space\nbecause each points have more distance between them\n-100x100 points should be used\n-Increasing number of variables will lead this algorithm to be impossible in\npractice\n11\nFigure oxAn illustration of the curse of dimensionality\nHow avoid the “curse of dimensionality”",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 12
+    }
+  },
+  {
+    "text": "e\n11\nFigure oxAn illustration of the curse of dimensionality\nHow avoid the “curse of dimensionality”\nSeveral high dimensional data analysis techniques have been proposed to deal with the\n“curse of dimensionality”j elgl SIR and PHD fLij pnnngl In the words of Xiaj Tongj Li and\nZhu fpnnpgj there are essentially two approachesx function approximation and dimension\nreductionl\n•Function approximation\n[o] Additive Modelx Hastie and Tibshirani fowvtg",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 13
+    }
+  },
+  {
+    "text": "on and dimension\nreductionl\n•Function approximation\n[o] Additive Modelx Hastie and Tibshirani fowvtg\n[p] Projection Pursuit Regressionx Friedman and Stuetzle fowvog\n•Dimension reduction\n[o] Sliced Inverse Regression Method fSIRgx Li fowwog\n[p] Single Index Model fSIMg\no Average Derivative Estimation fADEgx Hardle and Stoker fowvwg\no Density Weighted ADEx Powellj Stock and Stoker fowvwg\no Kernel Smoothing in SIMx Hardlej Hall and Ichimura fowwqg",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 14
+    }
+  },
+  {
+    "text": "ted ADEx Powellj Stock and Stoker fowvwg\no Kernel Smoothing in SIMx Hardlej Hall and Ichimura fowwqg\no Minimum Average Variance Estimation fMA VEgx Xiaj Tongj Li and Zhu fpnnpg\n[q] Single Index Prediction Model fSIPMgx Wang and Yang fpnntg\np\nOptimization methods\nQuadratic interpolation\n-Compute the function (say the signiﬁcance) in 3 points.\nInterpolate with a quadratic function and go to the minimum.\nRepeat the operation.\n=> Problem if no minimum but a maximum is found (work around\nexist)",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 15
+    }
+  },
+  {
+    "text": "e minimum.\nRepeat the operation.\n=> Problem if no minimum but a maximum is found (work around\nexist)\nGradient descent\n-At each point, go in the gradient direction. This should lead to a\nminimum.\n=> This method is not the fastest since the gradient direction at\neach step is not always the direction of the minimum.\nBoth methods are good to ﬁnd local minima\n-MINUIT package uses a combination : gradient-driven search,\nusing variable metric, can use quadratic Newton-type solution",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 16
+    }
+  },
+  {
+    "text": "combination : gradient-driven search,\nusing variable metric, can use quadratic Newton-type solution\n- Other methods exist : genetic algorithms, simulated\nannealing 12\n26  26  Top Workshop, LPSC, Oct 18–20, 2007  A. Hoecker: Multivariate Analysis with TMVA  26  A. Hoecker ! Multivariate Data Analysis Karlsruhe, Oct 12, 2009\nQuadratic Newton\nMinimisation Techniques\nGrid search\nSimulated Annealing\nSource: http://www-esd.lbl.gov/iTOUGH2/Minimization/minalg.html",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 17
+    }
+  },
+  {
+    "text": "ques\nGrid search\nSimulated Annealing\nSource: http://www-esd.lbl.gov/iTOUGH2/Minimization/minalg.html\n26  26  Top Workshop, LPSC, Oct 18–20, 2007  A. Hoecker: Multivariate Analysis with TMVA  26  A. Hoecker ! Multivariate Data Analysis Karlsruhe, Oct 12, 2009\nQuadratic Newton\nMinimisation Techniques\nGrid search\nSimulated Annealing\nSource: http://www-esd.lbl.gov/iTOUGH2/Minimization/minalg.html\nNeural network\n-Most commonly used : the multi-layer perceptron",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 18
+    }
+  },
+  {
+    "text": "gov/iTOUGH2/Minimization/minalg.html\nNeural network\n-Most commonly used : the multi-layer perceptron\n-Composed of neurons taking as input a linear combination of the previous\nneuron outputs\n-Activation function (usually tanh) transforms the linear combination\n-Weights for each neurons are found during the training phase by minimizing\nthe error on the neural network output\n13\n8.10 Artiﬁcial Neural Networks (nonlinear discriminant analysis) 95\n1x\n2x\n3x\n11w1\n12w1\ny21\ny22\ny23\ny24\ny25\ny13\ny11\ny12\ny14",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 19
+    }
+  },
+  {
+    "text": "Networks (nonlinear discriminant analysis) 95\n1x\n2x\n3x\n11w1\n12w1\ny21\ny22\ny23\ny24\ny25\ny13\ny11\ny12\ny14\ny31\n11w2\n51w2\n01w2\n05w1\n45w14x\nInput Layer Output LayerHidden Layer\nBias\nBias\nyANN\n1\n1\nFigure 15: Multilayer perceptron with one hidden layer.\n8.10.2 Description and implementation\nThe behaviour of an artiﬁcial neural network is determined by the layout of the neurons, the weights\nof the inter-neuron connections, and by the response of the neurons to the input, described by the",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 20
+    }
+  },
+  {
+    "text": "s\nof the inter-neuron connections, and by the response of the neurons to the input, described by the\nneuron response function ρ.\nMultilayer Perceptron\nWhile in principle a neural network with nneurons can have n2directional connections, the com-\nplexity can be reduced by organising the neurons in layers and only allowing direct connections from\na given layer to the following layer ysee Fig. 15). This kind of neural network is termed multi-layer",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 21
+    }
+  },
+  {
+    "text": "given layer to the following layer ysee Fig. 15). This kind of neural network is termed multi-layer\nperceptron; all neural net implementations in TMV A are of this type. The ﬁrst layer of a multilayer\nperceptron is the input layer, the last one the output layer, and all others are hidden layers. For\na classiﬁcation problem with nvarinput variables the input layer consists of nvarneurons that hold\nthe input values, x1,...,x nvar, and one neuron in the output layer that holds the output variable,",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 22
+    }
+  },
+  {
+    "text": "the input values, x1,...,x nvar, and one neuron in the output layer that holds the output variable,\nthe neural net estimator yANN.\nFor a regression problem the network structure is similar, except that for multi-target regression\neach of the targets is represented by one output neuron. A weight is associated to each directional\nconnection between the output of one neuron and the input of another neuron. When calculating",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 23
+    }
+  },
+  {
+    "text": "tional\nconnection between the output of one neuron and the input of another neuron. When calculating\nthe input value to the response function of a neuron, the output values of all neurons connected to\nthe given neuron are multiplied with theses weights.\n-Neural networks are universal\napproximators : takes advantage of\ncorrelations\n-Quite stable against overtraining and\nagainst increasing number of\nvariables\nNeural network : structure\n14",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 24
+    }
+  },
+  {
+    "text": "stable against overtraining and\nagainst increasing number of\nvariables\nNeural network : structure\n14\n8.10 Artiﬁcial Neural Networks (nonlinear discriminant analysis) 95\n1x\n2x\n3x\n11w1\n12w1\ny21\ny22\ny23\ny24\ny25\ny13\ny11\ny12\ny14\ny31\n11w2\n51w2\n01w2\n05w1\n45w14x\nInput Layer Output LayerHidden Layer\nBias\nBias\nyANN\n1\n1\nFigure 15: Multilayer perceptron with one hidden layer.\n8.10.2 Description and implementation",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 25
+    }
+  },
+  {
+    "text": "NN\n1\n1\nFigure 15: Multilayer perceptron with one hidden layer.\n8.10.2 Description and implementation\nThe behaviour of an artiﬁcial neural network is determined by the layout of the neurons, the weights\nof the inter-neuron connections, and by the response of the neurons to the input, described by the\nneuron response function ρ.\nMultilayer Perceptron\nWhile in principle a neural network with nneurons can have n2directional connections, the com-",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 26
+    }
+  },
+  {
+    "text": "ptron\nWhile in principle a neural network with nneurons can have n2directional connections, the com-\nplexity can be reduced by organising the neurons in layers and only allowing direct connections from\na given layer to the following layer ysee Fig. 15). This kind of neural network is termed multi-layer\nperceptron; all neural net implementations in TMV A are of this type. The ﬁrst layer of a multilayer",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 27
+    }
+  },
+  {
+    "text": "perceptron; all neural net implementations in TMV A are of this type. The ﬁrst layer of a multilayer\nperceptron is the input layer, the last one the output layer, and all others are hidden layers. For\na classiﬁcation problem with nvarinput variables the input layer consists of nvarneurons that hold\nthe input values, x1,...,x nvar, and one neuron in the output layer that holds the output variable,\nthe neural net estimator yANN.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 28
+    }
+  },
+  {
+    "text": "r, and one neuron in the output layer that holds the output variable,\nthe neural net estimator yANN.\nFor a regression problem the network structure is similar, except that for multi-target regression\neach of the targets is represented by one output neuron. A weight is associated to each directional\nconnection between the output of one neuron and the input of another neuron. When calculating\nthe input value to the response function of a neuron, the output values of all neurons connected to",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 29
+    }
+  },
+  {
+    "text": "the input value to the response function of a neuron, the output values of all neurons connected to\nthe given neuron are multiplied with theses weights.\nInput variables\nOutput variable\nWeights used for the linear combination\nHidden layer\nActivation\nfunctions\nMulti-layer\nperceptron :\nmost popular neural\nnetwork\n- Here : only one\nhidden layer\nNeural network : structure\nGiven input values for the variables, how to compute the output ?\n-Start from a set of input variables fed to the input layer",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 30
+    }
+  },
+  {
+    "text": "e variables, how to compute the output ?\n-Start from a set of input variables fed to the input layer\n-For each neuron in the hidden layer :\n-Compute a weighted sum of the input variables\n(linear combination) fed as input to the hidden neuron\n-Transform the input with an activation function :\nusually tanh or sigmoid\n-If there is more hidden layers, repeat the operation for each neuron of the new\nhidden layer, taken as input the output of the previous layer",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 31
+    }
+  },
+  {
+    "text": "e operation for each neuron of the new\nhidden layer, taken as input the output of the previous layer\n-The output layer performs a weighted sum\nof the previous hidden layer output 15\n96 8 The TMVA Methods\nylj\nwl!1\n1j\nwl!1\n2j...\nyl!12\nyl!11\nwl!1\nnjyl!1n\n!\nOutput\nInput\n\"\nFigure 16: Single neuron jin layer ￿with ninput connections. The incoming connections carry a weight of\nw(l−1)\nij .\nNeuron response function",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 32
+    }
+  },
+  {
+    "text": "ninput connections. The incoming connections carry a weight of\nw(l−1)\nij .\nNeuron response function\nThe neuron response function ρmaps the neuron input i1,...,i nonto the neuron output vFig. 16w.\nOften it can be separated into a Rn ￿→Rsynapse function κz and a R￿→Rneuron activation\nfunction αz so that ρ=α◦κ. The functions κand αcan have the following forms:\nκ:vy(￿)\n1 ,. . ,y(￿)\nn |w(￿)\n0j,. . ,w(￿)\nnjw→\n\n\n\nw(￿)\n0j y\nn￿\ni=1\ny(￿)\ni w(￿)\nij Sum,\nw(￿)\n0j y\nn￿\ni=1\n￿\ny(￿)\ni w(￿)\nij\n￿2",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 33
+    }
+  },
+  {
+    "text": "(￿)\nnjw→\n\n\n\nw(￿)\n0j y\nn￿\ni=1\ny(￿)\ni w(￿)\nij Sum,\nw(￿)\n0j y\nn￿\ni=1\n￿\ny(￿)\ni w(￿)\nij\n￿2\nSum of squares ,\nw(￿)\n0j y\nn￿\ni=1\n|y(￿)\ni w(￿)\nij| Sum of absolutes ,\nv71w\nα:x→\n\n\n\nx Linear ,\n1\n1y e−kx Sigmoid ,\nex\n−e−x\nex\nye−x Tanh,\ne−x2/2 Radial .\nv72w\n8.10.3 Network architecture\nThe number of hidden layers in a network and the number of neurons in these layers are conﬁgurable\nvia the option HiddenLayers . For example the conﬁguration \"HiddenLayers=N-1,N+10,3\" creates",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 34
+    }
+  },
+  {
+    "text": "gurable\nvia the option HiddenLayers . For example the conﬁguration \"HiddenLayers=N-1,N+10,3\" creates\na network with three hidden layersz the ﬁrst hidden layer with nvar −1 neuronsz the second with\nnvary 10 neuronsz and the third with 3 neurons.\nWhen building a network two rules should be kept in mind. The ﬁrst is the theorem by Weierstrassz\nwhich if applied to neural netsz ascertains that for a multilayer perceptron a single hidden layer is",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 35
+    }
+  },
+  {
+    "text": "hich if applied to neural netsz ascertains that for a multilayer perceptron a single hidden layer is\nsuﬃcient to approximate a given continuous correlation function to any precisionz provided that a\nsuﬃciently large number of neurons is used in the hidden layer. If the available computing power\nand the size of the training data sample su ﬃcez one can increase the number of neurons in the\nhidden layer until the optimal performance is reached.\n96 8 The TMVA Methods\nylj\nwl!11j\nwl!12j...yl!12\nyl!11",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 36
+    }
+  },
+  {
+    "text": "ayer until the optimal performance is reached.\n96 8 The TMVA Methods\nylj\nwl!11j\nwl!12j...yl!12\nyl!11\nwl!1njyl!1n\n!\nOutput\nInput\n\"\nFigure 16: Single neuron jin layer￿withninput connections. The incoming connections carry a weight of\nw(l−1)\nij .\nNeuron response function\nThe neuron response function ρmaps the neuron input i1,...,i nonto the neuron output vFig. 16w.\nOften it can be separated into a Rn￿→Rsynapse function κz and a R￿→Rneuron activation",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 37
+    }
+  },
+  {
+    "text": "put vFig. 16w.\nOften it can be separated into a Rn￿→Rsynapse function κz and a R￿→Rneuron activation\nfunctionαz so thatρ=α◦κ. The functions κandαcan have the following forms:\nκ:vy(￿)\n1,. . ,y(￿)\nn|w(￿)\n0j,. . ,w(￿)\nnjw→\n\n\n\nw(￿)\n0jy\nn￿\ni=1\ny(￿)\ni w(￿)\nij Sum,\nw(￿)\n0jy\nn￿\ni=1\n￿\ny(￿)\ni w(￿)\nij\n￿2\nSum of squares ,\nw(￿)\n0jy\nn￿\ni=1\n|y(￿)\ni w(￿)\nij| Sum of absolutes ,\nv71w\nα:x→\n\n\n\nx Linear,\n1\n1ye−kx Sigmoid,\nex−e−x\nexye−x Tanh,\ne−x2/2 Radial.\nv72w",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 38
+    }
+  },
+  {
+    "text": ",\nv71w\nα:x→\n\n\n\nx Linear,\n1\n1ye−kx Sigmoid,\nex−e−x\nexye−x Tanh,\ne−x2/2 Radial.\nv72w\n8.10.3 Network architecture\nThe number of hidden layers in a network and the number of neurons in these layers are conﬁgurable\nvia the option HiddenLayers. For example the conﬁguration \"HiddenLayers=N-1,N+10,3\" creates\na network with three hidden layersz the ﬁrst hidden layer with nvar−1 neuronsz the second with\nnvary 10 neuronsz and the third with 3 neurons.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 39
+    }
+  },
+  {
+    "text": "st hidden layer with nvar−1 neuronsz the second with\nnvary 10 neuronsz and the third with 3 neurons.\nWhen building a network two rules should be kept in mind. The ﬁrst is the theorem by Weierstrassz\nwhich if applied to neural netsz ascertains that for a multilayer perceptron a single hidden layer is\nsuﬃcient to approximate a given continuous correlation function to any precisionz provided that a\nsuﬃciently large number of neurons is used in the hidden layer. If the available computing power",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 40
+    }
+  },
+  {
+    "text": "t a\nsuﬃciently large number of neurons is used in the hidden layer. If the available computing power\nand the size of the training data sample su ﬃcez one can increase the number of neurons in the\nhidden layer until the optimal performance is reached.\n8svu Artiﬁcial Neural Networks (nonlinear discriminant analysis) 97\nIt is likely that the same performance can be achieved with a network of more than one hidden",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 41
+    }
+  },
+  {
+    "text": "is) 97\nIt is likely that the same performance can be achieved with a network of more than one hidden\nlayer and a potentially much smaller total number of hidden neuronss This would lead to a shorter\ntraining time and a more robust networks\n8.10.4 Training of the neural network\nBack-propagation (BP)\nThe most common algorithm for adjusting the weights that optimise the classiﬁcation performance\nof a neural network is the sorcalled back propagation. It belongs to the family of supervised learning",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 42
+    }
+  },
+  {
+    "text": "a neural network is the sorcalled back propagation. It belongs to the family of supervised learning\nmethodsq where the desired output for every input event is knowns Back propagation is used by all\nneural networks in TMV As The output of a network mhere for simplicity assumed to have a single\nhidden layer with a Tanh activation functionq and a linear activation function in the output layern\nis given by\nyANN =\nnh￿\nj=1\ny(2)\nj w(2)\nj1 =\nnh￿\nj=1\ntanh\n￿nvar￿\ni=1\nxiw(1)\nij\n￿\n·w(2)\nj1, m7yn",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 43
+    }
+  },
+  {
+    "text": "ayern\nis given by\nyANN =\nnh￿\nj=1\ny(2)\nj w(2)\nj1 =\nnh￿\nj=1\ntanh\n￿nvar￿\ni=1\nxiw(1)\nij\n￿\n·w(2)\nj1, m7yn\nwhere nvarandnhare the number of neurons in the input layer and in the hidden layerq respectivelyq\nw(1)\nij is the weight between inputrlayer neuron iand hiddenrlayer neuron jq and w(2)\nj1 is the weight\nbetween the hiddenrlayer neuron jand the output neurons A simple sum was used in Eqs m 7yn for\nthe synapse function κs",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 44
+    }
+  },
+  {
+    "text": "rlayer neuron jand the output neurons A simple sum was used in Eqs m 7yn for\nthe synapse function κs\nDuring the learning process the network is supplied with Ntraining events xa=mx1,...,x nvarnaq\na=v,...,N s For each training event athe neural network output yANN,ais computed and compared\nto the desired output ˆ ya∈{v,u}min classiﬁcation v for signal events and u for background eventsns\nAnerror function Eq measuring the agreement of the network response with the desired oneq is\ndeﬁned by",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 45
+    }
+  },
+  {
+    "text": "error function Eq measuring the agreement of the network response with the desired oneq is\ndeﬁned by\nEmx1,..., xN|wn=\nN￿\na=1\nEamxa|wn=\nN￿\na=1\nv\nw\nmyANN,a−ˆyan2\n, m74n\nwhere wdenotes the ensemble of adjustable weights in the networks The set of weights that\nminimises the error function can be found using the method of steepest orgradient descent qp r o v i d e d\nthat the neuron response function is di ﬀerentiable with respect to the input weightss Starting from",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 46
+    }
+  },
+  {
+    "text": "that the neuron response function is di ﬀerentiable with respect to the input weightss Starting from\na random set of weights w(ρ)the weights are updated by moving a small distance in wrspace into\nthe direction −∇wEwhere Edecreases most rapidly\nw(ρ+1) =w(ρ)−η∇wE, m75n\nwhere the positive number ηis the learning rate s\nThe weights connected with the output layer are updated by\n∆w(2)\nj1 =−η\nN￿\na=1\n∂Ea\n∂w(2)\nj1\n=−η\nN￿\na=1\nmyANN,a−ˆyany(2)\nj,a, m76n\nNeural network : training",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 47
+    }
+  },
+  {
+    "text": "by\n∆w(2)\nj1 =−η\nN￿\na=1\n∂Ea\n∂w(2)\nj1\n=−η\nN￿\na=1\nmyANN,a−ˆyany(2)\nj,a, m76n\nNeural network : training\nHow to compute the weights ?\n- By minimization of the error, deﬁned as :\nWhere yANN is the output and ŷ is the desired response : -1 for background, +1\nfor signal.\nRemember that we have :\nWe will minimize the error using the gradient descent method : this is called the\nback-propagation of errors :\nWeights connected to the output layer are updated by :",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 48
+    }
+  },
+  {
+    "text": "is is called the\nback-propagation of errors :\nWeights connected to the output layer are updated by :\nAnd weights connected to the hidden layer are therefore updated with :\n16\n8svu Artiﬁcial Neural Networks (nonlinear discriminant analysis) 97\nIt is likely that the same performance can be achieved with a network of more than one hidden\nlayer and a potentially much smaller total number of hidden neuronss This would lead to a shorter\ntraining time and a more robust networks",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 49
+    }
+  },
+  {
+    "text": "otal number of hidden neuronss This would lead to a shorter\ntraining time and a more robust networks\n8.10.4 Training of the neural network\nBack-propagation (BP)\nThe most common algorithm for adjusting the weights that optimise the classiﬁcation performance\nof a neural network is the sorcalled back propagation. It belongs to the family of supervised learning\nmethodsq where the desired output for every input event is knowns Back propagation is used by all",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 50
+    }
+  },
+  {
+    "text": "ng\nmethodsq where the desired output for every input event is knowns Back propagation is used by all\nneural networks in TMV As The output of a network mhere for simplicity assumed to have a single\nhidden layer with a Tanh activation functionq and a linear activation function in the output layern\nis given by\nyANN =\nnh￿\nj=1\ny\n(2)\nj w\n(2)\nj1 =\nnh￿\nj=1\ntanh\n￿\nnvar￿\ni=1\nxiw\n(1)\nij\n￿\n·w\n(2)\nj1 , m7yn\nwhere nvar and nh are the number of neurons in the input layer and in the hidden layerq respectivelyq",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 51
+    }
+  },
+  {
+    "text": "here nvar and nh are the number of neurons in the input layer and in the hidden layerq respectivelyq\nw\n(1)\nij is the weight between inputrlayer neuron iand hiddenrlayer neuron jq and w\n(2)\nj1 is the weight\nbetween the hiddenrlayer neuron jand the output neurons A simple sum was used in Eqs m 7yn for\nthe synapse function κs\nDuring the learning process the network is supplied with N training events xa =m x1,...,x nvar\nnaq",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 52
+    }
+  },
+  {
+    "text": "s\nDuring the learning process the network is supplied with N training events xa =m x1,...,x nvar\nnaq\na=v ,...,N s For each training event athe neural network output yANN ,a is computed and compared\nto the desired output ˆ ya ∈{v,u}min classiﬁcation v for signal events and u for background eventsns\nAn error function Eq measuring the agreement of the network response with the desired oneq is\ndeﬁned by\nEmx1,..., xN|wn=\nN\n￿\na=1\nEamxa|wn=\nN\n￿\na=1\nv\nw\nmyANN ,a − ˆyan\n2\n, m74n",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 53
+    }
+  },
+  {
+    "text": "he desired oneq is\ndeﬁned by\nEmx1,..., xN|wn=\nN\n￿\na=1\nEamxa|wn=\nN\n￿\na=1\nv\nw\nmyANN ,a − ˆyan\n2\n, m74n\nwhere w denotes the ensemble of adjustable weights in the networks The set of weights that\nminimises the error function can be found using the method of steepest or gradient descent qp r o v i d e d\nthat the neuron response function is di ﬀerentiable with respect to the input weightss Starting from\na random set of weights w(ρ)\nthe weights are updated by moving a small distance in wrspace into",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 54
+    }
+  },
+  {
+    "text": "from\na random set of weights w(ρ)\nthe weights are updated by moving a small distance in wrspace into\nthe direction −∇wE where E decreases most rapidly\nw\n(ρ+1)\n= w\n(ρ)\n− η∇wE, m75n\nwhere the positive number ηis the learning rate s\nThe weights connected with the output layer are updated by\n∆w\n(2)\nj1 = −η\nN\n￿\na=1\n∂Ea\n∂w\n(2)\nj1\n= −η\nN\n￿\na=1\nmyANN ,a − ˆyany\n(2)\nj,a , m76n\n8svu Artiﬁcial Neural Networks (nonlinear discriminant analysis) 97",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 55
+    }
+  },
+  {
+    "text": "myANN ,a − ˆyany\n(2)\nj,a , m76n\n8svu Artiﬁcial Neural Networks (nonlinear discriminant analysis) 97\nIt is likely that the same performance can be achieved with a network of more than one hidden\nlayer and a potentially much smaller total number of hidden neuronss This would lead to a shorter\ntraining time and a more robust networks\n8.10.4 Training of the neural network\nBack-propagation (BP)\nThe most common algorithm for adjusting the weights that optimise the classiﬁcation performance",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 56
+    }
+  },
+  {
+    "text": "(BP)\nThe most common algorithm for adjusting the weights that optimise the classiﬁcation performance\nof a neural network is the sorcalled back propagation. It belongs to the family of supervised learning\nmethodsq where the desired output for every input event is knowns Back propagation is used by all\nneural networks in TMV As The output of a network mhere for simplicity assumed to have a single\nhidden layer with a Tanh activation functionq and a linear activation function in the output layern",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 57
+    }
+  },
+  {
+    "text": "hidden layer with a Tanh activation functionq and a linear activation function in the output layern\nis given by\nyANN =\nnh￿\nj=1\ny\n(2)\nj w\n(2)\nj1 =\nnh￿\nj=1\ntanh\n￿\nnvar￿\ni=1\nxiw\n(1)\nij\n￿\n·w\n(2)\nj1 , m7yn\nwhere nvar and nh are the number of neurons in the input layer and in the hidden layerq respectivelyq\nw\n(1)\nij is the weight between inputrlayer neuron iand hiddenrlayer neuron jq and w\n(2)\nj1 is the weight",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 58
+    }
+  },
+  {
+    "text": ")\nij is the weight between inputrlayer neuron iand hiddenrlayer neuron jq and w\n(2)\nj1 is the weight\nbetween the hiddenrlayer neuron jand the output neurons A simple sum was used in Eqs m 7yn for\nthe synapse function κs\nDuring the learning process the network is supplied with N training events xa =mx1,...,x nvar naq\na=v ,...,N s For each training event athe neural network output yANN ,a is computed and compared",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 59
+    }
+  },
+  {
+    "text": "naq\na=v ,...,N s For each training event athe neural network output yANN ,a is computed and compared\nto the desired output ˆ ya ∈{v,u}min classiﬁcation v for signal events and u for background eventsns\nAn error function Eq measuring the agreement of the network response with the desired oneq is\ndeﬁned by\nEmx1,..., xN|wn=\nN￿\na=1\nEamxa|wn=\nN￿\na=1\nv\nw\nmyANN ,a − ˆyan\n2\n, m74n\nwhere w denotes the ensemble of adjustable weights in the networks The set of weights that",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 60
+    }
+  },
+  {
+    "text": "2\n, m74n\nwhere w denotes the ensemble of adjustable weights in the networks The set of weights that\nminimises the error function can be found using the method of steepest or gradient descent qp r o v i d e d\nthat the neuron response function is di ﬀerentiable with respect to the input weightss Starting from\na random set of weights w(ρ)\nthe weights are updated by moving a small distance in wrspace into\nthe direction −∇wE where E decreases most rapidly\nw(ρ+1)\n=w(ρ)\n−η∇wE, m75n",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 61
+    }
+  },
+  {
+    "text": "distance in wrspace into\nthe direction −∇wE where E decreases most rapidly\nw(ρ+1)\n=w(ρ)\n−η∇wE, m75n\nwhere the positive number ηis the learning rate s\nThe weights connected with the output layer are updated by\n∆w\n(2)\nj1 =−η\nN￿\na=1\n∂Ea\n∂w\n(2)\nj1\n=−η\nN￿\na=1\nmyANN ,a − ˆyany\n(2)\nj,a , m76n\n8svu Artiﬁcial Neural Networks (nonlinear discriminant analysis) 97\nIt is likely that the same performance can be achieved with a network of more than one hidden",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 62
+    }
+  },
+  {
+    "text": "is) 97\nIt is likely that the same performance can be achieved with a network of more than one hidden\nlayer and a potentially much smaller total number of hidden neuronss This would lead to a shorter\ntraining time and a more robust networks\n8.10.4 Training of the neural network\nBack-propagation (BP)\nThe most common algorithm for adjusting the weights that optimise the classiﬁcation performance\nof a neural network is the sorcalled back propagation. It belongs to the family of supervised learning",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 63
+    }
+  },
+  {
+    "text": "a neural network is the sorcalled back propagation. It belongs to the family of supervised learning\nmethodsq where the desired output for every input event is knowns Back propagation is used by all\nneural networks in TMV As The output of a network mhere for simplicity assumed to have a single\nhidden layer with a Tanh activation functionq and a linear activation function in the output layern\nis given by\nyANN =\nnh\n￿\nj=1\ny\n(2)\nj\nw\n(2)\nj1\n=\nnh\n￿\nj=1\ntanh\n￿\nnvar\n￿\ni=1\nxiw\n(1)\nij\n￿\n·w\n(2)\nj1\n, m7yn",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 64
+    }
+  },
+  {
+    "text": "given by\nyANN =\nnh\n￿\nj=1\ny\n(2)\nj\nw\n(2)\nj1\n=\nnh\n￿\nj=1\ntanh\n￿\nnvar\n￿\ni=1\nxiw\n(1)\nij\n￿\n·w\n(2)\nj1\n, m7yn\nwhere nvar and nh are the number of neurons in the input layer and in the hidden layerq respectivelyq\nw\n(1)\nij\nis the weight between inputrlayer neuron i and hiddenrlayer neuron jq and w\n(2)\nj1\nis the weight\nbetween the hiddenrlayer neuron j and the output neurons A simple sum was used in Eqs m 7y n for\nthe synapse function κs",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 65
+    }
+  },
+  {
+    "text": "ayer neuron j and the output neurons A simple sum was used in Eqs m 7y n for\nthe synapse function κs\nDuring the learning process the network is supplied with N training events xa =m x1,...,x nvar\nnaq\na =v ,...,N s For each training event a the neural network output yANN ,a is computed and compared\nto the desired output ˆ ya ∈ {v,u} min classiﬁcation v for signal events and u for background eventsns\nAn error function Eq measuring the agreement of the network response with the desired oneq is",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 66
+    }
+  },
+  {
+    "text": "entsns\nAn error function Eq measuring the agreement of the network response with the desired oneq is\ndeﬁned by\nEmx1,..., xN |wn=\nN\n￿\na=1\nEamxa|wn=\nN\n￿\na=1\nv\nw\nmyANN ,a − ˆyan\n2\n, m74n\nwhere w denotes the ensemble of adjustable weights in the networks The set of weights that\nminimises the error function can be found using the method of steepest or gradient descent qp r o v i d e d\nthat the neuron response function is di ﬀerentiable with respect to the input weightss Starting from",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 67
+    }
+  },
+  {
+    "text": "that the neuron response function is di ﬀerentiable with respect to the input weightss Starting from\na random set of weights w\n(ρ)\nthe weights are updated by moving a small distance in wrspace into\nthe direction −∇ w E where E decreases most rapidly\nw\n(ρ+1)\n= w\n(ρ)\n− η∇ w E, m75n\nwhere the positive number η is the learning rate s\nThe weights connected with the output layer are updated by\n∆ w\n(2)\nj1\n= −η\nN\n￿\na=1\n∂Ea\n∂w\n(2)\nj1\n= −η\nN\n￿\na=1\nmyANN ,a − ˆyany\n(2)\nj,a\n, m76n",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 68
+    }
+  },
+  {
+    "text": "er are updated by\n∆ w\n(2)\nj1\n= −η\nN\n￿\na=1\n∂Ea\n∂w\n(2)\nj1\n= −η\nN\n￿\na=1\nmyANN ,a − ˆyany\n(2)\nj,a\n, m76n\n8svu Artiﬁcial Neural Networks (nonlinear discriminant analysis) 97\nIt is likely that the same performance can be achieved with a network of more than one hidden\nlayer and a potentially much smaller total number of hidden neuronss This would lead to a shorter\ntraining time and a more robust networks\n8.10.4 Training of the neural network\nBack-propagation (BP)",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 69
+    }
+  },
+  {
+    "text": "training time and a more robust networks\n8.10.4 Training of the neural network\nBack-propagation (BP)\nThe most common algorithm for adjusting the weights that optimise the classiﬁcation performance\nof a neural network is the sorcalled back propagation. It belongs to the family of supervised learning\nmethodsq where the desired output for every input event is knowns Back propagation is used by all\nneural networks in TMV As The output of a network mhere for simplicity assumed to have a single",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 70
+    }
+  },
+  {
+    "text": "all\nneural networks in TMV As The output of a network mhere for simplicity assumed to have a single\nhidden layer with a Tanh activation functionq and a linear activation function in the output layern\nis given by\nyANN =\nnh￿\nj=1\ny\n(2)\nj w\n(2)\nj1 =\nnh￿\nj=1\ntanh\n￿\nnvar￿\ni=1\nxiw\n(1)\nij\n￿\n·w\n(2)\nj1 , m7yn\nwhere nvar and nh are the number of neurons in the input layer and in the hidden layerq respectivelyq\nw\n(1)\nij is the weight between inputrlayer neuron iand hiddenrlayer neuron jq and w\n(2)",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 71
+    }
+  },
+  {
+    "text": "espectivelyq\nw\n(1)\nij is the weight between inputrlayer neuron iand hiddenrlayer neuron jq and w\n(2)\nj1 is the weight\nbetween the hiddenrlayer neuron jand the output neurons A simple sum was used in Eqs m 7yn for\nthe synapse function κs\nDuring the learning process the network is supplied with N training events xa =mx1,...,x nvar naq\na=v ,...,N s For each training event athe neural network output yANN ,a is computed and compared",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 72
+    }
+  },
+  {
+    "text": "naq\na=v ,...,N s For each training event athe neural network output yANN ,a is computed and compared\nto the desired output ˆ ya ∈{v,u}min classiﬁcation v for signal events and u for background eventsns\nAn error function Eq measuring the agreement of the network response with the desired oneq is\ndeﬁned by\nEmx1,..., xN|wn=\nN￿\na=1\nEamxa|wn=\nN￿\na=1\nv\nw\nmyANN ,a −ˆyan\n2\n, m74n\nwhere w denotes the ensemble of adjustable weights in the networks The set of weights that",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 73
+    }
+  },
+  {
+    "text": "2\n, m74n\nwhere w denotes the ensemble of adjustable weights in the networks The set of weights that\nminimises the error function can be found using the method of steepest orgradient descent qp r o v i d e d\nthat the neuron response function is di ﬀerentiable with respect to the input weightss Starting from\na random set of weights w(ρ)\nthe weights are updated by moving a small distance in wrspace into\nthe direction −∇wE where E decreases most rapidly\nw(ρ+1)\n=w(ρ)\n−η∇wE, m75n",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 74
+    }
+  },
+  {
+    "text": "distance in wrspace into\nthe direction −∇wE where E decreases most rapidly\nw(ρ+1)\n=w(ρ)\n−η∇wE, m75n\nwhere the positive number ηis the learning rate s\nThe weights connected with the output layer are updated by\n∆w\n(2)\nj1 =−η\nN￿\na=1\n∂Ea\n∂w\n(2)\nj1\n=−η\nN￿\na=1\nmyANN ,a −ˆyany\n(2)\nj,a , m76n\n98 8 The TMVA Methods\nand the weights connected with the hidden layers are updated by\n∆w\n(1)\nij =−η\nN￿\na=1\n∂Ea\n∂w\n(1)\nij\n=−η\nN￿\na=1\nhyANN ,a − ˆyaiy\n(2)\nj,a hr−y\n(2)\nj,a iw\n(2)\nj1 xi,a , hxxi",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 75
+    }
+  },
+  {
+    "text": ")\nij =−η\nN￿\na=1\n∂Ea\n∂w\n(1)\nij\n=−η\nN￿\na=1\nhyANN ,a − ˆyaiy\n(2)\nj,a hr−y\n(2)\nj,a iw\n(2)\nj1 xi,a , hxxi\nwhere we have used tanh ￿\nx= tanh xhr−tanh xio This method of training the network is denoted\nbulk learning m since the sum of errors of all training events is used to update the weightso An\nalternative choice is the soncalled online learning m where the update of the weights occurs at each\nevento The weight updates are obtained from Eqso h xwi and h xxi by removing the event summationso",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 76
+    }
+  },
+  {
+    "text": "h\nevento The weight updates are obtained from Eqso h xwi and h xxi by removing the event summationso\nIn this case it is important to use a well randomised training sampleo Online learning is the learning\nmethod implemented in TMV Ao\nBFGS\nThe BroydennFletchernGoldfarbnShannon hBFGSi method [ su]d i ﬀers from back propagation by the\nuse of second derivatives of the error function to adapt the synapse weight by an algorithm which\nis composed of four main stepso",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 77
+    }
+  },
+  {
+    "text": "the error function to adapt the synapse weight by an algorithm which\nis composed of four main stepso\nro Two vectorsm D and Y are calculatedo The vector of weight changes D represents the evolution\nbetween one iteration of the algorithm h k−ri to the next h kio Each synapse weight corresponds\nto one element of the vectoro The vector Y is the vector of gradient errorso\nD\n(k)\ni = w\n(k)\ni −w\n(k−1)\ni , hxyi\nY\n(k)\ni = g\n(k)\ni −g\n(k−1)\ni , hx9i",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 78
+    }
+  },
+  {
+    "text": "e vector of gradient errorso\nD\n(k)\ni = w\n(k)\ni −w\n(k−1)\ni , hxyi\nY\n(k)\ni = g\n(k)\ni −g\n(k−1)\ni , hx9i\nwhere iis the synapse indexm gi is the inth synapse gradientm 28\nwi is the weight of the inth\nsynapsem and kdenotes the iteration countero\nso Approximate the inverse of the Hessian matrixm H−1\nm at iteration kby\nH−1(k)\n=\nD·DT\n·hr l YT\n·H−1(k−1)\n·Yi\nYT ·D\n−D·YT\n·H l H ·Y ·DT\nl H−1(k−1)\n, hyqi\nwhere superscripts h ki are implicit for D and Yo\nto Estimate the vector of weight changes by\nD(k)",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 79
+    }
+  },
+  {
+    "text": "i\nwhere superscripts h ki are implicit for D and Yo\nto Estimate the vector of weight changes by\nD(k)\n=−H−1(k)\n·Y(k)\n. hyri\nuo Compute a new vector of weights by applying a line search algorithmo In the line search the\nerror function is locally approximated by a parabolao The algorithm evaluates the second\nderivatives and determines the point where the minimum of the parabola is expectedo The\ntotal error is evaluated for this pointo The algorithm then evaluates points along the line\n28",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 80
+    }
+  },
+  {
+    "text": "o The\ntotal error is evaluated for this pointo The algorithm then evaluates points along the line\n28\nThe synapse gradient is estimated in the same way as in the BP method (with initial gradient and weights set to\nzero).\nNeural network : input\n17\nInput variables :\n-Can be correlated (NN uses correlations)\n-To improve the NN performance, should avoid unuseful variables (too much\ncorrelated, too low discrimination power)\n-They can be transformed to improve their discrimination power before the",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 81
+    }
+  },
+  {
+    "text": "low discrimination power)\n-They can be transformed to improve their discrimination power before the\ntraining",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 82
+    }
+  },
+  {
+    "text": "Neural network : neurons\n18\n\nNeural network : neurons\n19\n\nNeural network : output\n-The neural network output can be real or integer\n-For most of the HEP applications it is more interesting to have a a real-valued \nvariable\n-If the training is successful, background should peak at -1 (or 0) and signal at +1\n-Shape depends a lot on the NN parameters (layers, epochs...)\n-Discrimination power achieved depend a lot on the problems.\n20",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 83
+    }
+  },
+  {
+    "text": "he NN parameters (layers, epochs...)\n-Discrimination power achieved depend a lot on the problems.\n20\nNeural network : error\n-Training error :\n-One can compare, at each iteration (epoch),\nwhat is the NN error for the training and\nthe test sample.\n-Errors decrease with epochs in both training\nand test samples.\n- Usually it stabilizes\n-But with more epochs, it can happen\nthat the test sample will have an error\nwhich will increase again\n21",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 84
+    }
+  },
+  {
+    "text": "with more epochs, it can happen\nthat the test sample will have an error\nwhich will increase again\n21\n8svu Artiﬁcial Neural Networks (nonlinear discriminant analysis) 97\nIt is likely that the same performance can be achieved with a network of more than one hidden\nlayer and a potentially much smaller total number of hidden neuronss This would lead to a shorter\ntraining time and a more robust networks\n8.10.4 Training of the neural network\nBack-propagation (BP)",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 85
+    }
+  },
+  {
+    "text": "training time and a more robust networks\n8.10.4 Training of the neural network\nBack-propagation (BP)\nThe most common algorithm for adjusting the weights that optimise the classiﬁcation performance\nof a neural network is the sorcalled back propagation. It belongs to the family of supervised learning\nmethodsq where the desired output for every input event is knowns Back propagation is used by all\nneural networks in TMV As The output of a network mhere for simplicity assumed to have a single",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 86
+    }
+  },
+  {
+    "text": "all\nneural networks in TMV As The output of a network mhere for simplicity assumed to have a single\nhidden layer with a Tanh activation functionq and a linear activation function in the output layern\nis given by\nyANN =\nnh￿\nj=1\ny\n(2)\nj w\n(2)\nj1 =\nnh￿\nj=1\ntanh\n￿\nnvar￿\ni=1\nxiw\n(1)\nij\n￿\n·w\n(2)\nj1 , m7yn\nwhere nvar and nh are the number of neurons in the input layer and in the hidden layerq respectivelyq\nw\n(1)\nij is the weight between inputrlayer neuron iand hiddenrlayer neuron jq and w\n(2)",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 87
+    }
+  },
+  {
+    "text": "espectivelyq\nw\n(1)\nij is the weight between inputrlayer neuron iand hiddenrlayer neuron jq and w\n(2)\nj1 is the weight\nbetween the hiddenrlayer neuron jand the output neurons A simple sum was used in Eqs m 7yn for\nthe synapse function κs\nDuring the learning process the network is supplied with N training events xa =m x1,...,x nvar\nnaq\na=v ,...,N s For each training event athe neural network output yANN ,a is computed and compared",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 88
+    }
+  },
+  {
+    "text": "naq\na=v ,...,N s For each training event athe neural network output yANN ,a is computed and compared\nto the desired output ˆ ya ∈{v,u}min classiﬁcation v for signal events and u for background eventsns\nAn error function Eq measuring the agreement of the network response with the desired oneq is\ndeﬁned by\nEmx1,..., xN|wn=\nN\n￿\na=1\nEamxa|wn=\nN\n￿\na=1\nv\nw\nmyANN ,a − ˆyan\n2\n, m74n\nwhere w denotes the ensemble of adjustable weights in the networks The set of weights that",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 89
+    }
+  },
+  {
+    "text": "2\n, m74n\nwhere w denotes the ensemble of adjustable weights in the networks The set of weights that\nminimises the error function can be found using the method of steepest or gradient descent qp r o v i d e d\nthat the neuron response function is di ﬀerentiable with respect to the input weightss Starting from\na random set of weights w(ρ)\nthe weights are updated by moving a small distance in wrspace into\nthe direction −∇wE where E decreases most rapidly\nw\n(ρ+1)\n= w\n(ρ)\n− η∇wE, m75n",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 90
+    }
+  },
+  {
+    "text": "tance in wrspace into\nthe direction −∇wE where E decreases most rapidly\nw\n(ρ+1)\n= w\n(ρ)\n− η∇wE, m75n\nwhere the positive number ηis the learning rate s\nThe weights connected with the output layer are updated by\n∆w\n(2)\nj1 = −η\nN\n￿\na=1\n∂Ea\n∂w\n(2)\nj1\n= −η\nN\n￿\na=1\nmyANN ,a − ˆyany\n(2)\nj,a , m76n\n2.3 Use of an ANN forK0\nLBackground Suppression 27\nEpochs\n50 100 150 200 250 300 350 400 450 500\nEstimator\n0.36\n0.38\n0.4\n0.42\n0.44\n0.46\n0.48\n0.5 Training Sample\nTest sample\nMLP Convergence Test",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 91
+    }
+  },
+  {
+    "text": "500\nEstimator\n0.36\n0.38\n0.4\n0.42\n0.44\n0.46\n0.48\n0.5 Training Sample\nTest sample\nMLP Convergence Test\nFigure 2.9: ANN Training (solid red) and testing (dashed blue) output respect to training\nepoch.\nNN_AllVars\n-1 -0.5 0 0.5 1\nNormalized\n0\n0.2\n0.4\n0.6\n0.8\n1\n1.2\n1.4\nSignal\nBackground\nNN_AllVars\n-1 -0.5 0 0.5 1\nNormalized\n0\n0.2\n0.4\n0.6\n0.8\n1\n1.2\n1.4\nU/O-flow (S,B): (0.0, 0.0)% / (0.0, 0.0)%\nTMVA output for classifier: NN_AllVars",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 92
+    }
+  },
+  {
+    "text": "4\n0.6\n0.8\n1\n1.2\n1.4\nU/O-flow (S,B): (0.0, 0.0)% / (0.0, 0.0)%\nTMVA output for classifier: NN_AllVars\nFigure 2.10: ANN output for signal (dashed blue) and background (solid red) events.\n=> Overtraining :\n- The neural network was trained to recognize even the statistical ﬂuctuations\nof the training sample and is therefore not suitable for any test sample\nNeural network : overtraining\n-Simple check : NN output for the training and test sample.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 93
+    }
+  },
+  {
+    "text": "est sample\nNeural network : overtraining\n-Simple check : NN output for the training and test sample.\n-Both samples should have the same shape, with the statistical uncertainties\n22\nNot overtrained Overtrained\nBDT response\n-0.4 -0.2 0 0.2 0.4\nNormalized\n0\n2\n4\n6\n8\n10\n12 Signal (test sample)\nBackground (test sample)\nSignal (training sample)\nBackground (training sample)\nKolmogorov-Smirnov test: signal (background) probability =     0 (    0)\nBDT response\n-0.4 -0.2 0 0.2 0.4\nNormalized\n0\n2\n4\n6\n8\n10",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 94
+    }
+  },
+  {
+    "text": "al (background) probability =     0 (    0)\nBDT response\n-0.4 -0.2 0 0.2 0.4\nNormalized\n0\n2\n4\n6\n8\n10\n12\nU/O-flow (S,B): (0.0, 0.0)% / (0.0, 0.0)%\nTMVA overtraining check for classifier: BDT\nNeural network : performance\nUsual ﬁgure of merit to check the performance :\n-Scan the performance varying the cut on the network output\n-Plot the signal efﬁciency versus background efﬁciency (or background\nrejection). Each cut on the NN output is one point on the ﬁgure.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 95
+    }
+  },
+  {
+    "text": "background efﬁciency (or background\nrejection). Each cut on the NN output is one point on the ﬁgure.\n-The NN performs (almost all the time) better than the rectangular cut\n23\nExample without\ncorrelation\nExample with\ncorrelation\n(and few statistics)\nNeural network : examples in HEP\n24\nPhoton identiﬁcation at D0 and applications5\ndates with transverse momentum pT >21 (20) GeV for\nthe highest (next-to-highest) pT photon candidate and\npseudorapidity |η|< 0.9, for which the trigger require-",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 96
+    }
+  },
+  {
+    "text": "st (next-to-highest) pT photon candidate and\npseudorapidity |η|< 0.9, for which the trigger require-\nments are >96% e ﬃcient. The minimum pT require-\nments for the two photon candidates are chosen to be\ndiﬀerent following theoretical discussions [13, 14] and a\nprevious measurement [10]. The photon pT is computed\nwith respect to the reconstructed event primary vertex\n(PV) with the highest number of associated tracks. The\nPV is required to be within 60 cm of the center of the de-",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 97
+    }
+  },
+  {
+    "text": "highest number of associated tracks. The\nPV is required to be within 60 cm of the center of the de-\ntector along the beam axis. The PV has a reconstruction\neﬃciency of about 98% and has about 65% probability\nof being the correct vertex corresponding to the hard\np¯p→ γγ +X production.\nPhoton candidates are formed from clusters of\ncalorimeter cells within a cone of radius R =√\n(∆η)2+( ∆φ)2 =0 .4 around a seed tower [16]. The\nﬁnal cluster energy is then recalculated from the inner",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 98
+    }
+  },
+  {
+    "text": "2+( ∆φ)2 =0 .4 around a seed tower [16]. The\nﬁnal cluster energy is then recalculated from the inner\ncore with R =0 .2. The photon candidates are selected\nby requiring: (i) ≥97% of the cluster energy be deposited\nin the EM calorimeter layers; (ii) the calorimeter isola-\ntion I=[ Etot (0.4)−EEM (0.2)]/EEM (0.2)<0.10, where\nEtot (R)[EEM (R)] is the total [EM only] energy in a cone\nof radius R; (iii) the pT scalar sum of all tracks origi-\nnating from the PV in an annulus of 0 .05 < R < 0.4",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 99
+    }
+  },
+  {
+    "text": "R; (iii) the pT scalar sum of all tracks origi-\nnating from the PV in an annulus of 0 .05 < R < 0.4\naround the EM cluster be <1.5 GeV; and (iv) the energy-\nweighted EM shower width be consistent with that ex-\npected for an electromagnetic shower. To suppress elec-\ntrons misidentiﬁed as photons, the EM clusters are re-\nquired to not be spatially matched to signiﬁcant tracker\nactivity, either a reconstructed track or a density of hits\nin the SMT and CFT consistent with that of an elec-",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 100
+    }
+  },
+  {
+    "text": "ither a reconstructed track or a density of hits\nin the SMT and CFT consistent with that of an elec-\ntron [19]. In the following, this requirement will be re-\nferred to as the “track-match veto”.\nTo further suppress jets misidentiﬁed as photons, an\nartiﬁcial neural network (NN) discriminant which ex-\nploits di ﬀerences in tracker activity and energy deposits\nin the calorimeter and in the CPS between photons and\njets is deﬁned [1]. The NN is trained using γ and jet",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 101
+    }
+  },
+  {
+    "text": "calorimeter and in the CPS between photons and\njets is deﬁned [1]. The NN is trained using γ and jet\npythia MC samples. The shapes of the NN output\n(ONN ), normalized to unit area and obtained after ap-\nplying all data selection criteria, are shown in Figure\n2, exhibiting a signiﬁcant discrimination between pho-\ntons and jets. Photon candidates satisfy the requirement\nONN >0.3, which is ≈98% e ﬃcient for photons and re-\njects ≈40% of the jets misidentiﬁed as photons. The",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 102
+    }
+  },
+  {
+    "text": ">0.3, which is ≈98% e ﬃcient for photons and re-\njects ≈40% of the jets misidentiﬁed as photons. The\nONN shape is validated in data. For photons a data sam-\nple consisting of photons radiated from charged leptons\nin Z boson decays ( Z → ℓ+\nℓ−\nγ,ℓ= e, µ) [20] is used.\nThe MC modeling of the ONN shape for jets is validated\nin a sample of photon candidates selected by inverting\nthe photon isolation ( I>0.07), a requirement that sig-\nniﬁcantly enriches the sample in jets. The data and MC",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 103
+    }
+  },
+  {
+    "text": "isolation ( I>0.07), a requirement that sig-\nniﬁcantly enriches the sample in jets. The data and MC\nONN shapes are compared in Figures 2 and 3 and found\nto be in good agreement.\nFinally, the two photon candidates are required to be\nNN\nO\n0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1\nFraction of events\n0.05\n0.1\n0.15\n0.2\n0.25\n0.3\n0.35\n-1\nDØ, 4.2 fb\n) dataµ (l = e,!\n-\nl\n+\nZ->l\nMC!\njet MC\nFIG. 2: Comparison of the normalized ONN spectra for pho-\ntons from DPP MC and Z→ ℓ+\nℓ−\nγdata and for misidentiﬁed",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 104
+    }
+  },
+  {
+    "text": "ison of the normalized ONN spectra for pho-\ntons from DPP MC and Z→ ℓ+\nℓ−\nγdata and for misidentiﬁed\njets from dijet MC.\nspatially separated from each other by a distance in η−φ\nspace ∆R > 0.4 and to satisfy Mγγ >p\nγγ\nT . The lat-\nter requirement is satisﬁed by the majority ( ≈92%) of\nDPP events and, together with the photon isolation re-\nquirements, allows signiﬁcant suppression of the contri-\nbution from the fragmentation diagrams, thus restricting",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 105
+    }
+  },
+  {
+    "text": "llows signiﬁcant suppression of the contri-\nbution from the fragmentation diagrams, thus restricting\nthe data-to-theory comparison to the region where the\ntheoretical calculations should have smaller uncertainties\n[13].\nAfter imposing all requirements, 10938 events with\ndiphoton candidates are selected in data. This sam-\nple includes instrumental background contributions from\nγ+jet and dijet production, where a jet is misidentiﬁed\nas a single photon as a result of ﬂuctuations in the parton",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 106
+    }
+  },
+  {
+    "text": "production, where a jet is misidentiﬁed\nas a single photon as a result of ﬂuctuations in the parton\nfragmentation into a well-isolated neutral meson ( π0\norη)\ndecaying into a ﬁnal state with two or more photons. An\nadditional smaller background contribution results from\nZ-boson/Drell-Yan production events Z/γ∗\n→ e+\ne−\n(ZDY) in which both electrons are misidentiﬁed as pho-\ntons.\nThe contribution from ZDY events is estimated us-\ning the MC simulation with pythia , normalized to the",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 107
+    }
+  },
+  {
+    "text": "contribution from ZDY events is estimated us-\ning the MC simulation with pythia , normalized to the\nNNLO cross section [21]. The selection e ﬃciencies de-\ntermined from the MC simulation are corrected to those\nmeasured in the data. On average, each electron has\na 2% probability of satisfying the photon selection cri-\nteria, mainly due to the ine ﬃciency of the track-match\nveto requirements. The total ZDY contribution is es-\ntimated to be 161 ± 20 events. Backgrounds due to",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 108
+    }
+  },
+  {
+    "text": "to requirements. The total ZDY contribution is es-\ntimated to be 161 ± 20 events. Backgrounds due to\nγ+jet and dijet events are estimated from data by using\na4 ×4 matrix background estimation method [1]. Af-\nter applying all of the selection criteria described above,\na tighter ONN requirement ( ONN > 0.6) is used to\nclassify the data events into four categories, depend-\ning on whether both photon candidates, only the high-\nest pT one, only the next-to-highest pT one, or nei-",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 109
+    }
+  },
+  {
+    "text": "whether both photon candidates, only the high-\nest pT one, only the next-to-highest pT one, or nei-\nther of the two photon candidates pass ( p) or fail ( f)\nthis requirement. The corresponding number of events\nGoal : discriminate photons against neutral mesons in jets\nNeural network input variables :\n-Shape of the calorimeter energy deposit\n-Track variables in an isolation cone around the photon\n!\"#$#%%&'()*+',-./0123'4'!\"5+#6+'*7'89,':;<< =\n!\"#$%&\"'\"()\n! !\"#$%&'",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 110
+    }
+  },
+  {
+    "text": "solation cone around the photon\n!\"#$#%%&'()*+',-./0123'4'!\"5+#6+'*7'89,':;<< =\n!\"#$%&\"'\"()\n! !\"#$%&'\n! ()*+*$,-\"+),Σ./,*0,+)1,(%2+\"3&14,4522*5$6\"$#,\"+,-\"+)\"$,%,3*$1,\n78√∆ϕ2+∆η2 = 9:;<,4=%&&12,+)%$,>,?1@:\n! A%3B#2*5$6\n! C%\"$&D,(%\"24,*0,3*&&\"$1%2,()*+*$4,02*=,π0,%$6,η,613%D4<,\n213*$4+253+16,%4,%,4\"$#&1,()*+*$\n! 21E13+\"*$,F%416,*$,\"4*&%+\"*$,%$6,*$,.GHI,4)*-12,\n+2%$4J1241,4)%(1:\n! 21=$%$+,4+%+\"4+\"3%&&D,45F4+2%3+16\n! C1%4521=1$+,(120*2=16,\"$,;,η−F\"$4,%$6,K>,./,F\"$4:\n! G*=F\"$14,)*+,'\")-+.$",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 111
+    }
+  },
+  {
+    "text": "4+%+\"4+\"3%&&D,45F4+2%3+16\n! C1%4521=1$+,(120*2=16,\"$,;,η−F\"$4,%$6,K>,./,F\"$4:\n! G*=F\"$14,)*+,'\")-+.$\n! G*$J124\"*$,=1+)*6<,1L(&*\"+\"$#,3*$J12+16,()*+*$<,3*=(1+\"+\"J1,%+,&*-,./,2%$#1\n! M4*&%+\"*$,=1+)*6<,54\"$#,%&&,()*+*$4<,3*=(1+\"+\"J1,%+,)\"#)12,./,2%$#1\nIsolation\nTRK HCALECAL\n!\njet\n!π0accompaniedbyotherparticles\n!Isolation∆R=√∆η2+∆φ2\n\"IsoTRK=∑\npTintracker\n\"IsoECAL=∑\nETinECAL\n\"IsoHCAL=∑\nETinHCAL\n!LowvalueofH/Eidentiﬁesphotons\n!Suitedforuseanelectroncontrolsample\nVariableRout Rin ∆η",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 112
+    }
+  },
+  {
+    "text": "L=∑\nETinHCAL\n!LowvalueofH/Eidentiﬁesphotons\n!Suitedforuseanelectroncontrolsample\nVariableRout Rin ∆η\nIsoTRK 0.4 0.04 0.015\nIsoECAL 0.43.5crystals2.5crystals\nIsoHCAL 0.4 0.15 -\nH/E 0.15 - -\n\"#\n#\n$\nR\nRout\nin\nS.Ganjour ApprovalQCD-10-037 12\nDecision tree\n-A decision tree is a binary tree : a sequence of cuts paving the phase-space of\nthe input variables\n-Repeated yes/no decisions on each variables are taken for an event until a\nstop criterion is fulﬁlled",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 113
+    }
+  },
+  {
+    "text": "epeated yes/no decisions on each variables are taken for an event until a\nstop criterion is fulﬁlled\n-Trained to maximize the purity of signal nodes (or the impurity of background\nnodes)\n25\n8vyzBoosted Decision and Regression T rees 105\nFigure 18:Schematic view of a decision treev Starting from the root nodet a sequence of binary splits using\nthe discriminating variablesxiis applied to the datav Each split uses the variable that at this node gives the",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 114
+    }
+  },
+  {
+    "text": "minating variablesxiis applied to the datav Each split uses the variable that at this node gives the\nbest separation between signal and background when being cut onv The same variable may thus be used at\nseveral nodest while others might not be used at allv The leaf nodes at the bottom end of the tree are labeled\n“S” for signal and “B” for background depending on the majority of events that end up in the respective",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 115
+    }
+  },
+  {
+    "text": "for signal and “B” for background depending on the majority of events that end up in the respective\nnodesv For regression treest the node splitting is performed on the variable that gives the maximum decrease\nin the average squared error when attributing a constant value of the target variable as output of the nodet\ngiven by the average of the training events in the corresponding pleafq node psee Secv 8vyzv3qv\nfactory->BookMethod( Types::kBDT, \"BDT\", \"<options>\" );",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 116
+    }
+  },
+  {
+    "text": "corresponding pleafq node psee Secv 8vyzv3qv\nfactory->BookMethod( Types::kBDT, \"BDT\", \"<options>\" );\nCode Example 46:Booking of the BDT classiﬁer: the ﬁrst argument is a predeﬁned enumeratort the second\nargument is a userudeﬁned string identiﬁert and the third argument is the conﬁguration options stringv\nIndividual options are separated by a ’:’v See Secv3vyv5for more information on the bookingv\nSeveral conﬁguration options are available to customize the BDT classiﬁerv They are summarized",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 117
+    }
+  },
+  {
+    "text": "kingv\nSeveral conﬁguration options are available to customize the BDT classiﬁerv They are summarized\nin Option Tableszyandzzand described in more detail in Secv8vyzvzv\n8.12.2 Description and implementation\nDecision trees are well known classiﬁers that allow a straightforward interpretation as they can be\nvisualized by a simple twoudimensional tree structurev They are in this respect similar to rectangular",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 118
+    }
+  },
+  {
+    "text": "sualized by a simple twoudimensional tree structurev They are in this respect similar to rectangular\ncutsv Howevert whereas a cutubased analysis is able to select onlyonehypercube as region of phase\n-Decision trees are extremely\nsensitive to the training samples,\ntherefore to overtraining\n-To stabilize their performance, one\nuses different techniques :\n-Boosting\n-Bagging\n-Random forests\nDecision tree : structure\n-Similar to rectangular cuts, but each cut depends on the previous one",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 119
+    }
+  },
+  {
+    "text": "sts\nDecision tree : structure\n-Similar to rectangular cuts, but each cut depends on the previous one\n-Classiﬁes from a set of attributes. Each node splits the data according to one\nattribute\n26\n8vyzBoosted Decision and Regression T rees 105\nFigure 18:Schematic view of a decision treev Starting from the root nodet a sequence of binary splits using\nthe discriminating variablesxiis applied to the datav Each split uses the variable that at this node gives the",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 120
+    }
+  },
+  {
+    "text": "minating variablesxiis applied to the datav Each split uses the variable that at this node gives the\nbest separation between signal and background when being cut onv The same variable may thus be used at\nseveral nodest while others might not be used at allv The leaf nodes at the bottom end of the tree are labeled\n“S” for signal and “B” for background depending on the majority of events that end up in the respective",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 121
+    }
+  },
+  {
+    "text": "for signal and “B” for background depending on the majority of events that end up in the respective\nnodesv For regression treest the node splitting is performed on the variable that gives the maximum decrease\nin the average squared error when attributing a constant value of the target variable as output of the nodet\ngiven by the average of the training events in the corresponding pleafq node psee Secv 8vyzv3qv\nfactory->BookMethod( Types::kBDT, \"BDT\", \"<options>\" );",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 122
+    }
+  },
+  {
+    "text": "corresponding pleafq node psee Secv 8vyzv3qv\nfactory->BookMethod( Types::kBDT, \"BDT\", \"<options>\" );\nCode Example 46:Booking of the BDT classiﬁer: the ﬁrst argument is a predeﬁned enumeratort the second\nargument is a userudeﬁned string identiﬁert and the third argument is the conﬁguration options stringv\nIndividual options are separated by a ’:’v See Secv3vyv5for more information on the bookingv\nSeveral conﬁguration options are available to customize the BDT classiﬁerv They are summarized",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 123
+    }
+  },
+  {
+    "text": "kingv\nSeveral conﬁguration options are available to customize the BDT classiﬁerv They are summarized\nin Option Tableszyandzzand described in more detail in Secv8vyzvzv\n8.12.2 Description and implementation\nDecision trees are well known classiﬁers that allow a straightforward interpretation as they can be\nvisualized by a simple twoudimensional tree structurev They are in this respect similar to rectangular",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 124
+    }
+  },
+  {
+    "text": "sualized by a simple twoudimensional tree structurev They are in this respect similar to rectangular\ncutsv Howevert whereas a cutubased analysis is able to select onlyonehypercube as region of phase\nInternal node\nTerminal nodeAssigned class\n(here, signal/background)\nRoot node\nDecision\nDecision tree : training\n-Training a decision tree : process that deﬁnes the splitting criteria for each node.\n-Start with the root node, the split in two subsets of training events. Go through the",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 125
+    }
+  },
+  {
+    "text": "or each node.\n-Start with the root node, the split in two subsets of training events. Go through the\nsame algorithm for the next splitting operation\n-Repeat until the whole tree is built\n-Splitting criterion found maximizing the signal/background separation.\n-Different criteria available. Usually one uses the\n!!! Gini Index :   p.(1-p) where p is the signal purity\n-Note that it is symmetric between signal and background",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 126
+    }
+  },
+  {
+    "text": "ex :   p.(1-p) where p is the signal purity\n-Note that it is symmetric between signal and background\n-Selects the variable and cut value that optimises the increase in the separation\nindex between the parent node and the sum of the indices of the two daughter\nnodes, weighted by their relative fraction of events.\n27\n10 Multivariate Data Analysis Techniques\nThe node splitting is stopped once it has reached the minimumnumber of events. The end",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 127
+    }
+  },
+  {
+    "text": "is Techniques\nThe node splitting is stopped once it has reached the minimumnumber of events. The end\n(leaf)n o d e sa r ec l a s s i ﬁ e da ss i g n a lo rb a c k g r o u n da c c o r d i n gt ot hec l a s st h em a j o r i t yo f\nevents belongs to.\nAv a r i e t yo fs e p a r a t i o nc r i t e r i ac a nb ec o n ﬁ g u r e dt oa s s e s sthe performance of a vari-\nable and a speciﬁc cut requirement. Because a cut that selectsp r e d o m i n a n t l yb a c k g r o u n d",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 128
+    }
+  },
+  {
+    "text": "nd a speciﬁc cut requirement. Because a cut that selectsp r e d o m i n a n t l yb a c k g r o u n d\nis as valuable as one that selects signal, the criteria are symmetric with respect to the event\nclasses. All separation criteria have a maximum where the samples are fully mixed,i.e.,\nat purityp=0.5,a n df a l lo f ft oz e r ow h e nt h es a m p l ec o n s i s t so fo n ee v e n tc l ass only.\nTests have revealed no signiﬁcant performance disparity between the following separation\ncriteria:",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 129
+    }
+  },
+  {
+    "text": ".\nTests have revealed no signiﬁcant performance disparity between the following separation\ncriteria:\n•Gini Index,d e ﬁ n e db yp·(1−p).\n•Cross entropy,d e ﬁ n e db y−p·ln(p)−(1−p)·ln(1−p).\n•Misclassiﬁcation error,d e ﬁ n e db y1−max(p,1−p).\nThe splitting criterion being always a cut on a single variable, the training procedure se-\nlects the variable and cut value that optimizes the increasein the separation index between",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 130
+    }
+  },
+  {
+    "text": "dure se-\nlects the variable and cut value that optimizes the increasein the separation index between\nthe parent node and the sum of the indexes of the two daughter nodes, weighted by their\nrelative fraction of events. The cut values are optimized nu merically, in ﬁgure 1.3 we\nshow the shape of the above mentioned measures for a two class problem; the fact that\nGini IndexandCross entropyare smooth functions ofp,l e tt h e mt ob em o r ea m e n a b l ef o r\nnumerical minimization.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 131
+    }
+  },
+  {
+    "text": "ntropyare smooth functions ofp,l e tt h e mt ob em o r ea m e n a b l ef o r\nnumerical minimization.\nFigure 1.3: Node impurity measures, as function of purity ofbackground events: misclas-\nsiﬁcation error (blue), Gini index (green), entropy (red).Entropy has been scaled in order\nto pass through(0.5,0.5).\n2\ntil a given number of ﬁnal branches, called leaves, are\nobtained, or until each leaf is pure signal or pure back-\nground, or has too few events to continue. This descrip-",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 132
+    }
+  },
+  {
+    "text": "ntil each leaf is pure signal or pure back-\nground, or has too few events to continue. This descrip-\ntion is a little oversimpliﬁed. In fact at each stage one\npicks as the next branch to split, the branch which will\ngive the best increase in the quality of the separation. A\nschematic of a decision tree is shown in Fig.1, in which\n3v a r i a b l e sa r eu s e df o rs i g n a l / b a c k g r o u n ds e p a r a t i o n :\nevent hit multiplicity, energy, and reconstructed radial\nposition.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 133
+    }
+  },
+  {
+    "text": "g r o u n ds e p a r a t i o n :\nevent hit multiplicity, energy, and reconstructed radial\nposition.\nWhat criterion is used to deﬁne the quality of separa-\ntion between signal and background in the split? Imagine\nthe events are weighted with each event having weight\nWi.D e ﬁ n e t h e p u r i t y o f t h e s a m p l e i n a b r a n c h b y\nP=\n∑\nsWs\n∑\nsWs+\n∑\nbWb\n,\nwhere\n∑\ns is the sum over signal events and\n∑\nbis the\nsum over background events. Note that P(1−P)i s0",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 134
+    }
+  },
+  {
+    "text": "ere\n∑\ns is the sum over signal events and\n∑\nbis the\nsum over background events. Note that P(1−P)i s0\nif the sample is pure signal or pure background. For a\ngiven branch let\nGini =(\nn∑\ni=1\nWi)P(1−P),\nwhere nis the number of events on that branch. The\ncriterion chosen is to minimize\nGinilef t son +Giniright son .\nTo determine the increase in quality when a no de is\nsplit into two branches, one maximizes\nCriterion =Ginif ather −Ginilef t son −Giniright son .",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 135
+    }
+  },
+  {
+    "text": "de is\nsplit into two branches, one maximizes\nCriterion =Ginif ather −Ginilef t son −Giniright son .\nAt the end, if a leaf has purity greater than 1/2 (or\nwhatever is set), then it is called a signal leaf and if the\npurity is less than 1/2, it is a background leaf. Events\nare classiﬁed signal if they land on a signal leaf and back-\nground if they land on a background leaf. The resulting\ntree is a decision tree .\nDecision trees have been available for some time[5].",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 136
+    }
+  },
+  {
+    "text": "d leaf. The resulting\ntree is a decision tree .\nDecision trees have been available for some time[5].\nThey are known to be powerful but unstable, i.e., a small\nchange in the training sample can give a large change in\nthe tree and the results.\nThere are three major measures of node impurity used\nin practice: misclassiﬁcation error, the gini index and\nthe cross-entropy. If we deﬁne p as the proportion of\nthe signal in a node, then the three measures are: 1 -",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 137
+    }
+  },
+  {
+    "text": "s-entropy. If we deﬁne p as the proportion of\nthe signal in a node, then the three measures are: 1 -\nmax(p, 1-p) for the misclassiﬁcation error, 2p(1-p) for\nthe gini index and -plog(p) - (1-p)log(1-p) for the cross-\nentropy. The three measures are similar, but the gini\nindex and the cross-entropy are di ﬀerentiable, and hence\nmore amenable to numerical optimization. In addition,\nthe gini index and the cross-entropy are more sensitive\nto change in the node probabilities than the misclassiﬁ-",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 138
+    }
+  },
+  {
+    "text": "ex and the cross-entropy are more sensitive\nto change in the node probabilities than the misclassiﬁ-\ncation error. The gini index and the cross-entropy are\nsimilar.\nS/B\n52/48\nB\n4/37\nS/B\n48/11\nS/B\n9/10\nS\n39/1\nS\n7/1\nB\n2/9\nPMT Hits ?\n< 100 ! 100\nEnergy?\n< 0.2 GeV ! 0.2 GeV\nRadius?\n< 500 cm ! 500 cm\nFIG. 1: Schematic of a decision tree. S for signal, B for back-\nground. Terminal nodes(called leaves) are shown in boxes.\nIf signal events are dominant in one leave, then this leave is",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 139
+    }
+  },
+  {
+    "text": "es(called leaves) are shown in boxes.\nIf signal events are dominant in one leave, then this leave is\nsignal leave; otherwise, background leave.\nB. Boosting\nWithin the last few years a great improvement has\nbeen made[6, 7, 8]. Start with unweighted events and\nbuild a tree as above. If a training event is misclassiﬁed,\ni.e, a signal event lands on a background leaf or a back-\nground event lands on a signal leaf, then the weight of\nthat event is increased (boosted).",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 140
+    }
+  },
+  {
+    "text": "r a back-\nground event lands on a signal leaf, then the weight of\nthat event is increased (boosted).\nAs e c o n dt r e ei sb u i l tu s i n gt h en e ww e i g h t s ,n ol o n g e r\nequal. Again misclassiﬁed events have their weights\nboosted and the procedure is repeated. Typically , one\nmay build 1000 or 2000 trees this way.\nAs c o r ei sn o wa s s i g n e dt oa ne v e n ta sf o l l o w s . T h e\nevent is followed through each tree in turn. If it lands",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 141
+    }
+  },
+  {
+    "text": "e dt oa ne v e n ta sf o l l o w s . T h e\nevent is followed through each tree in turn. If it lands\non a signal leaf it is given a score of 1 and if it lands on\nab a c k g r o u n dl e a fi ti sg i v e nas c o r eo f- 1 . T h er e n o r -\nmalized sum of all the scores, possibly weighted, is the\nﬁnal score of the event. High scores mean the event is\nmost likely signal and low scores that it is most likely\nbackground. By choosing a particular value of the score",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 142
+    }
+  },
+  {
+    "text": "signal and low scores that it is most likely\nbackground. By choosing a particular value of the score\non which to cut, one can select a desired fraction of the\nsignal or a desired ratio of signal to background. For\nthose familiar with ANNs, the use of this score is the\nsame as the use of the ANN value for a given event. For\nthe MiniBooNE experiment, boosting has been found to\nbe superior to ANNs. Statisticians and computer scien-\ntists have found that this method of classiﬁcation is very",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 143
+    }
+  },
+  {
+    "text": "o ANNs. Statisticians and computer scien-\ntists have found that this method of classiﬁcation is very\neﬃcient and robust. Furthermore, the amount of tuning\nneeded is rather modest compared with ANNs. It works\nwell with many PID variables. If one makes a monotonic\ntransformation of a variable, so that if x1 >x 2 then\nf(x1)>f (x2), the boosting method gives exactly the\nsame results. It depends only on the ordering according\nto the variable, not on the value of the variable.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 144
+    }
+  },
+  {
+    "text": "esults. It depends only on the ordering according\nto the variable, not on the value of the variable.\nIn articles on boosting within the statistics and com-\nDecision tree : overtraining\nAdvantages :\n-Decision trees are independent of monotonous variable transformations\n-Weak variables are ignored and do not deteriorate performance\n- But Decision trees are extremely sensitive to the training samples,\ntherefore to overtraining\n-Slightly different training samples can lead to radically different DT",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 145
+    }
+  },
+  {
+    "text": "s,\ntherefore to overtraining\n-Slightly different training samples can lead to radically different DT\n-To stabilize Decision Tree performance, one can use different techniques.\n-Boosting\n-Bagging\n-Random forests\n-Pruning\n28\nDecision tree : boosting\nBoosting :\n-Sequentially apply the DT algorithm to reweighted\n(boosted) versions of the training data\n-Take a weighted majority vote of the sequence of DT\nalgorithms produced.\n-Boosting allows also to increase the performance.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 146
+    }
+  },
+  {
+    "text": "y vote of the sequence of DT\nalgorithms produced.\n-Boosting allows also to increase the performance.\n-Works very well on non-optimal decision tree (small\nnumber of nodes...)\nMost famous implementation in AdaBoost (adaptive\nboost) :\n-Events misclassiﬁed during the training of a decision\ntree are given a higher event weight\n-Events are reweighted depending on the error of the\nprevious tree\n-The output of the BDT is :\n! where hi=+1 or -1. 29\nvmp Adaptive Boost (AdaBoost) 53",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 147
+    }
+  },
+  {
+    "text": "e\nprevious tree\n-The output of the BDT is :\n! where hi=+1 or -1. 29\nvmp Adaptive Boost (AdaBoost) 53\nThe boost weight is derived from the misclassiﬁcation ratek errk of the previous tree 16\nk\nα=\np− err\nerr\n. fqrg\nThe weights of the entire event sample are then renormalised such that the sum of weights remains\nconstantm\nWe deﬁne the result of an individual classiﬁer as hfxgk with f x being the tuple of input variablesg",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 148
+    }
+  },
+  {
+    "text": "We deﬁne the result of an individual classiﬁer as hfxgk with f x being the tuple of input variablesg\nencoded for signal and background as hfxg = ip and − pk respectivelym The boosted event classiﬁl\ncation yBoost fxg is then given by\nyBoost fxg=\np\nNcollection\n·\nNcollection￿\ni\nlnf αig·hifxg, fqsg\nwhere the sum is over all classiﬁers in the collectionm Small flargeg values for yBoost fxg indicate\na backgroundllike fsignalllikeg eventm Equation f qsg represents the default boosting algorithmm It",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 149
+    }
+  },
+  {
+    "text": "a backgroundllike fsignalllikeg eventm Equation f qsg represents the default boosting algorithmm It\ncan be modiﬁed via the conﬁguration option string of the MV A method to be boosted fsee Option\nTables qp and qq on pages pou and pou for boosted decision treesk and Option Table qs for general\nclassiﬁer boosting xmpg if one wants to use an unweighted average of the boosted decision trees or\nclassiﬁers instead of the weighted onem",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 150
+    }
+  },
+  {
+    "text": "o use an unweighted average of the boosted decision trees or\nclassiﬁers instead of the weighted onem\nFor regression trees k the AdaBoost algorithm needs to be modiﬁedm TMV A uses here the solcalled\nAdaBoostmRq algorithm [ qv]m The idea is similar to AdaBoost albeit with a redeﬁned loss per event\nto account for the the deviation of the estimated target value from the true onem Moreoverk as there\nare no longer correctly and wrongly classiﬁed eventsk all events need to be reweighted depending on",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 151
+    }
+  },
+  {
+    "text": "are no longer correctly and wrongly classiﬁed eventsk all events need to be reweighted depending on\ntheir individual loss k which – for event k– is given by\nLinear y Lfkg=\n|y(k)−ˆy(k)|\nmax\nevents k￿\n(|y(k￿)−ˆy(k￿|)\n, fqtg\nSquare y Lfkg=\n￿\n|y(k)−ˆy(k)|\nmax\nevents k￿\n(|y(k￿)−ˆy(k￿|)\n￿2\n, fqug\nExponential y Lfkg=p − exp\n￿\n−\n|y(k)−ˆy(k)|\nmax\nevents k￿\n(|y(k￿)−ˆy(k￿|)\n￿\n. fqvg\nThe average loss of the classiﬁer y(i)\nover the whole training samplek ￿L￿\n(i)\n=\n￿\nevents k￿ wfk￿\ngL(i)\nfk￿\ngk",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 152
+    }
+  },
+  {
+    "text": "e loss of the classiﬁer y(i)\nover the whole training samplek ￿L￿\n(i)\n=\n￿\nevents k￿ wfk￿\ngL(i)\nfk￿\ngk\ncan be considered to be the analogon to the error fraction in classiﬁcationm Given ￿L￿k one computes\nthe quantity β(i) = ￿L￿\n(i)\n/fp −￿ L￿\n(i)\ngk which is used in the boosting of the eventsk and for the\ncombination of the regression methods belonging to the boosted collectionm The boosting weightk\nw(i+1)\nfkgk for event kand boost step ii p thus reads\nw(i+1)\nfkg= w(i)\nfkg·β\n1−L(i)\n(k)\n(i)\n. fqwg",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 153
+    }
+  },
+  {
+    "text": "k\nw(i+1)\nfkgk for event kand boost step ii p thus reads\nw(i+1)\nfkg= w(i)\nfkg·β\n1−L(i)\n(k)\n(i)\n. fqwg\n16\nBy construction, the error rate is err ≤ 0.5 as the same training events used to classify the output nodes of the\nprevious tree are used for the calculation of the error rate.\nvmp Adaptive Boost (AdaBoost) 53\nThe boost weight is derived from the misclassiﬁcation ratek errk of the previous tree 16\nk\nα =\np− err\nerr\n. fqrg",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 154
+    }
+  },
+  {
+    "text": "ight is derived from the misclassiﬁcation ratek errk of the previous tree 16\nk\nα =\np− err\nerr\n. fqrg\nThe weights of the entire event sample are then renormalised such that the sum of weights remains\nconstantm\nWe deﬁne the result of an individual classiﬁer as hfxgk with f x being the tuple of input variablesg\nencoded for signal and background as hfxg = ip and − pk respectivelym The boosted event classiﬁl\ncation yBoost fxg is then given by\nyBoost fxg=\np\nNcollection\n·\nNcollection\n￿\ni",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 155
+    }
+  },
+  {
+    "text": "oosted event classiﬁl\ncation yBoost fxg is then given by\nyBoost fxg=\np\nNcollection\n·\nNcollection\n￿\ni\nlnf αig·hifxg, fqsg\nwhere the sum is over all classiﬁers in the collectionm Small flargeg values for yBoost fxg indicate\na backgroundllike fsignalllikeg eventm Equation f qs g represents the default boosting algorithmm It\ncan be modiﬁed via the conﬁguration option string of the MV A method to be boosted fsee Option",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 156
+    }
+  },
+  {
+    "text": "mm It\ncan be modiﬁed via the conﬁguration option string of the MV A method to be boosted fsee Option\nTables qp and qq on pages pou and pou for boosted decision treesk and Option Table qs for general\nclassiﬁer boosting xmpg if one wants to use an unweighted average of the boosted decision trees or\nclassiﬁers instead of the weighted onem\nFor regression trees k the AdaBoost algorithm needs to be modiﬁedm TMV A uses here the solcalled",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 157
+    }
+  },
+  {
+    "text": "nem\nFor regression trees k the AdaBoost algorithm needs to be modiﬁedm TMV A uses here the solcalled\nAdaBoostmRq algorithm [ qv]m The idea is similar to AdaBoost albeit with a redeﬁned loss per event\nto account for the the deviation of the estimated target value from the true onem Moreoverk as there\nare no longer correctly and wrongly classiﬁed eventsk all events need to be reweighted depending on\ntheir individual loss k which – for event k – is given by\nLinear y Lfkg=\n|y(k)− ˆy(k)|\nmax",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 158
+    }
+  },
+  {
+    "text": "ending on\ntheir individual loss k which – for event k – is given by\nLinear y Lfkg=\n|y(k)− ˆy(k)|\nmax\nevents k￿\n(|y(k￿\n)− ˆy(k￿\n|)\n, fqtg\nSquare y Lfkg=\n￿\n|y(k)− ˆy(k)|\nmax\nevents k￿\n(|y(k￿\n)− ˆy(k￿\n|)\n￿2\n, fqug\nExponential y Lfkg=p − exp\n￿\n−\n|y(k)− ˆy(k)|\nmax\nevents k￿\n(|y(k￿\n)− ˆy(k￿\n|)\n￿\n. fqvg\nThe average loss of the classiﬁer y(i)\nover the whole training samplek ￿L￿\n(i)\n=\n￿\nevents k￿ wfk￿\ngL(i)\nfk￿\ngk",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 159
+    }
+  },
+  {
+    "text": "e loss of the classiﬁer y(i)\nover the whole training samplek ￿L￿\n(i)\n=\n￿\nevents k￿ wfk￿\ngL(i)\nfk￿\ngk\ncan be considered to be the analogon to the error fraction in classiﬁcationm Given ￿L￿k one computes\nthe quantity β(i) = ￿L￿\n(i)\n/fp −￿ L￿\n(i)\ngk which is used in the boosting of the eventsk and for the\ncombination of the regression methods belonging to the boosted collectionm The boosting weightk\nw(i+1)\nfkgk for event k and boost step ii p thus reads\nw\n(i+1)\nfkg= w\n(i)\nfkg·β\n1− L(i)\n(k)\n(i)",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 160
+    }
+  },
+  {
+    "text": "ghtk\nw(i+1)\nfkgk for event k and boost step ii p thus reads\nw\n(i+1)\nfkg= w\n(i)\nfkg·β\n1− L(i)\n(k)\n(i)\n. fqwg\n16\nBy construction, the error rate is err ≤ 0.5 as the same training events used to classify the output nodes of the\nprevious tree are used for the calculation of the error rate.\n3\nputer science communities, it is often recommended that\nshort trees with eight leaves or so be used. For the Mini-\nBooNE Monte Carlo samples it was found that large trees",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 161
+    }
+  },
+  {
+    "text": "th eight leaves or so be used. For the Mini-\nBooNE Monte Carlo samples it was found that large trees\nwith 45 leaves worked signiﬁcantly better.\nC. Some Boosting Algorithms\nIf there are Ntotal events in the sample, the weight of\neach event is initially taken as 1 /N.S u p p o s e t h a t t h e r e\nareNtree trees and mis the index of an individual tree.\nLet\n•xi=t h es e to fP I Dv a r i a b l e sf o rt h e ith event.\n•yi=1i ft h e ith event is a signal event and yi=−1",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 162
+    }
+  },
+  {
+    "text": "to fP I Dv a r i a b l e sf o rt h e ith event.\n•yi=1i ft h e ith event is a signal event and yi=−1\nif the event is a background event.\n•wi=t h ew e i g h to ft h e ith event.\n•Tm(xi)=1i ft h es e to fv a r i a b l e sf o rt h e ith event\nlands that event on a signal leaf and Tm(xi)= −1\nif the set of variables for that event lands it on a\nbackground leaf.\n•I(yi̸=Tm(xi)) = 1 if yi̸=Tm(xi)a n d0i f yi=\nTm(xi).\nThere are at least two commonly used methods for boost-",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 163
+    }
+  },
+  {
+    "text": "(xi)) = 1 if yi̸=Tm(xi)a n d0i f yi=\nTm(xi).\nThere are at least two commonly used methods for boost-\ning the weights of the misclassiﬁed events in the training\nsample.\nThe ﬁrst boosting method is called AdaBoost[3]. De-\nﬁne for the mth tree:\nerrm=\n∑N\ni=1wiI(yi̸=Tm(xi))\n∑N\ni=1wi\n.\nαm=β×ln((1−errm)/errm).\nβ =1 i s t h e v a l u e u s e d i n t h e s t a n d a r d A d a B o o s t\nmethod. For the MiniBooNE Monte Carlo samples,",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 164
+    }
+  },
+  {
+    "text": "u e u s e d i n t h e s t a n d a r d A d a B o o s t\nmethod. For the MiniBooNE Monte Carlo samples,\nβ=0.5h a sb e e nf o u n dt og i v eb e t t e rr e s u l t s . C h a n g e\nthe weight of each event i,i=1,. . . ,N:\nwi→wi×eαmI(yi̸=Tm(xi))\n.\nEach classiﬁer Tm is required to be better than random\nguessing with respect to the weighted distribution upon\nwhich the classiﬁer is trained. Thus, errm is required to\nbe less than 0.5, since, otherwise, the weights would be",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 165
+    }
+  },
+  {
+    "text": "siﬁer is trained. Thus, errm is required to\nbe less than 0.5, since, otherwise, the weights would be\nupdated in the wrong direction. Next, renormalize the\nweights, wi→wi/\n∑N\ni=1wi.The score for a given event\nis\nT(x)=\nNtree∑\nm=1\nαmTm(x),\nwhich is just the weighted sum of the scores over the\nindividual trees, see Fig.2.\nTraining Sample\nWeighted Sample\nWeighted Sample\nWeighted Sample\nT1(x)\nT2(x)\nT3(x)\nTM(x)\n! \"mTm(x)\nFIG. 2: Schematic of a boosting procedure.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 166
+    }
+  },
+  {
+    "text": "Sample\nWeighted Sample\nT1(x)\nT2(x)\nT3(x)\nTM(x)\n! \"mTm(x)\nFIG. 2: Schematic of a boosting procedure.\nThe second boosting method is called ϵ-Boost[4], or\nsometimes “shrinkage”. After the mth tree, change the\nweight of each event i,i=1,. . . ,N:\nwi→wie2ϵI(yi̸=Tm(xi))\n,\nwhere ϵis a constant of the order of 0.01. Renormalize\nthe weights, wi →wi/\n∑N\ni=1wi.The score for a given\nevent is\nT(x)=\nNtree∑\nm=1\nϵTm(x),\nwhich is the renormalized, but unweighted, sum of the\nscores over individual trees.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 167
+    }
+  },
+  {
+    "text": "ree∑\nm=1\nϵTm(x),\nwhich is the renormalized, but unweighted, sum of the\nscores over individual trees.\nThe AdaBoost and ϵ−Boost algorithms used in this\npaper try to minimize the expectation value: E(e−yF(x)),\nwhere y = 1 for signal, y = -1 for background, F(x)=\n∑Ntrees\ni=1 fi(x), where the classiﬁer fi(x)=1i fa ne v e n t\nlands on signal leaf, and fi(x)= −1i fa ne v e n tl a n d s\non background leaf. This minimization is closely related\nto minimizing the binomial log-likelihood[4]. It can be",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 168
+    }
+  },
+  {
+    "text": "d leaf. This minimization is closely related\nto minimizing the binomial log-likelihood[4]. It can be\nshown that E(e−yF(x))i sm i n i m i z e da t\nF(x)=\n1\n2\nln\nP(y=1|x)\nP(y=−1|x)\n=\n1\n2\nln\np(x)\n1−p(x)\nLety∗=(y+1 )/2. It is then easy to show that\ne−yF(x)\n=\n|y∗−p(x)|\n√\np(x)(1−p(x))\nThe right-hand side is known as the χstatistic. χ2is\naq u a d r a t i v ea p p r o x i m a t i o nt ot h el o g - l i k e l i h o o d ,s o χ\ncan be considered a gentler alternative. It turns out",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 169
+    }
+  },
+  {
+    "text": "o nt ot h el o g - l i k e l i h o o d ,s o χ\ncan be considered a gentler alternative. It turns out\nthat ﬁtting using χis monotone and smooth; the cri-\nteria will continually drive the estimates towards purer\nsolutions. An ANN tries to minimize the squared-error\nE(y−F(x))2,w h e r ey=1f o rs i g n a le v e n t s ,y=0f o r\nbackground events, and F(x)i st h en e t w o r kp r e d i c t i o n\nfor training events.\n!\"!\"#$\"%&'((% )*&+,:RUNVKRS\u000f\u0003&(51\u000f\u0003\u0003\u0015\u0014\u0011\u0003-DQXDU\\\u0003\u0015\u0013\u0014\u0014\u0003\u0003ʊ\u0003'HFLVLRQ\u00037UHHV\u0003DQG\u0003%RRVWLQJ\u0003",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 170
+    }
+  },
+  {
+    "text": "raining events.\n!\"!\"#$\"%&'((% )*&+,:RUNVKRS\u000f\u0003&(51\u000f\u0003\u0003\u0015\u0014\u0011\u0003-DQXDU\\\u0003\u0015\u0013\u0014\u0014\u0003\u0003ʊ\u0003'HFLVLRQ\u00037UHHV\u0003DQG\u0003%RRVWLQJ\u0003\n#$%&'()*+,--.'(/0+1#$%,--.'2\n)-./0/0$%1.23#\"\n4#.((/5/\"-%\n6789739\n:\"/$;<\"=%\n1.23#\"\n-\",>\"/$;<\n4#.((/5/\"-%\n67?9739\n:\"/$;<\"=%\n1.23#\"\n-\",>\"/$;<\n4#.((/5/\"-%\n67@9739\n:\"/$;<\"=%\n1.23#\"\n-\",>\"/$;<\n:\"/$;<\"=%\n1.23#\"\n-\",>\"/$;<\n4#.((/5/\"-%\n67A9739\n4#.((/5/\"-%\n6729739\n\"--\n\"--\n\"--\n?5\n>/<; B\n5\n2/(4#.((/5/\"= \"C\"0<(\n5\n.## \"C\"0<(\n\u0010\n6#.((/5/\"-D7 / 9\n7/9\"--\n7/9\n/ \"--\n?5\nE7F9 #'$ 6 7F9\n5\n§·\u0010\n¨¸\n©¹\n¦",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 171
+    }
+  },
+  {
+    "text": "/(4#.((/5/\"= \"C\"0<(\n5\n.## \"C\"0<(\n\u0010\n6#.((/5/\"-D7 / 9\n7/9\"--\n7/9\n/ \"--\n?5\nE7F9 #'$ 6 7F9\n5\n§·\u0010\n¨¸\n©¹\n¦\n+=.G''(<%-\",>\"/$;<(%\"C\"0<(%\n2/(4#.((/5/\"=%HE%3-\"C/'I(%4#.((/5/\"-%HEB\n+=.G''(<%>\"/$;<(%<;\"%4#.((/5/\"-(%.#('%\nI(/0$%<;\"%\"--'-%-.<\"%'5%<;\"%/0=/C/=I.#%\n4#.((/5/\"-%.44'-=/0$%<'B%\nAdaBoost : event weight\n30\n!\"!\"#$\"%&'((% )*&+,:RUNVKRS\u000f\u0003&(51\u000f\u0003\u0003\u0015\u0014\u0011\u0003-DQXDU\\\u0003\u0015\u0013\u0014\u0014\u0003\u0003ʊ\u0003'HFLVLRQ\u00037UHHV\u0003DQG\u0003%RRVWLQJ\u0003\n#$%&''()*+,*-+.)/01(\n-./0.%1\"0\"2\n\"34/#%\"5\"6.%7\"8$1.(\n98(:#/((8;8\"<%\"5\"6.(%$\".\n#/0$\"0%7\"8$1.(\n«\u0003DQG\u0003VR\u0003RQ\n3",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 172
+    }
+  },
+  {
+    "text": "()*+,*-+.)/01(\n-./0.%1\"0\"2\n\"34/#%\"5\"6.%7\"8$1.(\n98(:#/((8;8\"<%\"5\"6.(%$\".\n#/0$\"0%7\"8$1.(\n«\u0003DQG\u0003VR\u0003RQ\n3\nputer science communities, it is often recommended that\nshort trees with eight leaves or so be used. For the Mini-\nBooNE Monte Carlo samples it was found that large trees\nwith 45 leaves worked signiﬁcantly better.\nC. Some Boosting Algorithms\nIf there are N total events in the sample, the weight of\neach event is initially taken as 1 /N .S u p p o s e t h a t t h e r e",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 173
+    }
+  },
+  {
+    "text": "in the sample, the weight of\neach event is initially taken as 1 /N .S u p p o s e t h a t t h e r e\nare Ntree trees and m is the index of an individual tree.\nLet\n• xi =t h es e to fP I Dv a r i a b l e sf o rt h e ith event.\n• yi =1i ft h e ith event is a signal event and yi = −1\nif the event is a background event.\n• wi =t h ew e i g h to ft h e ith event.\n• Tm(xi)=1i ft h es e to fv a r i a b l e sf o rt h e ith event\nlands that event on a signal leaf and Tm(xi)= −1",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 174
+    }
+  },
+  {
+    "text": "ft h es e to fv a r i a b l e sf o rt h e ith event\nlands that event on a signal leaf and Tm(xi)= −1\nif the set of variables for that event lands it on a\nbackground leaf.\n• I(yi ̸= Tm(xi)) = 1 if yi ̸= Tm(xi)a n d0i f yi =\nTm(xi).\nThere are at least two commonly used methods for boost-\ning the weights of the misclassiﬁed events in the training\nsample.\nThe ﬁrst boosting method is called AdaBoost[3]. De-\nﬁne for the mth tree:\nerr m =\n∑N\ni=1\nwiI(yi ̸= Tm(xi))\n∑N\ni=1\nwi\n.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 175
+    }
+  },
+  {
+    "text": "method is called AdaBoost[3]. De-\nﬁne for the mth tree:\nerr m =\n∑N\ni=1\nwiI(yi ̸= Tm(xi))\n∑N\ni=1\nwi\n.\nαm = β×ln((1 −err m)/err m).\nβ =1 i s t h e v a l u e u s e d i n t h e s t a n d a r d A d a B o o s t\nmethod. For the MiniBooNE Monte Carlo samples,\nβ =0 .5h a sb e e nf o u n dt og i v eb e t t e rr e s u l t s . C h a n g e\nthe weight of each event i,i=1 ,. . . ,N :\nwi → wi×e\nαm I(yi̸=Tm (xi))\n.\nEach classiﬁer Tm is required to be better than random",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 176
+    }
+  },
+  {
+    "text": "i=1 ,. . . ,N :\nwi → wi×e\nαm I(yi̸=Tm (xi))\n.\nEach classiﬁer Tm is required to be better than random\nguessing with respect to the weighted distribution upon\nwhich the classiﬁer is trained. Thus, err m is required to\nbe less than 0.5, since, otherwise, the weights would be\nupdated in the wrong direction. Next, renormalize the\nweights, wi → wi/\n∑N\ni=1\nwi.The score for a given event\nis\nT(x)=\nNtree\n∑\nm=1\nαmTm(x),\nwhich is just the weighted sum of the scores over the\nindividual trees, see Fig.2.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 177
+    }
+  },
+  {
+    "text": "ee\n∑\nm=1\nαmTm(x),\nwhich is just the weighted sum of the scores over the\nindividual trees, see Fig.2.\nTraining Sample\nWeighted Sample\nWeighted Sample\nWeighted Sample\nT1\n(x)\nT2\n(x)\nT3\n(x)\nTM\n(x)\n! \"m\nTm\n(x)\nFIG. 2: Schematic of a boosting procedure.\nThe second boosting method is called ϵ-Boost[4], or\nsometimes “shrinkage”. After the mth tree, change the\nweight of each event i,i=1 ,. . . ,N :\nwi → wie\n2ϵI(yi̸=Tm (xi))\n,\nwhere ϵis a constant of the order of 0.01. Renormalize\nthe weights, wi → wi/\n∑N",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 178
+    }
+  },
+  {
+    "text": "e\n2ϵI(yi̸=Tm (xi))\n,\nwhere ϵis a constant of the order of 0.01. Renormalize\nthe weights, wi → wi/\n∑N\ni=1\nwi.The score for a given\nevent is\nT(x)=\nNtree\n∑\nm=1\nϵTm(x),\nwhich is the renormalized, but unweighted, sum of the\nscores over individual trees.\nThe AdaBoost and ϵ−Boost algorithms used in this\npaper try to minimize the expectation value: E(e−yF (x)\n),\nwhere y = 1 for signal, y = -1 for background, F(x)=\n∑Ntrees\ni=1\nfi(x), where the classiﬁer fi(x)=1i fa ne v e n t",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 179
+    }
+  },
+  {
+    "text": "r signal, y = -1 for background, F(x)=\n∑Ntrees\ni=1\nfi(x), where the classiﬁer fi(x)=1i fa ne v e n t\nlands on signal leaf, and fi(x)= −1i fa ne v e n tl a n d s\non background leaf. This minimization is closely related\nto minimizing the binomial log-likelihood[4]. It can be\nshown that E(e−yF (x)\n)i sm i n i m i z e da t\nF(x)=\n1\n2\nln\nP(y=1 |x)\nP(y= −1|x)\n=\n1\n2\nln\np(x)\n1−p(x)\nLet y∗\n=( y+1 ) /2. It is then easy to show that\ne\n−yF (x)\n=\n|y∗\n−p(x)|\n√\np(x)(1 −p(x))",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 180
+    }
+  },
+  {
+    "text": "p(x)\n1−p(x)\nLet y∗\n=( y+1 ) /2. It is then easy to show that\ne\n−yF (x)\n=\n|y∗\n−p(x)|\n√\np(x)(1 −p(x))\nThe right-hand side is known as the χ statistic. χ2\nis\naq u a d r a t i v ea p p r o x i m a t i o nt ot h el o g - l i k e l i h o o d ,s o χ\ncan be considered a gentler alternative. It turns out\nthat ﬁtting using χ is monotone and smooth; the cri-\nteria will continually drive the estimates towards purer\nsolutions. An ANN tries to minimize the squared-error\nE(y− F(x))2",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 181
+    }
+  },
+  {
+    "text": "drive the estimates towards purer\nsolutions. An ANN tries to minimize the squared-error\nE(y− F(x))2\n,w h e r ey=1f o rs i g n a le v e n t s ,y=0f o r\nbackground events, and F(x)i st h en e t w o r kp r e d i c t i o n\nfor training events.\n3\nputer science communities, it is often recommended that\nshort trees with eight leaves or so be used. For the Mini-\nBooNE Monte Carlo samples it was found that large trees\nwith 45 leaves worked signiﬁcantly better.\nC. Some Boosting Algorithms",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 182
+    }
+  },
+  {
+    "text": "it was found that large trees\nwith 45 leaves worked signiﬁcantly better.\nC. Some Boosting Algorithms\nIf there are N total events in the sample, the weight of\neach event is initially taken as 1 /N .S u p p o s e t h a t t h e r e\nare Ntree trees and m is the index of an individual tree.\nLet\n• xi =t h es e to fP I Dv a r i a b l e sf o rt h e ith event.\n• yi =1i ft h e ith event is a signal event and yi = −1\nif the event is a background event.\n• wi =t h ew e i g h to ft h e ith event.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 183
+    }
+  },
+  {
+    "text": "gnal event and yi = −1\nif the event is a background event.\n• wi =t h ew e i g h to ft h e ith event.\n• Tm(xi)=1i ft h es e to fv a r i a b l e sf o rt h e ith event\nlands that event on a signal leaf and Tm(xi)= −1\nif the set of variables for that event lands it on a\nbackground leaf.\n• I(yi ̸= Tm(xi)) = 1 if yi ̸= Tm(xi)a n d0i f yi =\nTm(xi).\nThere are at least two commonly used methods for boost-\ning the weights of the misclassiﬁed events in the training\nsample.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 184
+    }
+  },
+  {
+    "text": "commonly used methods for boost-\ning the weights of the misclassiﬁed events in the training\nsample.\nThe ﬁrst boosting method is called AdaBoost[3]. De-\nﬁne for the mth tree:\nerr m =\n∑N\ni=1\nwiI(yi ̸= Tm(xi))\n∑N\ni=1\nwi\n.\nαm = β× ln((1 − err m )/err m ).\nβ =1 i s t h e v a l u e u s e d i n t h e s t a n d a r d A d a B o o s t\nmethod. For the MiniBooNE Monte Carlo samples,\nβ =0 .5h a sb e e nf o u n dt og i v eb e t t e rr e s u l t s . C h a n g e\nthe weight of each event i,i=1 ,. . . ,N :",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 185
+    }
+  },
+  {
+    "text": "f o u n dt og i v eb e t t e rr e s u l t s . C h a n g e\nthe weight of each event i,i=1 ,. . . ,N :\nwi → wi × e\nαm I(yi̸=Tm (xi))\n.\nEach classiﬁer Tm is required to be better than random\nguessing with respect to the weighted distribution upon\nwhich the classiﬁer is trained. Thus, err m is required to\nbe less than 0.5, since, otherwise, the weights would be\nupdated in the wrong direction. Next, renormalize the\nweights, wi → wi/\n∑N\ni=1\nwi.The score for a given event\nis\nT(x)=\nNtree\n∑\nm=1\nαmTm(x),",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 186
+    }
+  },
+  {
+    "text": "enormalize the\nweights, wi → wi/\n∑N\ni=1\nwi.The score for a given event\nis\nT(x)=\nNtree\n∑\nm=1\nαmTm(x),\nwhich is just the weighted sum of the scores over the\nindividual trees, see Fig.2.\nTraining Sample\nWeighted Sample\nWeighted Sample\nWeighted Sample\nT1\n(x)\nT2\n(x)\nT3\n(x)\nTM\n(x)\n! \"m\nTm\n(x)\nFIG. 2: Schematic of a boosting procedure.\nThe second boosting method is called ϵ-Boost[4], or\nsometimes “shrinkage”. After the mth tree, change the\nweight of each event i,i=1 ,. . . ,N :\nwi → wie",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 187
+    }
+  },
+  {
+    "text": "ometimes “shrinkage”. After the mth tree, change the\nweight of each event i,i=1 ,. . . ,N :\nwi → wie\n2ϵI(yi̸=Tm (xi))\n,\nwhere ϵis a constant of the order of 0.01. Renormalize\nthe weights, wi → wi/\n∑N\ni=1\nwi. The score for a given\nevent is\nT(x)=\nNtree\n∑\nm=1\nϵTm(x),\nwhich is the renormalized, but unweighted, sum of the\nscores over individual trees.\nThe AdaBoost and ϵ−Boost algorithms used in this\npaper try to minimize the expectation value: E(e−yF (x)\n),",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 188
+    }
+  },
+  {
+    "text": "Boost and ϵ−Boost algorithms used in this\npaper try to minimize the expectation value: E(e−yF (x)\n),\nwhere y = 1 for signal, y = -1 for background, F(x)=\n∑Ntrees\ni=1\nfi(x), where the classiﬁer fi(x)=1i fa ne v e n t\nlands on signal leaf, and fi(x)= −1i fa ne v e n tl a n d s\non background leaf. This minimization is closely related\nto minimizing the binomial log-likelihood[4]. It can be\nshown that E(e−yF (x)\n)i sm i n i m i z e da t\nF(x)=\n1\n2\nln\nP(y=1 |x)\nP(y= −1|x)\n=\n1\n2\nln\np(x)\n1− p(x)\nLet y∗",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 189
+    }
+  },
+  {
+    "text": "t E(e−yF (x)\n)i sm i n i m i z e da t\nF(x)=\n1\n2\nln\nP(y=1 |x)\nP(y= −1|x)\n=\n1\n2\nln\np(x)\n1− p(x)\nLet y∗\n=( y+1 ) /2. It is then easy to show that\ne\n−yF (x)\n=\n|y∗\n− p(x)|\n√\np(x)(1 − p(x))\nThe right-hand side is known as the χ statistic. χ2\nis\naq u a d r a t i v ea p p r o x i m a t i o nt ot h el o g - l i k e l i h o o d ,s o χ\ncan be considered a gentler alternative. It turns out\nthat ﬁtting using χ is monotone and smooth; the cri-\nteria will continually drive the estimates towards purer",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 190
+    }
+  },
+  {
+    "text": "ng using χ is monotone and smooth; the cri-\nteria will continually drive the estimates towards purer\nsolutions. An ANN tries to minimize the squared-error\nE(y− F(x))2\n,w h e r ey=1f o rs i g n a le v e n t s ,y=0f o r\nbackground events, and F(x)i st h en e t w o r kp r e d i c t i o n\nfor training events.\n3\nputer science communities, it is often recommended that\nshort trees with eight leaves or so be used. For the Mini-\nBooNE Monte Carlo samples it was found that large trees",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 191
+    }
+  },
+  {
+    "text": "th eight leaves or so be used. For the Mini-\nBooNE Monte Carlo samples it was found that large trees\nwith 45 leaves worked signiﬁcantly better.\nC. Some Boosting Algorithms\nIf there are N total events in the sample, the weight of\neach event is initially taken as 1 /N .S u p p o s e t h a t t h e r e\nare Ntree trees and m is the index of an individual tree.\nLet\n•xi =t h es e to fP I Dv a r i a b l e sf o rt h e ith event.\n•yi=1i ft h e ith event is a signal event and yi =−1",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 192
+    }
+  },
+  {
+    "text": "to fP I Dv a r i a b l e sf o rt h e ith event.\n•yi=1i ft h e ith event is a signal event and yi =−1\nif the event is a background event.\n•wi =t h ew e i g h to ft h e ith event.\n•Tm(xi)=1i ft h es e to fv a r i a b l e sf o rt h e ith event\nlands that event on a signal leaf and Tm(xi)= −1\nif the set of variables for that event lands it on a\nbackground leaf.\n•I(yi ̸= Tm(xi)) = 1 if yi ̸= Tm(xi)a n d0i f yi =\nTm(xi).\nThere are at least two commonly used methods for boost-",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 193
+    }
+  },
+  {
+    "text": ")) = 1 if yi ̸= Tm(xi)a n d0i f yi =\nTm(xi).\nThere are at least two commonly used methods for boost-\ning the weights of the misclassiﬁed events in the training\nsample.\nThe ﬁrst boosting method is called AdaBoost[3]. De-\nﬁne for the mth tree:\nerrm =\n∑N\ni=1 wiI(yi̸=Tm(xi))\n∑N\ni=1 wi\n.\nαm =β×ln((1 −errm)/err m).\nβ =1 i s t h e v a l u e u s e d i n t h e s t a n d a r d A d a B o o s t\nmethod. For the MiniBooNE Monte Carlo samples,",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 194
+    }
+  },
+  {
+    "text": "u e u s e d i n t h e s t a n d a r d A d a B o o s t\nmethod. For the MiniBooNE Monte Carlo samples,\nβ =0 .5h a sb e e nf o u n dt og i v eb e t t e rr e s u l t s . C h a n g e\nthe weight of each event i,i=1 ,. . . ,N :\nwi → wi×eαm I(yi̸=Tm (xi))\n.\nEach classiﬁer Tm is required to be better than random\nguessing with respect to the weighted distribution upon\nwhich the classiﬁer is trained. Thus, errm is required to\nbe less than 0.5, since, otherwise, the weights would be",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 195
+    }
+  },
+  {
+    "text": "siﬁer is trained. Thus, errm is required to\nbe less than 0.5, since, otherwise, the weights would be\nupdated in the wrong direction. Next, renormalize the\nweights, wi → wi/\n∑N\ni=1 wi.The score for a given event\nis\nT(x)=\nNtree\n∑\nm=1\nαmTm(x),\nwhich is just the weighted sum of the scores over the\nindividual trees, see Fig.2.\nTraining Sample\nWeighted Sample\nWeighted Sample\nWeighted Sample\nT1\n(x)\nT2\n(x)\nT3\n(x)\nTM\n(x)\n! \"m\nTm\n(x)\nFIG. 2: Schematic of a boosting procedure.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 196
+    }
+  },
+  {
+    "text": "e\nWeighted Sample\nT1\n(x)\nT2\n(x)\nT3\n(x)\nTM\n(x)\n! \"m\nTm\n(x)\nFIG. 2: Schematic of a boosting procedure.\nThe second boosting method is called ϵ-Boost[4], or\nsometimes “shrinkage”. After the mth tree, change the\nweight of each event i,i=1 ,. . . ,N :\nwi → wie2ϵI(yi̸=Tm (xi))\n,\nwhere ϵis a constant of the order of 0.01. Renormalize\nthe weights, wi → wi/\n∑N\ni=1 wi.The score for a given\nevent is\nT(x)=\nNtree\n∑\nm=1\nϵTm(x),\nwhich is the renormalized, but unweighted, sum of the\nscores over individual trees.",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 197
+    }
+  },
+  {
+    "text": "ee\n∑\nm=1\nϵTm(x),\nwhich is the renormalized, but unweighted, sum of the\nscores over individual trees.\nThe AdaBoost and ϵ−Boost algorithms used in this\npaper try to minimize the expectation value: E(e−yF (x)\n),\nwhere y = 1 for signal, y = -1 for background, F(x)=\n∑Ntrees\ni=1 fi(x), where the classiﬁer fi(x)=1i fa ne v e n t\nlands on signal leaf, and fi(x)= −1i fa ne v e n tl a n d s\non background leaf. This minimization is closely related\nto minimizing the binomial log-likelihood[4]. It can be",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 198
+    }
+  },
+  {
+    "text": "d leaf. This minimization is closely related\nto minimizing the binomial log-likelihood[4]. It can be\nshown that E(e−yF (x)\n)i sm i n i m i z e da t\nF(x)=\n1\n2\nln\nP(y=1 |x)\nP(y=−1|x)\n=\n1\n2\nln\np(x)\n1−p(x)\nLet y∗\n=( y+1 ) /2. It is then easy to show that\ne−yF (x)\n=\n|y∗\n−p(x)|\n√\np(x)(1 −p(x))\nThe right-hand side is known as the χ statistic. χ2\nis\naq u a d r a t i v ea p p r o x i m a t i o nt ot h el o g - l i k e l i h o o d ,s o χ\ncan be considered a gentler alternative. It turns out",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 199
+    }
+  },
+  {
+    "text": "o nt ot h el o g - l i k e l i h o o d ,s o χ\ncan be considered a gentler alternative. It turns out\nthat ﬁtting using χ is monotone and smooth; the cri-\nteria will continually drive the estimates towards purer\nsolutions. An ANN tries to minimize the squared-error\nE(y−F(x))2\n,w h e r ey=1f o rs i g n a le v e n t s ,y=0f o r\nbackground events, and F(x)i st h en e t w o r kp r e d i c t i o n\nfor training events.\nweight of the ith event :\nI=1 if the event is\nmisclassiﬁed (0 otherwise)",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 200
+    }
+  },
+  {
+    "text": "i o n\nfor training events.\nweight of the ith event :\nI=1 if the event is\nmisclassiﬁed (0 otherwise)\nerror on the\nmth tree\nBDT : example\n31!\"!\"#$\"%&'((% )*&+,:RUNVKRS\u000f\u0003&(51\u000f\u0003\u0003\u0015\u0014\u0011\u0003-DQXDU\\\u0003\u0015\u0013\u0014\u0014\u0003\u0003ʊ\u0003'HFLVLRQ\u00037UHHV\u0003DQG\u0003%RRVWLQJ\u0003\n#$%&''()*+#+(,-./0+$0-'1()2%),'1\n7KH\u0003H[DPSOH\u001d\u0003\u000bVRPHZKDW\u0003DUWLILFLDO«EXW\u0003QLFH\u0003IRU\u0003GHPRQVWUDWLRQ\f\u0003\u001d\u0003\u0003\n'DWD\u0003ILOH\u0003ZLWK\u0003WKUHH\u0003³EXPSV´\n:HDN\u0003FODVVLILHU\u0003\u000bL\u0011H\u0011\u0003RQH\u0003VLQJOH\u0003VLPSOH\u0003³FXW´\u0003\u0003\u0003ļ\u0003GHFLVLRQ\u0003WUHH\u0003VWXPSV\u0003\n- .\n/01234%5%6 /01234%78%6",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 201
+    }
+  },
+  {
+    "text": ":HDN\u0003FODVVLILHU\u0003\u000bL\u0011H\u0011\u0003RQH\u0003VLQJOH\u0003VLPSOH\u0003³FXW´\u0003\u0003\u0003ļ\u0003GHFLVLRQ\u0003WUHH\u0003VWXPSV\u0003\n- .\n/01234%5%6 /01234%78%6\n)9'%1\"0(':0;#\"%<=>(?04%&01@%5%@AB%Æİ(3$:0#8CCD%İ;E$§\u0003\u0013\b\u0003\u0003\u0003PLVFODVVLILHG\u0003HYHQWV\u0003LQ\u0003WRWDO\u0003\u0014\u0019\u0011\u0018\b\n'1%\n;4%&01@%7%,@AB%Æİ(3$:0#8FFD%İ;E$§\u0003\u0013\b\u0003\u0003PLVFODVVLILHG\u0003HYHQWV\u0003LQ\u0003WRWDO\u0003\u0016\u0016\b\nWKH\u0003WUDLQLQJ\u0003RI\u0003D\u0003VLQJOH\u0003GHFLVLRQ\u0003WUHH\u0003VWXPS\u0003ZLOO\u0003ILQG\u0003³FXW\u0003D\f´\n04;4\nBDT : example\n32!\"!\"#$\"%&'((% )*&+,:RUNVKRS\u000f\u0003&(51\u000f\u0003\u0003\u0015\u0014\u0011\u0003-DQXDU\\\u0003\u0015\u0013\u0014\u0014\u0003\u0003ʊ\u0003'HFLVLRQ\u00037UHHV\u0003DQG\u0003%RRVWLQJ\u0003\n#$%&''()*+#+(,-./0+$0-'1()2%),'1",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 202
+    }
+  },
+  {
+    "text": "+,:RUNVKRS\u000f\u0003&(51\u000f\u0003\u0003\u0015\u0014\u0011\u0003-DQXDU\\\u0003\u0015\u0013\u0014\u0014\u0003\u0003ʊ\u0003'HFLVLRQ\u00037UHHV\u0003DQG\u0003%RRVWLQJ\u0003\n#$%&''()*+#+(,-./0+$0-'1()2%),'1\n7KH\u0003ILUVW\u0003³WUHH´\u000f\u0003FKRRVLQJ\u0003FXW\u0003D\f\u0003ZLOO\u0003JLYH\u0003DQ\u0003HUURU\u0003IUDFWLRQ\u001d\u0003HUU\u0003 \u0003\u0013\u0011\u0014\u0019\u0018\n--%./0%1\"/2\"%34##%\nFKRVH\u001d\u0003\u0003\u0003³FXW\u0003E\f´\u001d\u0003\u0003\n&.56%7%,6-8\n9:\n)1\"%2';94/\"0%2#.((4<4\"5=%%)5\"\">%?%)5\"\"@\nA1\"%B3\"4$1A\"0:%.C\"5.$\"%'<%A1\"%5\"(D'/(\"%A'%\n.%A\"(A%\"C\"/A%<5';%9'A1%A5\"\"(%4(%.9#\"%A'%\n(\"D.5.A\"%(4$/.#%<5';%9.2E$5'F/0%.(%\n$''0%.(%'/\"%3'F#0%\"GD\"2A%<5';%A1\"%;'(A%\nD'3\"5<F#%2#.((4<4\"5",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 203
+    }
+  },
+  {
+    "text": "%A'%\n(\"D.5.A\"%(4$/.#%<5';%9.2E$5'F/0%.(%\n$''0%.(%'/\"%3'F#0%\"GD\"2A%<5';%A1\"%;'(A%\nD'3\"5<F#%2#.((4<4\"5\nÎEHIRUH\u0003EXLOGLQJ\u0003WKH\u0003QH[W\u0003³WUHH´\u001d\u0003\u0003ZHLJKW\u0003ZURQJ\u0003FODVVLILHG\u0003WUDLQLQJ\u0003HYHQWV\u0003E\\\u0003\u0003\u000b\u0003\u0014,\"55H\"55:%:%§8%\nÎWKH\u0003QH[W\u0003³WUHH´\u0003VHHV\u0003HVVHQWLDOO\\\u0003WKH\u0003IROORZLQJ\u0003GDWD\u0003VDPSOH\n5\",3\"4$1A\nDecision tree : output\n-A single decision tree can be trained to gives always\nan integer response, : signal (+1) / background (-1)\nBoosted decision trees give a Real-valued output :",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 204
+    }
+  },
+  {
+    "text": "integer response, : signal (+1) / background (-1)\nBoosted decision trees give a Real-valued output :\n-The output is a linear combination of +1 and -1, because of the weights over\nthe different training decision trees during boosting\n-Output is quasi-continuous. The number of classes depends on the number of\ntrees used in the boosting process\n33\n− −\n−\n−\n−\n−\n+\n+\n+\n+\n+\nExamples of classiﬁers\nLinear Quadratic Decision tree\n+− +−\n−\n−\n−\n+\n+\n+\nf(x)=s i g n ( ax+b) f(x)=s i g n ( ax2+bx+c)\n− −\n−\n−\n−\n−\n+",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 205
+    }
+  },
+  {
+    "text": "uadratic Decision tree\n+− +−\n−\n−\n−\n+\n+\n+\nf(x)=s i g n ( ax+b) f(x)=s i g n ( ax2+bx+c)\n− −\n−\n−\n−\n−\n+\n+\n+\n+\n+\n− −\n−\n−\n−\n−\n+\n+\n+\n+\n+\n− −\n−\n−\n−\n−\n+\n+\n+\n+\n+\nCost functions for classiﬁcation The objective of classiﬁcation is to min-\nimize the probability of making an error on future data, also called the\nexpected error ,a n dd e n o t e db y R.\nR(f)= P[Yf(X)<0] = EPXY [1[Yf(X)<0]]( 1 )\nThis cost cannot be optimized directly, because we don’t kno wt h ed a t a",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 206
+    }
+  },
+  {
+    "text": "= EPXY [1[Yf(X)<0]]( 1 )\nThis cost cannot be optimized directly, because we don’t kno wt h ed a t a\ndistribution PXY.T h e r e f o r e , i n t r a i n i n g c l a s s i ﬁ e r s , o n e u s e s t h e empirical\n1 tree 850 trees\nDecision tree : bagging, random\nforests, pruning\n-One can also use different techniques such as bagging and random forest\n-Improves the stability against ﬂuctuations, not much the performance\n-Both of them makes use of the idea of randomizing trees.\nBagging :",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 207
+    }
+  },
+  {
+    "text": "ations, not much the performance\n-Both of them makes use of the idea of randomizing trees.\nBagging :\n-Resampling technique. Training is repeated on “bootstrap” samples (i.e re-\nsample training data with replacement), then combined\nRandom forests :\n-Training repeated on random bootstrap (or subsets) of the training data only\n-Consider at each node only a random subsets of variables for the split\nPruning :\n- Grow tree to the end and “cut back”, nodes that seem statistically dominated\n34",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 208
+    }
+  },
+  {
+    "text": "he split\nPruning :\n- Grow tree to the end and “cut back”, nodes that seem statistically dominated\n34\nDecision tree : example in HEP\nExamples in CMS : H→WW, H→bb analyses\n35\n6 4 H→ W+W−Event Selection\nBDT Output\n-1 -0.5 0 0.5 1\nentries\n0\n20\n40\ndata=130H m\nWW\nZ+jets\ntop\nWZ/ZZ\nW+jets\n-1L = 4.6 fbCMS preliminary\n-a(\nBDT Output\n-1 -0.5 0 0.5 1\nentries\n0\n20\n40\ndata=130H m\nWW\nZ+jets\ntop\nWZ/ZZ\nW+jets\n-1L = 4.6 fbCMS preliminary\n-b(\nBDT Output\n-1 -0.5 0 0.5 1\nentries\n0\n20\n40\ndata=130H m\nWW\nZ+jets\ntop",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 209
+    }
+  },
+  {
+    "text": "-1L = 4.6 fbCMS preliminary\n-b(\nBDT Output\n-1 -0.5 0 0.5 1\nentries\n0\n20\n40\ndata=130H m\nWW\nZ+jets\ntop\nWZ/ZZ\nW+jets\n-1L = 4.6 fbCMS preliminary\n-c(\nBDT Output\n-1 -0.5 0 0.5 1\nentries\n0\n20\n40\ndata=130H m\nWW\nZ+jets\ntop\nWZ/ZZ\nW+jets\n-1L = 4.6 fbCMS preliminary\n-d(\nFigure 3: BDT classiﬁer outputs for Higgs signal and background events for mH=130 GeV / c2\nin the 0-jet bin same ﬂavor ﬁnal state -a(, 1-jet bin same ﬂavor ﬁnal state -b(, 0-jet bin opposite",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 210
+    }
+  },
+  {
+    "text": "in the 0-jet bin same ﬂavor ﬁnal state -a(, 1-jet bin same ﬂavor ﬁnal state -b(, 0-jet bin opposite\nﬂavor ﬁnal state -c(, and 1-jet bin opposite ﬂavor ﬁnal state -d(, after the W +W−selection. The\narea marked as WW corresponds to non-resonant W +W−production.\n14 7 Results\nBDT output-0.6-0.4-0.20 0.20.40.6\nEvents\n-110\n1\n10\n210\n310\n410 DataWHVVW + bbW + udscgZ + bbZ + udscgSingle TopttQCDMC uncertainty\nCMS Preliminary-1 = 7 TeV, L = 4.7 fbs\n)b)H(b!µW(\nBDT output-0.6 -0.4 -0.2 0 0.2 0.4 0.6",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 211
+    }
+  },
+  {
+    "text": "uncertainty\nCMS Preliminary-1 = 7 TeV, L = 4.7 fbs\n)b)H(b!µW(\nBDT output-0.6 -0.4 -0.2 0 0.2 0.4 0.6\nData/MC\n0.5\n1\n1.5 Kolmogorov Test: 0.996885\nchi2/ndf: 0.54051, p-value: 0.966576\nBDT output-0.6-0.4-0.20 0.20.40.6\nEvents\n-110\n1\n10\n210\n310\n410 DataVVW + bbW + udscgZ + bbZ + udscgSingle TopttQCDMC uncertainty\nCMS Preliminary-1 = 7 TeV, L = 4.7 fbs\n)b)H(b!W(e\nBDT output-0.6 -0.4 -0.2 0 0.2 0.4 0.6\nData/MC\n0.5\n1\n1.5 Kolmogorov Test: 0.97523\nchi2/ndf: 0.721828, p-value: 0.791994",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 212
+    }
+  },
+  {
+    "text": "-0.2 0 0.2 0.4 0.6\nData/MC\n0.5\n1\n1.5 Kolmogorov Test: 0.97523\nchi2/ndf: 0.721828, p-value: 0.791994\nBDT Output-1-0.8-0.6-0.4-0.200.2\nEvents / 0.10\n-310\n-210\n-110\n1\n10\n210\n310\n410CMS Preliminary-1 = 7 TeV, L = 4.7 fbs\n)b)H(b+µ-µZ(\nDataZH(115 GeV)\nZZ+WZ+WWZ + udscg\nZ + bb\n+ S.T.tt\n-1 -0.8 -0.6 -0.4 -0.2 0 0.2\ndata/mc0\n0.5\n1\n1.5\n2 Kolmorov Test: 0.656\nchi2/ndf: 1.187\nBDT output-1-0.8-0.6-0.4-0.200.20.40.60.81\nEvents / 0.1\n-210\n-110\n1\n10\n210\n310\n410 Data\nbZ + bZ + udscg\n+jetsttSingle top\nWW, WZ, ZZ",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 213
+    }
+  },
+  {
+    "text": "0.40.60.81\nEvents / 0.1\n-210\n-110\n1\n10\n210\n310\n410 Data\nbZ + bZ + udscg\n+jetsttSingle top\nWW, WZ, ZZ\nZH(115 GeV)\nCMS preliminary-1 = 7 TeV, L = 4.7 fbs\n)b)H(b+e-Z(e\nData/MC00.51\n1.52  = 0.6702!  = 0.987sK\nBDT\n-1-0.8-0.6-0.4-0.20 0.20.4\nEvents\n-310\n-210\n-110\n1\n10\n210\n310\n410 Data\nVH(115)\nVV\ntt\nst\nQCD\nZ+udscg\nZ+bb\nW+udscg\nW+bb\nCMS Preliminary-1 = 7 TeV, L = 4.7 fbs\n)b)H(b!!Z(\n-1 -0.8 -0.6 -0.4 -0.2 0 0.2 0.4\ndata  / mc\n0\n0.5\n1\n1.5\n2\nKolmorov Test: 0.420\nchi2/ndf: 0.943",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 214
+    }
+  },
+  {
+    "text": "b!!Z(\n-1 -0.8 -0.6 -0.4 -0.2 0 0.2 0.4\ndata  / mc\n0\n0.5\n1\n1.5\n2\nKolmorov Test: 0.420\nchi2/ndf: 0.943\nFigure 3: Distributions of BDT output for W (µν)H(top left) and W (eν)H(top right), Z (µµ)H\n(middle left) and Z (ee)H (middle right), and Z (νν)H (bottom) for data (points with errors), all\nbackgrounds, and signal after all selection criteria have been applied.\nThe package TMVA\n-Package widely used in HEP\n- Root-based implementation (included in every recent ROOT release)\nTMVA functionalities :",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 215
+    }
+  },
+  {
+    "text": "ed in HEP\n- Root-based implementation (included in every recent ROOT release)\nTMVA functionalities :\n-Allows to check input variables, correlations, overtraining, performance\n-Many multivariate methods available : rectangular cuts, likelihood,\nvarious decision trees, SVM...\n-Classiﬁcation and regression\n-Tuning of parameters relatively easy\n-Training is user-friendly and fast enough to be manageable on a laptop\n-Application is less user friendly : basically have to do it by hand in ROOT\n36",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 216
+    }
+  },
+  {
+    "text": "Available classiﬁers\n// --- Cut optimisation\nUse[\"Cuts\"]            = 1;\nUse[\"CutsD\"]           = 0;\nUse[\"CutsPCA\"]         = 0;\nUse[\"CutsGA\"]          = 0;\nUse[\"CutsSA\"]          = 0;\n//\n// --- 1-dimensional likelihood (\"naive Bayes estimator\")\nUse[\"Likelihood\"]      = 0;\nUse[\"LikelihoodD\"]     = 0; // the \"D\" extension indicates decorrelated input variables (see option strings)\nUse[\"LikelihoodPCA\"]   = 0; // the \"PCA\" extension indicates PCA-transformed input variables (see option strings)",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 217
+    }
+  },
+  {
+    "text": "odPCA\"]   = 0; // the \"PCA\" extension indicates PCA-transformed input variables (see option strings)\nUse[\"LikelihoodKDE\"]   = 0;\nUse[\"LikelihoodMIX\"]   = 0;\n//\n// --- Mutidimensional likelihood and Nearest-Neighbour methods\nUse[\"PDERS\"]           = 0;\nUse[\"PDERSD\"]          = 0;\nUse[\"PDERSPCA\"]        = 0;\nUse[\"PDEFoam\"]         = 0;\nUse[\"PDEFoamBoost\"]    = 0; // uses generalised MVA method boosting\nUse[\"KNN\"]             = 0; // k-nearest neighbour method\n//\n// --- Linear Discriminant Analysis",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 218
+    }
+  },
+  {
+    "text": "ing\nUse[\"KNN\"]             = 0; // k-nearest neighbour method\n//\n// --- Linear Discriminant Analysis\nUse[\"LD\"]              = 0; // Linear Discriminant identical to Fisher\nUse[\"Fisher\"]          = 0;\nUse[\"FisherG\"]         = 0;\nUse[\"BoostedFisher\"]   = 0; // uses generalised MVA method boosting\nUse[\"HMatrix\"]         = 0;\n//\n// --- Function Discriminant analysis\nUse[\"FDA_GA\"]          = 0; // minimisation of user-defined function using Genetics Algorithm\nUse[\"FDA_SA\"]          = 0;",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 219
+    }
+  },
+  {
+    "text": "= 0; // minimisation of user-defined function using Genetics Algorithm\nUse[\"FDA_SA\"]          = 0;\nUse[\"FDA_MC\"]          = 0;\nUse[\"FDA_MT\"]          = 0;\nUse[\"FDA_GAMT\"]        = 0;\nUse[\"FDA_MCMT\"]        = 0;\n//\n// --- Neural Networks (all are feed-forward Multilayer Perceptrons)\nUse[\"MLP\"]             = 1; // Recommended ANN\nUse[\"MLPBFGS\"]         = 0; // Recommended ANN with optional training method",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 220
+    }
+  },
+  {
+    "text": "= 1; // Recommended ANN\nUse[\"MLPBFGS\"]         = 0; // Recommended ANN with optional training method\nUse[\"MLPBNN\"]          = 0; // Recommended ANN with BFGS training method and bayesian regulator\nUse[\"CFMlpANN\"]        = 0; // Depreciated ANN from ALEPH\nUse[\"TMlpANN\"]         = 0; // ROOT's own ANN\n//\n// --- Support Vector Machine\nUse[\"SVM\"]             = 0;\n//\n// --- Boosted Decision Trees\nUse[\"BDT\"]             = 0; // uses Adaptive Boost\nUse[\"BDTG\"]            = 0; // uses Gradient Boost",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 221
+    }
+  },
+  {
+    "text": "se[\"BDT\"]             = 0; // uses Adaptive Boost\nUse[\"BDTG\"]            = 0; // uses Gradient Boost\nUse[\"BDTB\"]            = 0; // uses Bagging\nUse[\"BDTD\"]            = 0; // decorrelation + Adaptive Boost\n//\n// --- Friedman's RuleFit method, ie, an optimised series of cuts (\"rules\")\nUse[\"RuleFit\"]         = 0;\n37\nFunctionalities : correlations\n-Linear correlations are easily investigated via the GUI :\n-(Here, no correlation)\n38",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 222
+    }
+  },
+  {
+    "text": "Functionalities : correlations\n-Linear correlations are easily investigated via the GUI :\n-Signal and background input variables can be correlated differently\n39\n\nFunctionalities : performance\n-Many classiﬁers can be trained in one shot\n-Useful for performance comparison\n40",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 223
+    }
+  },
+  {
+    "text": "ties : performance\n-Many classiﬁers can be trained in one shot\n-Useful for performance comparison\n40\nAdvantages and drawbacks of\ndifferent classiﬁers\nFrom TMVA manual\n41\n126 10 Which MVA method should I use for my problem?\nMV A M ETHOD\nCRITERIA Cuts Likelip\nhood\nPDEp\nRS r\nkpNN\nPDEp\nFoam\nHp\nMatrix\nFisher\nr LD\nMLP BDT Rulep\nFit\nSVM\nPerforp\nNo or linear\ncorrelations\n￿ ￿￿ ￿ ￿ ￿ ￿￿ ￿￿ ￿ ￿￿ ￿\nmance Nonlinear\ncorrelations\n◦◦ ￿￿ ￿￿ ◦◦ ￿￿ ￿￿ ￿￿ ￿￿\nTraining ◦ ￿￿ ￿￿ ￿￿ ￿￿ ￿￿ ￿ ◦ ￿ ◦\nSpeed",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 224
+    }
+  },
+  {
+    "text": "￿ ￿￿ ￿\nmance Nonlinear\ncorrelations\n◦◦ ￿￿ ￿￿ ◦◦ ￿￿ ￿￿ ￿￿ ￿￿\nTraining ◦ ￿￿ ￿￿ ￿￿ ￿￿ ￿￿ ￿ ◦ ￿ ◦\nSpeed\nResponse ￿￿ ￿￿ ◦ ￿ ￿￿ ￿￿ ￿￿ ￿ ￿￿ ￿\nRobustp Overtraining ￿￿ ￿ ￿ ￿ ￿￿ ￿￿ ￿ ◦ ￿ ￿￿\nness Weak variables ￿￿ ￿ ◦◦ ￿￿ ￿￿ ￿ ￿￿ ￿ ￿\nCurse of dimensionality ◦ ￿￿ ◦◦ ￿￿ ￿￿ ￿ ￿ ￿\nTransparency ￿￿ ￿￿ ￿ ￿ ￿￿ ￿￿ ◦◦◦◦\nT able 6: Assessment of MV A method propertiesq The symbols stand for the attributes “good” k ￿￿lo “fair”",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 225
+    }
+  },
+  {
+    "text": "e 6: Assessment of MV A method propertiesq The symbols stand for the attributes “good” k ￿￿lo “fair”\nk￿l and “bad” k ◦lq “Curse of dimensionality” refers to the “burden” of required increase in training statistics\nand processing time when adding more input variablesq See also comments in the textq The FDA method is\nnot listed here since its properties depend on the chosen functionq\n10 Which MVA method should I use for my problem?",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 226
+    }
+  },
+  {
+    "text": "since its properties depend on the chosen functionq\n10 Which MVA method should I use for my problem?\nThere is obviously no generally valid answer to this questionq To guide the usero we have attempted\na coarse assessment of various MV A properties in Table yq Simplicity is a virtueo but only if it is not\nat the expense of signiﬁcant loss of discrimination powerq Robustness with respect to overtraining\ncould become an issue when the training sample is scarceq Some methods require more attention",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 227
+    }
+  },
+  {
+    "text": "aining\ncould become an issue when the training sample is scarceq Some methods require more attention\nthan others in this regardq For exampleo boosted decision trees are particularly vulnerable to\novertraining if used without careq 37 To circumvent overtraining a problempspeciﬁc adjustment of\nthe pruning strength parameter is requiredq\nTo assess whether a linear discriminant analysis kLDAl could be su ﬃcient for a classiﬁcation krep",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 228
+    }
+  },
+  {
+    "text": "q\nTo assess whether a linear discriminant analysis kLDAl could be su ﬃcient for a classiﬁcation krep\ngressionl problemo the user is advised to analyse the correlations among the discriminating variables\nkamong the variables and regression targetl by inspecting scatter and proﬁle plots kit is not enough\nto print the correlation coe ﬃcientso which by deﬁnition are linear onlylq Using an LDA greatly\nreduces the number of parameters to be adjusted and hence allow smaller training samplesq It",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 229
+    }
+  },
+  {
+    "text": "greatly\nreduces the number of parameters to be adjusted and hence allow smaller training samplesq It\nusually is robust with respect to generalisation to larger data samplesq For moderately intricate\nproblemso the function discriminant analysis kFDAl with some added nonlinearity may be found\nsuﬃcientq It is always useful to crosspcheck its performance against several of the sophisticated\nnonlinear methods to see how much can be gained over the use of the simple and very transparent\nFDAq\n37",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 230
+    }
+  },
+  {
+    "text": "linear methods to see how much can be gained over the use of the simple and very transparent\nFDAq\n37\nHowever, experience shows that the BDT performance is amazingly robust – even for strongly overtrained decision\ntrees.\nExercises\n- Problem inspired by Higgs searches in H->2photons channel at LHC\n-Goal : be able to estimate the sensitivity of a search for a small peak over a\nhuge background, using multivariate methods\n-3 exercises :\n-Setting up Root and TMVA environment, TMVA basics",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 231
+    }
+  },
+  {
+    "text": "ground, using multivariate methods\n-3 exercises :\n-Setting up Root and TMVA environment, TMVA basics\n-Using a MVA method inside the analysis\n-Estimation of analysis sensitivity\n42",
+    "metadata": {
+      "source": "data\\Multivariate analysis.pdf",
+      "chunk_index": 232
+    }
+  },
+  {
+    "text": "量子计算利用量子叠加和量子纠缠来进行计算。与传统计算机不同，量子计算机使用量子比特（qubit）作为信息的基本单位。\n\n量子信息技术战略情报与知识产权高质量发展研讨会在2026年1月举行，讨论了量子通信和量子密码学的最新进展。\n\n机器学习是人工智能的一个分支，它使用统计技术让计算机系统能够从数据中学习和改进。深度学习是机器学习的一个子集。",
+    "metadata": {
+      "source": "data\\test_doc.txt",
+      "chunk_index": 0
+    }
+  }
+]

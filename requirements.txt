@@ -1,0 +1,17 @@
+# Core dependencies (standard library only for basic usage)
+# Python 3.8+ recommended
+
+# Required for PDF loading
+pypdf>=3.0
+
+# For YAML config support (standard library lacks yaml parser)
+# You can skip this if you prefer JSON configs
+pyyaml>=6.0
+
+# Optional: for semantic embedding via OpenAI API
+# No extra package needed, uses standard library urllib
+
+# Optional: for local sentence-transformer embedding
+# sentence-transformers>=2.2
+# torch>=2.0
+# numpy>=1.24

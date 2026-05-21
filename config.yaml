@@ -1,0 +1,36 @@
+# RAG System Configuration
+# Fill in your API keys and adjust parameters as needed.
+
+kb:
+  data_dir: "./data"
+  index_dir: "./index"
+  chunk_method: "recursive"  # recursive / fixed / paragraph
+  chunk_size: 500
+  chunk_overlap: 100
+  top_k: 5
+  bm25_k1: 1.5
+  bm25_b: 0.75
+
+embedding:
+  provider: "local"  # bm25 / openai / local
+  model: "all-MiniLM-L6-v2"  # for local semantic embedding
+  api_key: null
+  api_base: null
+
+llm:
+  provider: "openai"  # Kimi uses OpenAI-compatible API
+  model: "kimi-k2.6"
+  api_key: "sk-I2CycISUgpOUOVmnj6mgF0GQ8IlcKzf4Un9EpfPAEi9OaS49"
+  api_base: "https://api.moonshot.cn/v1"
+  temperature: null  # kimi-k2.6 only allows 1; set to null to omit
+  max_tokens: 2048
+  system_prompt: "你是一个专业的文档问答助手。请基于提供的参考资料回答用户问题。如果资料中没有相关信息，请明确说明。"
+
+rag:
+  max_context_length: 3000
+  context_template: |
+    以下是参考资料：
+    {context}
+
+    请根据以上资料回答用户问题：
+    {question}
