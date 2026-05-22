@@ -195,6 +195,17 @@ llm:
 
 **验证**：Pipeline 总耗时从 **>15 分钟（死锁）** 降至 **62.8 秒**。
 
+### 8.10 量科网日期提取鲁棒性修复（2026-05-22）
+
+**问题**：用户发现 Quantum Bridge 文章在量科网显示 2026-05-21，但数据库被记为 2026-05-22。`fetch_article_detail` 对 flash 页面仅查找 `<time>` 标签，某些运行时提取失败回退到 `today`，且 `insert_or_update_article` 无条件覆盖旧日期。
+
+**改动**：
+1. **`scrape_daily.py`**：`fetch_article_detail` 增加 `span/div/p.time/date/published` fallback 选择器。
+2. **`db.py`**：`insert_or_update_article` 更新时，若新 `liangke_date` 晚于旧值则保留旧值，防止 `today` fallback 污染历史记录。
+3. 新增 `fix_liangke_dates.py`：批量重抓修正已有错误日期。
+
+**验证**：16 篇文章被检查，id=67（Quantum Bridge）从 2026-05-22 修正为 2026-05-21，知识库同步后旧 chunks 已清理替换。
+
 ---
 
 ## 9. 待办 / 未来方向
