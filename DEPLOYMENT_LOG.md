@@ -154,9 +154,20 @@ llm:
 - **英文场景**：bge-large-en-v1.5 得分更高、排序更合理（0.85+ vs 0.57+）
 - **语言对齐**：中文问题优先召回中文文档，英文问题优先召回英文文档
 
+### 8.6 txt + metadata 分离与稳定 chunk_id（2026-05-22）
+
+**问题**：`sync_liangke.py` 早期版本把 tags、dates、URLs 直接拼进 txt，导致标签变更必须重新编码向量；FAISS 索引依赖顺序编号，删除文件后索引错位。
+
+**改动**：
+1. **`article_to_txt()`** 只返回 `标题 + body`，tags/dates/URLs 移到 `build_metadata()`。
+2. **`refresh_metadata()`**：仅更新 `.docs` JSON，不碰 `.faiss` 向量文件。
+3. **`chunk_id`**：由 `chunk_id_prefix`（如 `liangke_79`）+ 分段序号生成最终 ID（如 `liangke_79_0`），写入 metadata。非桥接文档回退到 `Path(source).stem_{i}`。
+
+**验证**：Pro 知识库 37 个 liangke chunks 全部带有稳定 chunk_id，26 篇文章覆盖完整。
+
 ---
 
-## 7. 待办 / 未来方向
+## 9. 待办 / 未来方向
 
 - [x] 接入 Reranker 精排模型（bge-reranker-base）
 - [x] 实现增量更新（--incremental）
@@ -166,4 +177,6 @@ llm:
 - [ ] 用 `rich` 美化 `query_kb.py` 的终端交互
 - [ ] 支持网页抓取（beautifulsoup4）直接入知识库
 - [ ] 评估 ChromaDB（虽然用户当前未选择，但可保留接口）
-- [ ] 量科网每日数据桥接（MySQL → RAG 增量入库）
+- [x] 量科网每日数据桥接（MySQL → RAG 增量入库）
+- [x] txt + metadata 分离（标签/日期变更无需重新编码向量）
+- [x] 稳定 chunk_id（避免依赖 FAISS 顺序索引）
