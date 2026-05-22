@@ -175,6 +175,22 @@ class KnowledgeBaseManager:
         self._is_fitted = True
         print(f"[INFO] Index loaded from {path}")
 
+    def refresh_metadata(self, source: str, metadata: Dict[str, Any]) -> int:
+        """Update metadata for all chunks belonging to source.
+        Does NOT recompute vectors; only rewrites the .docs file on save().
+        Returns number of chunks updated.
+        """
+        count = 0
+        for doc in self.store.documents:
+            if doc.get("metadata", {}).get("source") == source:
+                chunk_index = doc["metadata"].get("chunk_index")
+                doc["metadata"] = dict(metadata)
+                doc["metadata"]["source"] = source
+                if chunk_index is not None:
+                    doc["metadata"]["chunk_index"] = chunk_index
+                count += 1
+        return count
+
     def stats(self) -> Dict[str, Any]:
         return {
             "total_chunks": len(self.store),

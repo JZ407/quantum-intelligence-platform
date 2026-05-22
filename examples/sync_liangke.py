@@ -1,4 +1,8 @@
-"""Bridge: sync liangke_daily MySQL articles into RAG Pro knowledge base."""
+"""Bridge: sync liangke_daily MySQL articles into RAG Pro knowledge base.
+
+Strategy: txt files contain ONLY title + body (for embedding).
+Tags, dates, and URLs are kept in metadata (no re-encoding needed on change).
+"""
 
 import sys
 import os
@@ -36,27 +40,37 @@ def fetch_articles(start_date=None, end_date=None):
 
 
 def article_to_txt(row):
-    """Convert DB row to plain text for RAG ingestion."""
+    """Convert DB row to plain text for RAG embedding.
+    ONLY title + body; no tags/dates/URLs (those live in metadata).
+    """
     lines = []
     lines.append(f"标题：{row['title']}")
-    lines.append(f"量科网发布日期：{row['liangke_date']}")
-    if pd.notna(row.get('original_date')):
-        lines.append(f"原始来源日期：{row['original_date']}")
-    if pd.notna(row.get('reference_title')) and pd.notna(row.get('reference_url')):
-        lines.append(f"参考来源：{row['reference_title']} ({row['reference_url']})")
-    if pd.notna(row.get('source_domain')):
-        lines.append(f"来源域名：{row['source_domain']}")
+    lines.append("")
+    lines.append(row['content'])
+    return '\n'.join(lines)
+
+
+def build_metadata(row):
+    """Build metadata dict from DB row."""
     tags = row.get('tags')
     if tags:
         if isinstance(tags, list):
             tag_str = ', '.join(tags)
         else:
             tag_str = str(tags)
-        lines.append(f"标签：{tag_str}")
-    lines.append("")
-    lines.append("正文：")
-    lines.append(row['content'])
-    return '\n'.join(lines)
+    else:
+        tag_str = ''
+    return {
+        'title': row['title'],
+        'liangke_date': str(row['liangke_date']) if pd.notna(row.get('liangke_date')) else '',
+        'original_date': str(row['original_date']) if pd.notna(row.get('original_date')) else '',
+        'reference_url': row.get('reference_url', '') or '',
+        'reference_title': row.get('reference_title', '') or '',
+        'source_domain': row.get('source_domain', '') or '',
+        'tags': tag_str,
+        'db_id': int(row['id']),
+        'source': 'liangke_daily',
+    }
 
 
 def safe_filename(title):
@@ -73,12 +87,21 @@ def main():
                         help='Sync since date (YYYY-MM-DD)')
     parser.add_argument('--full', action='store_true',
                         help='Sync all historical articles (use with caution)')
+    parser.add_argument('--refresh-metadata', action='store_true',
+                        help='Only refresh metadata for already-indexed articles (fast, no re-encoding)')
     args = parser.parse_args()
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     # Determine date range
-    if args.full:
+    if args.refresh_metadata:
+        start_date = None
+        if args.since:
+            start_date = args.since
+        elif not args.full:
+            start_date = (datetime.now() - timedelta(days=args.days)).strftime('%Y-%m-%d')
+        print(f'[INFO] Refresh-metadata mode: fetching from {start_date or "all"}')
+    elif args.full:
         start_date = None
         print('[INFO] Full sync mode: fetching ALL historical articles')
     elif args.since:
@@ -94,10 +117,10 @@ def main():
     print(f'[INFO] Fetched {len(df)} articles')
 
     if len(df) == 0:
-        print('[INFO] No articles to sync. Exiting.')
+        print('[INFO] No articles to process. Exiting.')
         return
 
-    # Write each article to txt
+    # Write each article to txt (always overwrite so txt stays in sync with DB)
     written_files = []
     for _, row in df.iterrows():
         safe_title = safe_filename(row['title'])
@@ -106,7 +129,6 @@ def main():
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(article_to_txt(row))
         written_files.append(filepath)
-        print(f'  [WRITE] {filename}')
 
     # Load RAG KB
     print(f'\n[INFO] Loading RAG knowledge base...')
@@ -122,35 +144,56 @@ def main():
     else:
         print('[WARN] No existing index found; starting fresh')
 
+    # Mode A: refresh metadata only (fast, no re-encoding)
+    if args.refresh_metadata:
+        refreshed = 0
+        for _, row in df.iterrows():
+            safe_title = safe_filename(row['title'])
+            filename = f"{row['liangke_date']}_{row['id']}_{safe_title}.txt"
+            filepath = os.path.join(OUTPUT_DIR, filename)
+            meta = build_metadata(row)
+            meta['source'] = filepath
+            n = kb.refresh_metadata(filepath, meta)
+            if n > 0:
+                refreshed += n
+                print(f'  [REFRESH] {filename} -> {n} chunks')
+            else:
+                print(f'  [MISSING] {filename} (not in KB yet)')
+        kb.save()
+        print(f'\n{"="*50}')
+        print(f'Metadata refresh complete')
+        print(f'  Chunks refreshed:   {refreshed}')
+        print(f'  Total KB chunks:    {kb.stats()["total_chunks"]}')
+        print(f'{"="*50}')
+        return
+
+    # Mode B: normal sync (incremental ingest)
     existing_sources = {
         d.get('metadata', {}).get('source', '')
         for d in kb.store.documents
     }
 
-    # Incremental ingest
     synced_chunks = 0
     skipped_files = 0
-    for filepath in written_files:
+    for _, row in df.iterrows():
+        safe_title = safe_filename(row['title'])
+        filename = f"{row['liangke_date']}_{row['id']}_{safe_title}.txt"
+        filepath = os.path.join(OUTPUT_DIR, filename)
+
         if filepath in existing_sources:
-            print(f'  [SKIP] {os.path.basename(filepath)} (already in KB)')
+            print(f'  [SKIP] {filename} (already indexed)')
             skipped_files += 1
             continue
 
         with open(filepath, 'r', encoding='utf-8') as f:
             text = f.read()
 
-        # Extract metadata for the chunk
-        row = df[df.apply(lambda r: f"{r['liangke_date']}_{r['id']}_{safe_filename(r['title'])}.txt" == os.path.basename(filepath), axis=1)].iloc[0]
-        metadata = {
-            'title': row['title'],
-            'liangke_date': str(row['liangke_date']),
-            'reference_url': row.get('reference_url', ''),
-            'source': 'liangke_daily',
-        }
+        meta = build_metadata(row)
+        meta['source'] = filepath
 
-        n = kb.ingest_text(text, source=filepath, metadata=metadata)
+        n = kb.ingest_text(text, source=filepath, metadata=meta)
         synced_chunks += n
-        print(f'  [SYNC] {os.path.basename(filepath)} -> {n} chunks')
+        print(f'  [SYNC] {filename} -> {n} chunks')
 
     kb.save()
     print(f'\n{"="*50}')
