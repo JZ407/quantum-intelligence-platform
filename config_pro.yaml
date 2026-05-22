@@ -1,0 +1,40 @@
+# RAG System Configuration — Pro Edition (bge-large-zh-v1.5)
+# 方案A：中文语义增强版，适合深度文档分析
+
+kb:
+  data_dir: "D:/Claude_code/rag_system/data_pro"
+  index_dir: "D:/Claude_code/rag_system/index_pro"
+  chunk_method: "recursive"
+  chunk_size: 800
+  chunk_overlap: 150
+  top_k: 5
+  bm25_k1: 1.5
+  bm25_b: 0.75
+
+reranker:
+  model: "BAAI/bge-reranker-base"
+  top_k: 20
+
+embedding:
+  provider: "local"
+  model: "BAAI/bge-large-zh-v1.5"  # 1024-dim, Chinese-optimized
+  api_key: null
+  api_base: null
+
+llm:
+  provider: "openai"
+  model: "kimi-k2.6"
+  api_key: "sk-I2CycISUgpOUOVmnj6mgF0GQ8IlcKzf4Un9EpfPAEi9OaS49"
+  api_base: "https://api.moonshot.cn/v1"
+  temperature: null
+  max_tokens: 2048
+  system_prompt: "你是一个专业的文档问答助手。请基于提供的参考资料回答用户问题。如果资料中没有相关信息，请明确说明。"
+
+rag:
+  max_context_length: 3000
+  context_template: |
+    以下是参考资料：
+    {context}
+
+    请根据以上资料回答用户问题：
+    {question}

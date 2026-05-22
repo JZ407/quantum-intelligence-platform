@@ -3,3 +3,7 @@ __pycache__/
 *.zip
 .env
 .claude/
+data/
+data_*/
+index/
+index_*/

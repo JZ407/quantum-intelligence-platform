@@ -1,0 +1,40 @@
+# RAG System Configuration — English Edition (bge-large-en-v1.5)
+# 纯英文论文/文献专用，chunk_size 适配英文 token 密度
+
+kb:
+  data_dir: "D:/Claude_code/rag_system/data_en"
+  index_dir: "D:/Claude_code/rag_system/index_en"
+  chunk_method: "recursive"
+  chunk_size: 1500          # 英文 512 tokens ≈ 1500-2000 chars
+  chunk_overlap: 200        # 保持段落间连贯
+  top_k: 5
+  bm25_k1: 1.5
+  bm25_b: 0.75
+
+reranker:
+  model: "BAAI/bge-reranker-base"
+  top_k: 20
+
+embedding:
+  provider: "local"
+  model: "BAAI/bge-large-en-v1.5"  # 1024-dim, English-optimized
+  api_key: null
+  api_base: null
+
+llm:
+  provider: "openai"
+  model: "kimi-k2.6"
+  api_key: "sk-I2CycISUgpOUOVmnj6mgF0GQ8IlcKzf4Un9EpfPAEi9OaS49"
+  api_base: "https://api.moonshot.cn/v1"
+  temperature: null
+  max_tokens: 2048
+  system_prompt: "You are a professional research assistant. Answer questions based solely on the provided references. If the references do not contain relevant information, state so explicitly."
+
+rag:
+  max_context_length: 3000
+  context_template: |
+    References:
+    {context}
+
+    Based on the above references, answer the following question:
+    {question}

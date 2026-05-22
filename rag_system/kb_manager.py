@@ -10,6 +10,7 @@ from .chunker import get_splitter
 from .embedder import BaseEmbedder, Bm25Embedder, OpenAIEmbedder, SentenceTransformerEmbedder
 from .vector_store import VectorStore, FaissVectorStore
 from .retriever import HybridRetriever
+from .reranker import BgeReranker
 from .llm_client import LLMClient
 from .pipeline import RAGPipeline
 
@@ -75,15 +76,17 @@ class KnowledgeBaseManager:
 
         texts = [d["text"] for d in docs]
         if not self._is_fitted:
-            all_texts = texts
-            if len(self.store) > 0:
-                all_texts = [d["text"] for d in self.store.documents] + texts
-            self.embedder.fit(all_texts)
-            if len(self.store) > 0:
-                old_docs = self.store.documents[:]
-                old_vecs = self.embedder.embed_batch([d["text"] for d in old_docs])
-                self.store = VectorStore()
-                self.store.add_batch(old_docs, old_vecs)
+            # BM25 requires refitting when vocab changes; dense embedders do not.
+            if isinstance(self.embedder, Bm25Embedder):
+                all_texts = texts
+                if len(self.store) > 0:
+                    all_texts = [d["text"] for d in self.store.documents] + texts
+                self.embedder.fit(all_texts)
+                if len(self.store) > 0:
+                    old_docs = self.store.documents[:]
+                    old_vecs = self.embedder.embed_batch([d["text"] for d in old_docs])
+                    self.store = type(self.store)()
+                    self.store.add_batch(old_docs, old_vecs)
             self._is_fitted = True
 
         vectors = self.embedder.embed_batch(texts)
@@ -103,7 +106,15 @@ class KnowledgeBaseManager:
     def build_retriever(self, top_k: Optional[int] = None) -> HybridRetriever:
         """Build retriever from current store."""
         k = top_k or self.config.get("kb.top_k", 5)
-        self.retriever = HybridRetriever(self.store, self.embedder, top_k=k)
+        reranker = None
+        reranker_model = self.config.get("reranker.model")
+        if reranker_model:
+            reranker = BgeReranker(model_name=reranker_model)
+        self.retriever = HybridRetriever(
+            self.store, self.embedder, top_k=k,
+            reranker=reranker,
+            rerank_top_k=self.config.get("reranker.top_k", k * 4)
+        )
         return self.retriever
 
     def build_pipeline(self, llm_client: Optional[LLMClient] = None) -> RAGPipeline:

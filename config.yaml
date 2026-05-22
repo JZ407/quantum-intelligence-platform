@@ -2,14 +2,18 @@
 # Fill in your API keys and adjust parameters as needed.
 
 kb:
-  data_dir: "./data"
-  index_dir: "./index"
+  data_dir: "D:/Claude_code/rag_system/data_lite"
+  index_dir: "D:/Claude_code/rag_system/index_lite"
   chunk_method: "recursive"  # recursive / fixed / paragraph
   chunk_size: 500
   chunk_overlap: 100
   top_k: 5
   bm25_k1: 1.5
   bm25_b: 0.75
+
+reranker:
+  model: null  # 设为模型名启用，如 "BAAI/bge-reranker-base"
+  top_k: 20    # 召回候选数，rerank 后取 kb.top_k
 
 embedding:
   provider: "local"  # bm25 / openai / local

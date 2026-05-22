@@ -2,6 +2,7 @@
 
 import sys
 import os
+import argparse
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -10,11 +11,26 @@ from rag_system.config import Config
 
 
 def main():
-    config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config.yaml")
+    parser = argparse.ArgumentParser(description="Query the knowledge base.")
+    parser.add_argument(
+        "--config", "-c",
+        default=None,
+        help="Path to config file (default: ../config.yaml)"
+    )
+    args = parser.parse_args()
+
+    # Load config
+    if args.config:
+        config_path = args.config
+    else:
+        config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config.yaml")
+
     if os.path.exists(config_path):
         config = Config.from_yaml(config_path)
+        print(f"[INFO] Loaded config: {config_path}")
     else:
         config = Config()
+        print("[WARN] No config found, using defaults.")
 
     kb = KnowledgeBaseManager(config)
 
