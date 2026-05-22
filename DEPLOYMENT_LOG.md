@@ -175,6 +175,16 @@ llm:
 
 **用法**：`python examples/run_daily_pipeline.py`
 
+### 8.8 标签变更后 metadata 自动刷新（2026-05-22）
+
+**问题**：用户更新 `scrape_daily.py` 标签库后重新抓取，数据库 tags 已变，但 `sync_liangke.py` 增量模式跳过已有文件，metadata 不更新。
+
+**改动**：
+1. **`sync_liangke.py`**：增量模式下对比已有文章的 `tags` 字段，若不同自动调用 `refresh_metadata()`，无需手动 `--refresh-metadata`。
+2. **`kb_manager.refresh_metadata()`**：重写 metadata 时保留旧 `chunk_id`，避免稳定标识丢失。
+
+**验证**：全量同步 80 篇文章，112 个 chunks 的 tags 自动刷新，全部 `chunk_id` 完好保留。
+
 ---
 
 ## 9. 待办 / 未来方向
