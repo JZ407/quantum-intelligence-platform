@@ -69,6 +69,12 @@ class KnowledgeBaseManager:
         for i, c in enumerate(chunks):
             meta = dict(metadata) if metadata else {}
             meta.update({"source": source, "chunk_index": i})
+            # Stable chunk_id for debugging and alignment safety
+            chunk_id_prefix = meta.pop("chunk_id_prefix", None)
+            if chunk_id_prefix:
+                meta["chunk_id"] = f"{chunk_id_prefix}_{i}"
+            else:
+                meta["chunk_id"] = f"{Path(source).stem}_{i}"
             docs.append({"text": c, "metadata": meta})
 
         if not docs:

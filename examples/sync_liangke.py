@@ -70,6 +70,7 @@ def build_metadata(row):
         'tags': tag_str,
         'db_id': int(row['id']),
         'source': 'liangke_daily',
+        'chunk_id_prefix': f"liangke_{int(row['id'])}",
     }
 
 
