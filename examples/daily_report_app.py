@@ -13,6 +13,7 @@ Usage + public access via ngrok:
 import os
 import sys
 import io
+import json
 from datetime import datetime, timedelta
 
 import pandas as pd
@@ -36,7 +37,21 @@ def fetch_articles(target_date: str):
     """Fetch articles for a specific liangke_date."""
     engine = create_engine(DB_URL)
     query = f"SELECT * FROM articles WHERE liangke_date = '{target_date}' ORDER BY id DESC"
-    return pd.read_sql(query, engine)
+    df = pd.read_sql(query, engine)
+
+    # MySQL JSON column isn't auto-parsed by pd.read_sql; fix it here
+    def _parse_tags(x):
+        if isinstance(x, list):
+            return x
+        if isinstance(x, str):
+            try:
+                return json.loads(x)
+            except Exception:
+                return []
+        return []
+
+    df['tags'] = df['tags'].apply(_parse_tags)
+    return df
 
 
 def select_top3(df: pd.DataFrame):
