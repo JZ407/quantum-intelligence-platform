@@ -112,10 +112,58 @@ llm:
 
 ---
 
+## 8. 第三阶段：Reranker + 增量更新 + 三库并行（2026-05-22）
+
+**触发条件**：用户硬件确认为 i9-13900H + 32GB RAM + RTX 4060 4GB，希望根据文档语言选择最优嵌入模型，并要求接入 reranker 与增量更新。
+
+### 8.1 硬件适配与模型选型
+
+| 组件 | 规格 | 模型决策 |
+|------|------|----------|
+| CPU | i9-13900H (20T) | CPU fallback 充足 |
+| RAM | 32GB | 可承载 bge-large 系列（~1.3GB） |
+| GPU | RTX 4060 4GB | 可 CUDA 加速 embedding，但不足本地 7B LLM |
+
+**结论**：LLM 继续走 Kimi-k2.6；本地嵌入模型按语言分库。
+
+### 8.2 三库并行架构
+
+| 库 | 配置 | 模型 | chunk | 用途 |
+|----|------|------|-------|------|
+| **Lite** | `config.yaml` | all-MiniLM-L6-v2 | 500 | 中文轻量/快速验证 |
+| **Pro** | `config_pro.yaml` | bge-large-zh-v1.5 | 800 | 中文深度分析（院士稿、政策） |
+| **EN** | `config_en.yaml` | bge-large-en-v1.5 | 1500 | 纯英文论文 |
+
+切换方式：`python examples/query_kb.py --config config_pro.yaml`
+
+### 8.3 Reranker 接入
+
+**模型**：`BAAI/bge-reranker-base`（~1.1GB，CPU 推理）。
+**流程**：先召回 top-20 → CrossEncoder 精排 → 取 top-5 给 LLM。
+**效果**：相关文档得分从 0.62 提升到 0.96+，弱相关文档被有效过滤。
+
+### 8.4 增量更新
+
+**改动**：`build_kb.py` 新增 `--incremental` / `-i` 参数。
+**逻辑**：加载已有索引 → 对比文件 source 列表 → 只编码新增文件 → 直接 append 到 FAISS index。
+**修复**：`kb_manager.py` 中 `self.store = VectorStore()` 硬编码改为 `type(self.store)()`，避免 FaissVectorStore 被误替换。
+
+### 8.5 语义检索对比结论
+
+- **中文场景**：bge-large-zh-v1.5 显著优于 all-MiniLM-L6-v2（5/5 相关 vs 1/5 相关）
+- **英文场景**：bge-large-en-v1.5 得分更高、排序更合理（0.85+ vs 0.57+）
+- **语言对齐**：中文问题优先召回中文文档，英文问题优先召回英文文档
+
+---
+
 ## 7. 待办 / 未来方向
 
+- [x] 接入 Reranker 精排模型（bge-reranker-base）
+- [x] 实现增量更新（--incremental）
+- [x] 多配置文件切换（Lite/Pro/EN）
 - [ ] 用 `httpx` 替换 `urllib`（更稳定、支持异步）
 - [ ] 接入 `jieba` 优化中文 BM25 分词（备用方案）
 - [ ] 用 `rich` 美化 `query_kb.py` 的终端交互
 - [ ] 支持网页抓取（beautifulsoup4）直接入知识库
 - [ ] 评估 ChromaDB（虽然用户当前未选择，但可保留接口）
+- [ ] 量科网每日数据桥接（MySQL → RAG 增量入库）
