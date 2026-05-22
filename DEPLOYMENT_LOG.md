@@ -185,6 +185,16 @@ llm:
 
 **验证**：全量同步 80 篇文章，112 个 chunks 的 tags 自动刷新，全部 `chunk_id` 完好保留。
 
+### 8.9 每日管道从 subprocess 改为直接导入（2026-05-22）
+
+**问题**：`run_daily_pipeline.py` 使用 `subprocess.run` 调用抓取和同步脚本，在 Windows 上因 GBK 控制台编码与 PIPE 机制互相干扰，导致管道死锁、运行 15 分钟仍不结束。单独运行抓取只需 54 秒。
+
+**改动**：
+1. **`run_daily_pipeline.py`**：抛弃 `subprocess.run`，改为直接 `import scrape_daily` 和 `sync_liangke` 并调用其 `main()` 函数。
+2. **`sync_liangke.py`**：`main()` 接受可选 `args` 参数，支持程序化传参（如 `main(['--days', '1'])`）。
+
+**验证**：Pipeline 总耗时从 **>15 分钟（死锁）** 降至 **62.8 秒**。
+
 ---
 
 ## 9. 待办 / 未来方向
