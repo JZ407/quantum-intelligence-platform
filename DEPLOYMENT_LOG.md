@@ -165,6 +165,16 @@ llm:
 
 **验证**：Pro 知识库 37 个 liangke chunks 全部带有稳定 chunk_id，26 篇文章覆盖完整。
 
+### 8.7 抓取与知识库自动桥接（2026-05-22）
+
+**问题**：用户运行 `scrape_daily.py` 后知识库未更新，因为抓取只写 MySQL，不会自动触发 `sync_liangke.py`。
+
+**改动**：新增 `examples/run_daily_pipeline.py`，一键完成：
+1. 调用 `liangke_daily/core/scrape_daily.py` 抓取当日新闻入库
+2. 调用 `sync_liangke.py --days 1` 增量同步到 Pro 知识库
+
+**用法**：`python examples/run_daily_pipeline.py`
+
 ---
 
 ## 9. 待办 / 未来方向
