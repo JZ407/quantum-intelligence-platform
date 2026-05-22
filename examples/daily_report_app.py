@@ -22,6 +22,7 @@ import streamlit as st
 from docx import Document
 from docx.shared import Pt, RGBColor
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.oxml.ns import qn
 
 # ------------------------------------------------------------------
 # Config
@@ -32,6 +33,11 @@ CATEGORY_PRIORITY = ['资本运作', '产品动态', '企业资讯', '科技前�
 # ------------------------------------------------------------------
 # Helpers
 # ------------------------------------------------------------------
+
+def _set_run_font(run, font_name, size_pt):
+    run.font.name = font_name
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), font_name)
+    run.font.size = Pt(size_pt)
 
 def fetch_articles(target_date: str):
     """Fetch articles for a specific liangke_date."""
@@ -87,14 +93,15 @@ def select_top3(df: pd.DataFrame):
     return selected
 
 
-def build_docx(title: str, articles: list) -> io.BytesIO:
+def build_docx(date_str: str, articles: list) -> io.BytesIO:
     """Generate a Word document and return as BytesIO."""
     doc = Document()
+    YAHEI = '微软雅黑'
 
     # Title
     p = doc.add_paragraph()
-    run = p.add_run(title)
-    run.font.size = Pt(16)
+    run = p.add_run(f"每日情报资讯（{date_str}）：")
+    _set_run_font(run, YAHEI, 16)
     run.font.bold = True
     run.font.color.rgb = RGBColor(0, 0, 0)
     p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
@@ -104,25 +111,42 @@ def build_docx(title: str, articles: list) -> io.BytesIO:
     for idx, art in enumerate(articles, 1):
         # Article title
         p = doc.add_paragraph()
-        run = p.add_run(f"{idx}. {art['title']}")
-        run.font.size = Pt(12)
+        run = p.add_run(f"{idx}、{art['title']}：")
+        _set_run_font(run, YAHEI, 16)
         run.font.bold = True
 
         # Summary (first 300 chars of content)
         content = art.get('content', '') or ''
         summary = content[:300].strip()
         if summary:
-            doc.add_paragraph(summary)
+            p = doc.add_paragraph()
+            run = p.add_run(summary)
+            _set_run_font(run, YAHEI, 14)
 
         # Reference link
         ref_url = art.get('reference_url', '') or art.get('liangke_url', '')
         if ref_url:
             p = doc.add_paragraph()
             run = p.add_run(f"参考链接：{ref_url}")
-            run.font.size = Pt(10)
+            _set_run_font(run, YAHEI, 10.5)
             run.font.color.rgb = RGBColor(0, 0, 255)
 
         doc.add_paragraph()  # blank line between articles
+
+    # Patent section
+    p = doc.add_paragraph()
+    run = p.add_run("4、专利：")
+    _set_run_font(run, YAHEI, 16)
+    run.font.bold = True
+
+    p = doc.add_paragraph()
+    run = p.add_run(" ")
+    _set_run_font(run, YAHEI, 14)
+
+    p = doc.add_paragraph()
+    run = p.add_run("参考链接：")
+    _set_run_font(run, YAHEI, 10.5)
+    run.font.color.rgb = RGBColor(0, 0, 255)
 
     # Save to memory
     buf = io.BytesIO()
@@ -173,9 +197,8 @@ def main():
                 st.markdown("---")
 
         # Generate docx
-        doc_title = f"量科每日讯{target_date_str}"
-        doc_buf = build_docx(doc_title, top3)
-        file_name = f"量科每日讯{target_date_str}.docx"
+        doc_buf = build_docx(target_date_str, top3)
+        file_name = f"日报{target_date_str}.docx"
 
         st.download_button(
             label="📥 下载 Word 日报",
