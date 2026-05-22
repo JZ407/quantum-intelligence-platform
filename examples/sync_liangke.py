@@ -80,7 +80,7 @@ def safe_filename(title):
     return cleaned[:50]
 
 
-def main():
+def main(args=None):
     parser = argparse.ArgumentParser(description='Sync liangke articles to RAG KB.')
     parser.add_argument('--days', type=int, default=1,
                         help='Sync articles from last N days (default: 1)')
@@ -90,7 +90,7 @@ def main():
                         help='Sync all historical articles (use with caution)')
     parser.add_argument('--refresh-metadata', action='store_true',
                         help='Only refresh metadata for already-indexed articles (fast, no re-encoding)')
-    args = parser.parse_args()
+    args = parser.parse_args(args)
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 

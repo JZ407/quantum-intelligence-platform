@@ -5,57 +5,72 @@ Usage:
     python examples/run_daily_pipeline.py
 
 Steps:
-    1. Run liangke_daily/core/scrape_daily.py (requires cookies)
-    2. Run sync_liangke.py --days 1 (incremental ingest into Pro KB)
+    1. Import and run liangke_daily/core/scrape_daily.py (requires cookies)
+    2. Import and run sync_liangke.py --days 1 (incremental ingest into Pro KB)
+
+NOTE: Uses direct Python imports instead of subprocess to avoid Windows
+GBK/encoding deadlocks that can hang the pipeline for 10+ minutes.
 """
 
 import os
 import sys
-import subprocess
+import time
 
 RAG_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LIANGKE_ROOT = os.path.join(os.path.dirname(RAG_ROOT), 'liangke_daily')
-SCRAPER = os.path.join(LIANGKE_ROOT, 'core', 'scrape_daily.py')
-SYNCER = os.path.join(RAG_ROOT, 'examples', 'sync_liangke.py')
+
+# Ensure liangke_daily modules are importable
+sys.path.insert(0, os.path.join(LIANGKE_ROOT, 'core'))
+
+# Ensure rag_system modules are importable
+sys.path.insert(0, RAG_ROOT)
 
 
-def run_step(name, cmd, cwd):
+def run_scrape():
     print(f'\n{"="*50}')
-    print(f'STEP: {name}')
+    print('STEP: Scrape daily news from liangke')
     print(f'{"="*50}')
-    result = subprocess.run(
-        [sys.executable, cmd],
-        cwd=cwd,
-        encoding='utf-8'
-    )
-    if result.returncode != 0:
-        print(f'[ERROR] {name} failed with code {result.returncode}')
+    start = time.time()
+    try:
+        import scrape_daily
+        scrape_daily.main()
+        elapsed = time.time() - start
+        print(f'[OK] Scrape completed in {elapsed:.1f}s')
+        return True
+    except Exception as e:
+        print(f'[ERROR] Scrape failed: {e}')
         return False
-    return True
+
+
+def run_sync():
+    print(f'\n{"="*50}')
+    print('STEP: Sync to RAG Pro KB')
+    print(f'{"="*50}')
+    start = time.time()
+    try:
+        from sync_liangke import main as sync_main
+        sync_main(['--days', '1'])
+        elapsed = time.time() - start
+        print(f'[OK] Sync completed in {elapsed:.1f}s')
+        return True
+    except Exception as e:
+        print(f'[ERROR] Sync failed: {e}')
+        return False
 
 
 def main():
-    # Step 1: scrape
-    if not os.path.exists(SCRAPER):
-        print(f'[ERROR] Scraper not found: {SCRAPER}')
-        sys.exit(1)
+    total_start = time.time()
 
-    ok = run_step('Scrape daily news from liangke', SCRAPER, LIANGKE_ROOT)
-    if not ok:
+    if not run_scrape():
         print('[ABORT] Scrape failed; skipping sync.')
         sys.exit(1)
 
-    # Step 2: sync to RAG
-    if not os.path.exists(SYNCER):
-        print(f'[ERROR] Syncer not found: {SYNCER}')
+    if not run_sync():
         sys.exit(1)
 
-    ok = run_step('Sync to RAG Pro KB', SYNCER, RAG_ROOT)
-    if not ok:
-        sys.exit(1)
-
+    total_elapsed = time.time() - total_start
     print(f'\n{"="*50}')
-    print('Daily pipeline complete.')
+    print(f'Daily pipeline complete in {total_elapsed:.1f}s')
     print(f'{"="*50}')
 
 
