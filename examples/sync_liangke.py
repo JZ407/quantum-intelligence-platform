@@ -168,13 +168,21 @@ def main():
         print(f'{"="*50}')
         return
 
-    # Mode B: normal sync (incremental ingest)
+    # Mode B: normal sync (incremental ingest + auto metadata refresh)
     existing_sources = {
         d.get('metadata', {}).get('source', '')
         for d in kb.store.documents
     }
 
+    # Build map for fast metadata comparison
+    source_meta_map = {}
+    for d in kb.store.documents:
+        src = d.get('metadata', {}).get('source', '')
+        if src:
+            source_meta_map[src] = d['metadata']
+
     synced_chunks = 0
+    refreshed_chunks = 0
     skipped_files = 0
     for _, row in df.iterrows():
         safe_title = safe_filename(row['title'])
@@ -182,8 +190,17 @@ def main():
         filepath = os.path.join(OUTPUT_DIR, filename)
 
         if filepath in existing_sources:
-            print(f'  [SKIP] {filename} (already indexed)')
-            skipped_files += 1
+            # Check if metadata changed (e.g., tags updated after retag)
+            new_meta = build_metadata(row)
+            new_meta['source'] = filepath
+            old_meta = source_meta_map.get(filepath, {})
+            if old_meta.get('tags') != new_meta.get('tags'):
+                n = kb.refresh_metadata(filepath, new_meta)
+                refreshed_chunks += n
+                print(f'  [REFRESH] {filename} -> {n} chunks (tags changed)')
+            else:
+                print(f'  [SKIP] {filename} (already indexed)')
+                skipped_files += 1
             continue
 
         with open(filepath, 'r', encoding='utf-8') as f:
@@ -201,6 +218,7 @@ def main():
     print(f'Sync complete')
     print(f'  Articles written:   {len(written_files)}')
     print(f'  New chunks synced:  {synced_chunks}')
+    print(f'  Refreshed (tags):   {refreshed_chunks}')
     print(f'  Skipped (exists):   {skipped_files}')
     print(f'  Total KB chunks:    {kb.stats()["total_chunks"]}')
     print(f'{"="*50}')

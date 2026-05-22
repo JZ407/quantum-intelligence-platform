@@ -189,11 +189,15 @@ class KnowledgeBaseManager:
         count = 0
         for doc in self.store.documents:
             if doc.get("metadata", {}).get("source") == source:
-                chunk_index = doc["metadata"].get("chunk_index")
+                old_meta = doc["metadata"]
+                chunk_index = old_meta.get("chunk_index")
+                chunk_id = old_meta.get("chunk_id")
                 doc["metadata"] = dict(metadata)
                 doc["metadata"]["source"] = source
                 if chunk_index is not None:
                     doc["metadata"]["chunk_index"] = chunk_index
+                if chunk_id is not None:
+                    doc["metadata"]["chunk_id"] = chunk_id
                 count += 1
         return count
 
