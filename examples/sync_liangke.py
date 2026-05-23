@@ -9,6 +9,9 @@ import os
 import argparse
 from datetime import datetime, timedelta
 
+# Use HuggingFace mirror to avoid connection timeouts in China
+os.environ.setdefault('HF_ENDPOINT', 'https://hf-mirror.com')
+
 # Add project roots
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, 'D:/Claude_code/liangke_daily')

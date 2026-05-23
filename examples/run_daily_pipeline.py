@@ -16,6 +16,9 @@ import os
 import sys
 import time
 
+# Use HuggingFace mirror to avoid connection timeouts in China
+os.environ.setdefault('HF_ENDPOINT', 'https://hf-mirror.com')
+
 RAG_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LIANGKE_ROOT = os.path.join(os.path.dirname(RAG_ROOT), 'liangke_daily')
 
