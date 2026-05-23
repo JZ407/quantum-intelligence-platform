@@ -213,11 +213,69 @@ llm:
 - [x] 接入 Reranker 精排模型（bge-reranker-base）
 - [x] 实现增量更新（--incremental）
 - [x] 多配置文件切换（Lite/Pro/EN）
+- [x] 量科网每日数据桥接（MySQL → RAG 增量入库）
+- [x] txt + metadata 分离（标签/日期变更无需重新编码向量）
+- [x] 稳定 chunk_id（避免依赖 FAISS 顺序索引）
+- [x] Streamlit 日报生成器（一键生成 Word + 远程访问）
+- [x] ngrok 内网穿透试验（后卸载，切换为直接公网访问）
+- [x] HuggingFace 镜像配置（hf-mirror.com，解决中国大陆超时）
 - [ ] 用 `httpx` 替换 `urllib`（更稳定、支持异步）
 - [ ] 接入 `jieba` 优化中文 BM25 分词（备用方案）
 - [ ] 用 `rich` 美化 `query_kb.py` 的终端交互
 - [ ] 支持网页抓取（beautifulsoup4）直接入知识库
 - [ ] 评估 ChromaDB（虽然用户当前未选择，但可保留接口）
-- [x] 量科网每日数据桥接（MySQL → RAG 增量入库）
-- [x] txt + metadata 分离（标签/日期变更无需重新编码向量）
-- [x] 稳定 chunk_id（避免依赖 FAISS 顺序索引）
+
+---
+
+## 10. 第四阶段：Streamlit 日报生成器 + 内网穿透（2026-05-22）
+
+**触发条件**：用户需要每日筛选重要新闻生成 Word 日报，并让同事通过网页远程访问一键生成。
+
+### 10.1 Streamlit 日报生成器
+
+**功能**：
+- 选择日期 → 从 MySQL 读取当天文章 → 按优先级自动选 top-3
+- 优先级：资本运作 > 产品动态 > 企业资讯 > 科技前沿 > 宏观态势
+- 生成 Word 文档，一键下载
+
+**文件**：`examples/daily_report_app.py`
+
+### 10.2 pd.read_sql JSON 解析修复
+
+**问题**：`pd.read_sql` 不自动解析 MySQL JSON 列，tags 全部显示为空列表 `[]`，导致 `select_top3()` 无法按优先级筛选。
+
+**修复**：在 `fetch_articles()` 中添加 `json.loads` 显式解析 tags 列。验证：15 篇文章全部正确解析。
+
+### 10.3 Word 格式定制
+
+**要求**：
+- 文件名：`日报{日期}.docx`
+- 大标题：`每日情报资讯（XXXX-XX-XX）：`，微软雅黑 3 号
+- 新闻标题：微软雅黑 3 号加粗
+- 内容摘要：微软雅黑 4 号
+- 参考链接：微软雅黑 5 号蓝色
+- 末尾专利占位：`4、专利：`（3 号）+ 空行（4 号）+ `参考链接：`（5 号）
+
+**实现**：`_set_run_font()` 辅助函数同时设置西文和东亚字体（`w:eastAsia`）。
+
+### 10.4 访问方式与内网穿透
+
+| 地址 | 范围 |
+|------|------|
+| `http://localhost:8501` | 本机 |
+| `http://192.168.5.113:8501` | 局域网 |
+| `http://38.150.71.74:8501` | 公网（需端口映射） |
+
+**ngrok 试验**：
+- 安装 pyngrok + ngrok，配置 authtoken，成功创建 `https://xxx.ngrok-free.dev` 公网隧道
+- 后卸载（用户确认不再需要，直接使用公网 IP 访问）
+
+**启动脚本**：`start_daily_report.bat`，双击启动 + 显示三个访问地址。
+
+### 10.5 HuggingFace 镜像配置
+
+**问题**：中国大陆直连 `huggingface.co` 超时，`run_daily_pipeline.py` 和 `sync_liangke.py` 加载 BGE 模型时卡住。
+
+**修复**：在两个脚本开头设置 `os.environ.setdefault('HF_ENDPOINT', 'https://hf-mirror.com')`，使用清华镜像。
+
+**验证**：镜像模式下模型加载秒过，同步 19 篇文章、12 chunks 成功。
