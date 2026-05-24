@@ -8,10 +8,12 @@ Usage (local network):
 import os
 import sys
 import io
+import re
 import json
 from datetime import datetime, timedelta
 
 import pandas as pd
+import yaml
 from sqlalchemy import create_engine
 import streamlit as st
 from docx import Document
@@ -488,17 +490,293 @@ def page_conferences():
 
 
 # ------------------------------------------------------------------
-# Main
+# Page: Weekly Report
+# ------------------------------------------------------------------
+
+def _find_column(df: pd.DataFrame, candidates: list):
+    cols_lower = {c.lower(): c for c in df.columns}
+    for cand in candidates:
+        if cand.lower() in cols_lower:
+            return cols_lower[cand.lower()]
+    return None
+
+
+def parse_tender_excel(df: pd.DataFrame) -> list:
+    col_name = _find_column(df, ['项目名称', '项目标题', 'title', 'name'])
+    col_desc = _find_column(df, ['项目基本情况', '项目内容', 'desc', 'description'])
+    col_unit = _find_column(df, ['项目主体单位', '采购单位', 'unit', 'organization'])
+    col_scale = _find_column(df, ['项目规模', '预算金额', 'scale', 'budget'])
+    col_pub = _find_column(df, ['发布时间', '发布日期', 'pub_date', 'publish date'])
+    col_pre = _find_column(df, ['预采时间', '预计采购时间', 'pre_date'])
+    col_url = _find_column(df, ['信息来源', '来源链接', 'url', 'source', 'link'])
+
+    tenders = []
+    for _, row in df.iterrows():
+        t = {
+            'name': str(row[col_name]) if col_name and pd.notna(row[col_name]) else '',
+            'desc': str(row[col_desc]) if col_desc and pd.notna(row[col_desc]) else '',
+            'unit': str(row[col_unit]) if col_unit and pd.notna(row[col_unit]) else '',
+            'scale': str(row[col_scale]) if col_scale and pd.notna(row[col_scale]) else '',
+            'pub_date': str(row[col_pub]) if col_pub and pd.notna(row[col_pub]) else '',
+            'pre_date': str(row[col_pre]) if col_pre and pd.notna(row[col_pre]) else '',
+            'url': str(row[col_url]) if col_url and pd.notna(row[col_url]) else '',
+        }
+        t = {k: (v if v not in ('nan', 'None', 'null') else '') for k, v in t.items()}
+        tenders.append(t)
+    return tenders
+
+
+def parse_patent_excel(df: pd.DataFrame, file_bytes=None) -> list:
+    col_title = _find_column(df, ['标题(译)(简体中文)', '发明名称(中文)(机器翻译)', '标题', 'title'])
+    col_applicant = _find_column(df, ['[标]当前申请(专利权)人', '申请人', 'applicant'])
+    col_inventor = _find_column(df, ['发明人', 'inventor'])
+    col_type = _find_column(df, ['法律状态/事件', '法律状态', '专利类型', 'type'])
+    col_date = _find_column(df, ['公开(公告)日', '公开日', '授权日', 'date'])
+    col_abstract = _find_column(df, ['摘要(译)(简体中文)', '摘要(中文)(机器翻译)', '摘要', 'abstract'])
+
+    # Extract hyperlinks from 公开号 column
+    hyperlinks = {}
+    if file_bytes:
+        try:
+            import openpyxl
+            wb = openpyxl.load_workbook(io.BytesIO(file_bytes))
+            ws = wb.active
+            num_col_idx = None
+            for col in range(1, ws.max_column + 1):
+                v = ws.cell(row=1, column=col).value
+                if v and '公开' in str(v) and '号' in str(v):
+                    num_col_idx = col
+                    break
+            if num_col_idx:
+                for row_idx in range(2, ws.max_row + 1):
+                    cell = ws.cell(row=row_idx, column=num_col_idx)
+                    if cell.hyperlink and cell.hyperlink.target:
+                        hyperlinks[row_idx - 2] = cell.hyperlink.target
+            wb.close()
+        except Exception:
+            pass
+
+    patents = []
+    for i, (_, row) in enumerate(df.iterrows()):
+        ptype = str(row[col_type]) if col_type and pd.notna(row[col_type]) else ''
+        if '授权' in ptype:
+            ptype = '授权专利'
+        elif '公开' in ptype:
+            ptype = '公开专利'
+        else:
+            ptype = '公开专利'
+        url = hyperlinks.get(i, '') or ''
+        p = {
+            'title': str(row[col_title]) if col_title and pd.notna(row[col_title]) else '',
+            'applicant': str(row[col_applicant]) if col_applicant and pd.notna(row[col_applicant]) else '',
+            'inventor': str(row[col_inventor]) if col_inventor and pd.notna(row[col_inventor]) else '',
+            'type': ptype,
+            'date': str(row[col_date]) if col_date and pd.notna(row[col_date]) else '',
+            'abstract': str(row[col_abstract]) if col_abstract and pd.notna(row[col_abstract]) else '',
+            'url': url,
+        }
+        p = {k: (v if v not in ('nan', 'None', 'null') else '') for k, v in p.items()}
+        patents.append(p)
+    return patents
+
+
+def filter_patents_by_date(patents: list, start_date, end_date) -> list:
+    """Filter patents to only those with dates within the week range."""
+    from datetime import datetime as dt2
+    result = []
+    for p in patents:
+        d = p.get('date', '')
+        if not d:
+            result.append(p)  # keep if no date
+            continue
+        try:
+            # Try common date formats
+            for fmt in ['%Y-%m-%d', '%Y%m%d', '%Y/%m/%d', '%Y年%m月%d日']:
+                try:
+                    pd_date = dt2.strptime(str(d).strip()[:10], fmt).date()
+                    if pd_date >= start_date and pd_date <= end_date:
+                        result.append(p)
+                    break
+                except ValueError:
+                    continue
+        except Exception:
+            result.append(p)  # keep if can't parse
+    return result
+
+
+def filter_patents_llm(patents: list, category: str, max_keep: int = 8) -> list:
+    """LLM ranks patents, prioritizing 授权 > 公开 > 实用新型 > 外观."""
+    if len(patents) <= max_keep:
+        return patents
+
+    client = _get_weekly_llm()
+    lines = [
+        f"以下是【{category}】板块的{len(patents)}条专利。请筛选出最重要的{max_keep}条放入周报。",
+        "优先级：授权专利 > 公开专利 > 实用新型专利 > 外观专利。在同类中，优先创新型、突破性技术。",
+        "只输出选中的序号（逗号分隔），不要解释。\n"
+    ]
+    for i, p in enumerate(patents, 1):
+        lines.append(f"{i}. [{p.get('type','未知')}] {p.get('title','')} | {p.get('applicant','')} | {p.get('abstract','')[:80]}")
+
+    messages = [
+        {"role": "system", "content": "你是专利分析专家。"},
+        {"role": "user", "content": "\n".join(lines)},
+    ]
+    try:
+        resp = client.chat(messages)
+        nums = re.findall(r'\d+', resp)
+        selected = []
+        for n in nums:
+            idx = int(n) - 1
+            if 0 <= idx < len(patents) and patents[idx] not in selected:
+                selected.append(patents[idx])
+        return selected[:max_keep] if selected else patents[:max_keep]
+    except Exception:
+        return patents[:max_keep]
+
+
+def _get_weekly_llm():
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'rag_system'))
+    from llm_client import LLMClient
+    cfg_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config.yaml')
+    cfg = yaml.safe_load(open(cfg_path, encoding='utf-8'))['llm']
+    return LLMClient(
+        provider='openai', api_key=cfg['api_key'], api_base=cfg['api_base'],
+        model=cfg['model'], max_tokens=2048, timeout=180,
+    )
+
+
+def page_weekly_report():
+    st.header("周报生成")
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        start_date = st.date_input("开始日期", value=datetime.now().date() - timedelta(days=7), key="wr_start")
+    with col2:
+        end_date = st.date_input("结束日期", value=datetime.now().date(), key="wr_end")
+    with col3:
+        issue_no = st.text_input("期数", value="42", key="wr_issue")
+
+    conf_month = st.selectbox("会议月份", options=list(range(1, 13)),
+                               format_func=lambda x: f"{x}月",
+                               index=datetime.now().month - 1, key="wr_conf")
+
+    st.markdown("---")
+    st.markdown("### 招投标数据")
+    tender_file = st.file_uploader("上传招投标 Excel", type=['xlsx', 'xls'], key="wr_tender")
+
+    st.markdown("---")
+    PATENT_CATS = ['低温环境系统', '超导量子测控技术', '量子软件与算法', '量子算力网', '量子科技长三角产业创新中心']
+    st.markdown("### 专利数据（一次上传多个 Excel，按文件名自动归入板块）")
+    patent_raw = st.file_uploader("上传专利 Excel", type=['xlsx', 'xls'], accept_multiple_files=True, key="wr_pat_all",
+                                  help="文件名需包含板块名，如：低温环境系统_0516.xlsx")
+    patent_files = {}
+    if patent_raw:
+        for pf in patent_raw:
+            name = pf.name
+            matched = False
+            for cat in PATENT_CATS:
+                if cat in name:
+                    patent_files[cat] = pf
+                    st.caption(f"  ✓ {name} → {cat}")
+                    matched = True
+                    break
+            if not matched:
+                st.warning(f"  ⚠ {name} 未匹配到板块，已跳过")
+
+    if 'wr_result' not in st.session_state:
+        st.session_state.wr_result = None
+    if 'wr_pdf_path' not in st.session_state:
+        st.session_state.wr_pdf_path = None
+
+    btn_col1, btn_col2 = st.columns([2, 5])
+    with btn_col1:
+        gen_clicked = st.button("🚀 生成周报 PDF", type="primary", key="wr_gen")
+    with btn_col2:
+        if st.session_state.wr_result == 'success' and st.session_state.wr_pdf_path:
+            with open(st.session_state.wr_pdf_path, 'rb') as f:
+                st.download_button(
+                    label="📥 下载周报 PDF", data=f,
+                    file_name=os.path.basename(st.session_state.wr_pdf_path),
+                    mime="application/pdf",
+                )
+            st.success("周报生成成功！")
+        elif st.session_state.wr_result == 'error':
+            st.error("PDF 未找到，编译可能失败。")
+
+    if gen_clicked:
+        with st.spinner("正在生成周报..."):
+            import subprocess
+
+            temp_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'weekly_temp')
+            os.makedirs(temp_dir, exist_ok=True)
+
+            cmd = [
+                sys.executable,
+                os.path.join(os.path.dirname(os.path.abspath(__file__)), 'generate_weekly_report.py'),
+                '--start', start_date.strftime('%Y-%m-%d'),
+                '--end', end_date.strftime('%Y-%m-%d'),
+                '--issue', issue_no,
+                '--conf-month', str(conf_month),
+            ]
+
+            if tender_file:
+                tender_path = os.path.join(temp_dir, 'tenders.xlsx')
+                with open(tender_path, 'wb') as f:
+                    f.write(tender_file.getvalue())
+                cmd.extend(['--tender-excel', tender_path])
+
+            for cat in PATENT_CATS:
+                pf = patent_files.get(cat)
+                if pf:
+                    df = pd.read_excel(pf)
+                    patents = parse_patent_excel(df, file_bytes=pf.getvalue())
+                    if patents:
+                        patents = filter_patents_by_date(patents, start_date, end_date)
+                        filtered = filter_patents_llm(patents, cat) if len(patents) > 8 else patents
+                        st.caption(f"{cat} 原始 → 本周{len(patents)}条 → 精选{len(filtered)}条")
+                        pd.DataFrame(filtered).to_excel(
+                            os.path.join(temp_dir, f'patents_{cat}.xlsx'), index=False, engine='openpyxl')
+                        cmd.extend(['--patent-excel', os.path.join(temp_dir, f'patents_{cat}.xlsx')])
+
+            result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace')
+            st.code(result.stdout)
+
+            if result.returncode != 0:
+                st.error("生成失败")
+                st.code(result.stderr)
+                st.session_state.wr_result = 'error'
+                st.session_state.wr_pdf_path = None
+            else:
+                pdf_path = os.path.join(
+                    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                    'weekly_output',
+                    f'量子行业每周新闻洞察_第{issue_no}期.pdf'
+                )
+                if os.path.exists(pdf_path):
+                    st.session_state.wr_result = 'success'
+                    st.session_state.wr_pdf_path = pdf_path
+                    st.rerun()
+                else:
+                    st.error("PDF 未找到，编译可能失败。")
+                    st.session_state.wr_result = 'error'
+                    st.session_state.wr_pdf_path = None
+
+
+# ------------------------------------------------------------------
+# Page: Conferences
 # ------------------------------------------------------------------
 
 def main():
     st.set_page_config(page_title="量子科技情报", page_icon="📰", layout="wide")
     st.title("📰 量子科技情报")
 
-    page = st.sidebar.radio("导航", ["每日资讯", "会议信息"])
+    page = st.sidebar.radio("导航", ["每日资讯", "周报生成", "会议信息"])
 
     if page == "每日资讯":
         page_daily_news()
+    elif page == "周报生成":
+        page_weekly_report()
     elif page == "会议信息":
         page_conferences()
 
