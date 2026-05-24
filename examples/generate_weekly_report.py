@@ -8,11 +8,13 @@ Usage:
 import os
 import sys
 import json
+import re
 import argparse
 import subprocess
 from datetime import datetime
 
 import pandas as pd
+import yaml
 from jinja2 import Environment, FileSystemLoader
 from sqlalchemy import create_engine
 
@@ -61,12 +63,93 @@ def classify_news(df: pd.DataFrame):
     return result
 
 
-def generate_summary(category_name: str, articles: list) -> str:
-    """Generate one-sentence summary for a category."""
-    if not articles:
-        return "本周暂无相关新闻。"
-    titles = [a['title'] for a in articles[:3]]
-    return f"本周共{len(articles)}条{category_name}相关新闻，重点关注：{titles[0]}等。"
+def preprocess_content(content: str, article_date) -> str:
+    """Preprocess article content for weekly report."""
+    if not content:
+        return ""
+    # Normalize date to string
+    if hasattr(article_date, 'strftime'):
+        date_str = article_date.strftime('%Y年%m月%d日')
+    else:
+        date_str = str(article_date)
+    # Replace time-sensitive words
+    replacements = {
+        '昨日': '此前一日',
+        '近日': '近期',
+        '日前': '此前',
+        '昨天': '此前一日',
+        '今天': date_str,
+        '当日': date_str,
+        '今早': date_str + '早间',
+        '昨晚': date_str + '晚间',
+    }
+    for old, new in replacements.items():
+        content = content.replace(old, new)
+    # Replace date prefix format: "5月22日——" -> "5月22日消息，"
+    content = re.sub(r'(\d{1,2}月\d{1,2}日)[——\-]', r'\1消息，', content)
+    return content
+
+
+def _load_llm_config():
+    """Load LLM config from config.yaml."""
+    cfg_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config.yaml')
+    with open(cfg_path, 'r', encoding='utf-8') as f:
+        return yaml.safe_load(f)
+
+
+def generate_summaries_llm(categories: dict) -> dict:
+    """Use LLM to generate trend-analysis summaries for all categories."""
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'rag_system'))
+    from llm_client import LLMClient
+    cfg = _load_llm_config()['llm']
+    client = LLMClient(
+        provider='openai',
+        api_key=cfg['api_key'],
+        api_base=cfg['api_base'],
+        model=cfg['model'],
+        temperature=cfg.get('temperature') if cfg.get('temperature') is not None else 1,
+        max_tokens=cfg.get('max_tokens', 2048),
+        timeout=180,
+    )
+
+    # Build prompt
+    prompt_lines = [
+        "你是一位量子科技行业分析师。请根据以下本周新闻，为每个分类撰写一句趋势性摘要。",
+        "要求：不要写'本周有几条新闻'，不要简单罗列标题。请提炼出行业趋势、重点方向和关键动向。",
+        "每个分类一句话，不超过80字。\n"
+    ]
+    for cat in CATEGORIES:
+        arts = categories.get(cat, [])
+        if not arts:
+            continue
+        prompt_lines.append(f"\n【{cat}】")
+        for art in arts[:5]:
+            prompt_lines.append(f"- {art['title']}")
+    prompt_lines.append("\n请按以下格式输出（仅输出5行）：")
+    for cat in CATEGORIES:
+        prompt_lines.append(f"{cat}：...")
+
+    messages = [
+        {"role": "system", "content": "你是一位专业的量子科技行业分析师，擅长从新闻中提炼趋势。"},
+        {"role": "user", "content": "\n".join(prompt_lines)},
+    ]
+
+    try:
+        print('[INFO] Generating trend summaries via LLM...')
+        resp = client.chat(messages)
+        summaries = {}
+        for cat in CATEGORIES:
+            # Extract summary line for each category
+            import re
+            match = re.search(rf'{re.escape(cat)}[：:](.+?)(?:\n|$)', resp)
+            if match:
+                summaries[cat] = match.group(1).strip()
+            else:
+                summaries[cat] = "本周该领域保持活跃态势。"
+        return summaries
+    except Exception as e:
+        print(f'[WARN] LLM summary generation failed: {e}')
+        return {cat: "本周该领域保持活跃态势。" for cat in CATEGORIES}
 
 
 def render_latex(context: dict, template_name: str = 'weekly_report_template.tex') -> str:
@@ -183,8 +266,14 @@ def main():
     for cat, arts in categories.items():
         print(f'  {cat}: {len(arts)} articles')
 
-    # 2. Generate summaries
-    summaries = {cat: generate_summary(cat, arts) for cat, arts in categories.items()}
+    # 2. Preprocess article content and set URL
+    for cat in CATEGORIES:
+        for art in categories[cat]:
+            art['content'] = preprocess_content(art.get('content', '') or '', art.get('liangke_date', ''))
+            art['url'] = art.get('reference_url') or art.get('liangke_url') or ''
+
+    # 3. Generate trend summaries via LLM
+    summaries = generate_summaries_llm(categories)
 
     # 3. Optional: conferences
     conferences = []
@@ -241,19 +330,22 @@ def main():
         f.write(latex)
     print(f'[OK] LaTeX saved to {tex_path}')
 
-    # 7. Copy cover image if exists
-    cover_src = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-        '量子行业每周新闻洞察_模板文件夹',
-        '量子行业每周新闻洞察_模板文件夹',
-        'Cover_Suzhou.png'
-    )
-    if os.path.exists(cover_src):
-        import shutil
-        shutil.copy(cover_src, os.path.join(output_dir, 'Cover_Suzhou.png'))
-        print(f'[OK] Cover image copied')
-    else:
-        print(f'[WARN] Cover image not found at {cover_src}')
+    # 7. Copy cover image
+    cover_candidates = [
+        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'weekly_templates', 'Cover_Suzhou.png'),
+        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '量子行业每周新闻洞察_模板文件夹', '量子行业每周新闻洞察_模板文件夹', 'Cover_Suzhou.png'),
+        r'D:\Claude_code\量子行业每周新闻洞察_模板文件夹\量子行业每周新闻洞察_模板文件夹\Cover_Suzhou.png',
+    ]
+    cover_copied = False
+    for cover_src in cover_candidates:
+        if os.path.exists(cover_src):
+            import shutil
+            shutil.copy(cover_src, os.path.join(output_dir, 'Cover_Suzhou.png'))
+            print(f'[OK] Cover image copied from {cover_src}')
+            cover_copied = True
+            break
+    if not cover_copied:
+        print(f'[WARN] Cover image not found')
 
     # 8. Compile PDF
     print('[INFO] Compiling PDF (xelatex x2)...')
