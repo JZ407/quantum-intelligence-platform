@@ -26,7 +26,15 @@ DB_URL = 'mysql+pymysql://scraper:scraper123@127.0.0.1:3306/liangke_scraper?char
 HISTORICAL_DB_PATH = 'D:/Claude_code/liangke_historical/historical.db'
 CATEGORY_PRIORITY = ['资本运作', '产品动态', '企业资讯', '科技前沿', '宏观态势']
 
-CONF_JSON_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'conferences_zh.json')
+CONF_DB_PATH = 'D:/Claude_code/conference_db/conferences.db'
+
+TAGS_LIST = [
+    '量子计算', '科技前沿', '产品动态', '量子通信', '行业应用',
+    '企业与机构', '硬件平台', '融资商业', '宏观态势', 'AI/ML',
+    '半导体', '量子物理', '后量子密码', '融资', 'PQC', 'QKD',
+    '量子纠错', '超导', 'NIST', '量子传感', '企业资讯',
+    '光量子', '资本运作', '离子阱', '政策标准', '后量子迁移', 'arXiv',
+]
 
 # ------------------------------------------------------------------
 # Helpers
@@ -199,13 +207,19 @@ def build_docx(date_str: str, articles: list) -> io.BytesIO:
 # Conference helpers
 # ------------------------------------------------------------------
 
-@st.cache_data
+@st.cache_data(ttl=60)
 def load_conferences():
-    """Load translated conference cache."""
-    if not os.path.exists(CONF_JSON_PATH):
+    """Load translated conferences from SQLite database."""
+    import sqlite3
+    if not os.path.exists(CONF_DB_PATH):
         return []
-    with open(CONF_JSON_PATH, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    conn = sqlite3.connect(CONF_DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute('SELECT date_str, month, name_zh, location_zh, url FROM conferences ORDER BY month, id')
+    rows = [dict(r) for r in cursor.fetchall()]
+    conn.close()
+    return rows
 
 
 # ------------------------------------------------------------------
@@ -239,39 +253,51 @@ def page_daily_news():
     """Daily news selection and report generation."""
     st.header("量科网每日情报资讯")
 
-    col1, col2 = st.columns([2, 3])
+    today = datetime.now().date()
+    col1, col2, col3 = st.columns([2, 2, 2])
     with col1:
         source = st.selectbox("数据源", options=["量科每日库", "量科历史库"], index=0)
     with col2:
-        today = datetime.now().date()
         if source == "量科每日库":
-            target_date = st.date_input("选择日期", value=today, min_value=datetime(2026, 4, 11).date())
-            st.caption("📌 每日库记录始于 2026-04-11")
+            min_date = datetime(2026, 4, 11).date()
+            caption = "📌 每日库记录始于 2026-04-11"
         else:
-            target_date = st.date_input("选择日期", value=today, min_value=datetime(2021, 11, 18).date())
-            st.caption("📌 历史库记录始于 2021-11-18")
-    target_date_str = target_date.strftime('%Y-%m-%d')
+            min_date = datetime(2021, 11, 18).date()
+            caption = "📌 历史库记录始于 2021-11-18"
+        target_date = st.date_input("选择日期", value=today, min_value=min_date)
+    with col3:
+        st.caption(caption)
+    target_str = target_date.strftime('%Y-%m-%d')
 
-    keyword = st.text_input("🔍 关键词检索（标题/内容）", placeholder="输入关键词过滤...")
+    keyword = st.text_input("🔍 关键词检索（搜索全库，不限日期）", placeholder="输入关键词搜索全库...")
 
     with st.spinner("正在读取数据库..."):
-        if source == "量科历史库":
-            df = fetch_historical_articles(target_date_str)
+        if keyword:
+            # Search entire database, ignore date
+            if source == "量科历史库":
+                df = fetch_historical_articles_range('2021-01-01', '2030-01-01')
+            else:
+                df = _fetch_daily_articles_range('2026-01-01', '2030-01-01')
+            kw = keyword.strip()
+            mask = df['title'].str.contains(kw, case=False, na=False) | df['content'].str.contains(kw, case=False, na=False)
+            df = df[mask]
         else:
-            df = fetch_articles(target_date_str)
-
-    if keyword:
-        kw = keyword.strip()
-        mask = df['title'].str.contains(kw, case=False, na=False) | df['content'].str.contains(kw, case=False, na=False)
-        df = df[mask]
+            if source == "量科历史库":
+                df = fetch_historical_articles(target_str)
+            else:
+                df = fetch_articles(target_str)
 
     if df.empty:
-        st.warning(f"📭 {target_date_str} 暂无数据。")
+        st.warning(f"📭 暂无匹配数据。")
         return
 
     # News list section (with manual selection)
-    st.markdown(f"### 📋 新闻列表（{target_date_str}，共 {len(df)} 条）")
-    st.caption("请勾选您认为最重要的 3 条新闻，下方将据此生成日报。")
+    if keyword:
+        st.markdown(f"### 📋 搜索结果（共 {len(df)} 条）")
+        st.caption(f"全文检索 \"{keyword}\" ，跨全库")
+    else:
+        st.markdown(f"### 📋 新闻列表（{target_str}，共 {len(df)} 条）")
+        st.caption("请勾选您认为最重要的 3 条新闻，下方将据此生成日报。")
 
     source_key = "daily" if source == "量科每日库" else "hist"
     selected_ids = []
@@ -285,8 +311,17 @@ def page_daily_news():
             with cols[1]:
                 st.markdown(f"**{row['title']}**")
                 tags = row.get('tags', [])
-                if isinstance(tags, list) and tags:
-                    st.caption(f"{' | '.join(tags[:3])}")
+                date_str = row.get('liangke_date', '')
+                # For historical DB, truncate datetime to date
+                if date_str and len(str(date_str)) > 10:
+                    date_str = str(date_str)[:10]
+                tag_text = ' | '.join(tags[:3]) if isinstance(tags, list) and tags else ''
+                if tag_text and date_str:
+                    st.caption(f"{date_str} · {tag_text}")
+                elif date_str:
+                    st.caption(f"{date_str}")
+                elif tag_text:
+                    st.caption(tag_text)
             with cols[2]:
                 if st.button("查看详情", key=f"view_{source_key}_{row['id']}", type="secondary"):
                     show_article_detail(row.to_dict())
@@ -321,8 +356,8 @@ def page_daily_news():
                     st.caption(f"标签：{' | '.join(tags)}")
                 st.markdown("---")
 
-        doc_buf = build_docx(target_date_str, rows_to_use)
-        file_name = f"日报{target_date_str}.docx"
+        doc_buf = build_docx(target_str, rows_to_use)
+        file_name = f"日报{target_str}.docx"
 
         st.download_button(
             label="📥 下载 Word 日报",
@@ -330,6 +365,83 @@ def page_daily_news():
             file_name=file_name,
             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         )
+
+    # Data export section
+    st.markdown("---")
+    st.markdown("### 📤 数据导出")
+
+    exp_col1, exp_col2 = st.columns(2)
+    with exp_col1:
+        exp_start = st.date_input("开始日期", value=target_date, min_value=min_date, key="exp_start")
+    with exp_col2:
+        exp_end = st.date_input("结束日期", value=target_date, min_value=min_date, key="exp_end")
+    exp_kw = st.text_input("关键词筛选", placeholder="留空=全部", key="exp_kw")
+    exp_tags = st.multiselect("标签筛选（留空=全部）", options=TAGS_LIST, default=[], key="exp_tags")
+    exp_format = st.radio("导出格式", ["Excel (.xlsx)", "SQLite (.db)"], horizontal=True, key="exp_format")
+
+    if st.button("📤 导出数据", type="primary", key="btn_export"):
+        with st.spinner("正在读取数据库..."):
+            if source == "量科历史库":
+                exp_df = fetch_historical_articles_range(exp_start.strftime('%Y-%m-%d'), exp_end.strftime('%Y-%m-%d'))
+            else:
+                exp_df = _fetch_daily_articles_range(exp_start.strftime('%Y-%m-%d'), exp_end.strftime('%Y-%m-%d'))
+        if exp_kw:
+            kw = exp_kw.strip()
+            mask = exp_df['title'].str.contains(kw, case=False, na=False) | exp_df['content'].str.contains(kw, case=False, na=False)
+            exp_df = exp_df[mask]
+        if exp_tags:
+            mask = exp_df['tags'].apply(lambda t: isinstance(t, list) and any(tag in t for tag in exp_tags))
+            exp_df = exp_df[mask]
+        if exp_df.empty:
+            st.warning("未找到匹配的数据。")
+        else:
+            if exp_format == "Excel (.xlsx)":
+                buf = io.BytesIO()
+                exp_df.to_excel(buf, index=False, engine='openpyxl')
+                buf.seek(0)
+                st.download_button(
+                    label="📥 下载 Excel",
+                    data=buf,
+                    file_name=f"export_{exp_start.strftime('%Y%m%d')}_{exp_end.strftime('%Y%m%d')}.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                )
+                st.success(f"已导出 {len(exp_df)} 条数据")
+            else:
+                import sqlite3
+                tmp_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'export_tmp.db')
+                os.makedirs(os.path.dirname(tmp_path), exist_ok=True)
+                tmp_conn = sqlite3.connect(tmp_path)
+                exp_df.to_sql('articles', tmp_conn, index=False, if_exists='replace')
+                tmp_conn.close()
+                with open(tmp_path, 'rb') as f:
+                    st.download_button(
+                        label="📥 下载 SQLite 数据库",
+                        data=f,
+                        file_name=f"export_{exp_start.strftime('%Y%m%d')}_{exp_end.strftime('%Y%m%d')}.db",
+                        mime="application/octet-stream",
+                    )
+                st.success(f"已导出 {len(exp_df)} 条数据")
+
+
+def _fetch_daily_articles_range(start_date: str, end_date: str) -> pd.DataFrame:
+    """Fetch articles from daily MySQL DB for a date range."""
+    engine = create_engine(DB_URL)
+    query = f"SELECT id, title, content, reference_url, liangke_url, liangke_date, tags FROM articles WHERE liangke_date BETWEEN '{start_date}' AND '{end_date}' ORDER BY id DESC"
+    df = pd.read_sql(query, engine)
+    df['tags'] = df['tags'].apply(_parse_tags)
+    return df
+
+
+def fetch_historical_articles_range(start_date: str, end_date: str) -> pd.DataFrame:
+    """Fetch articles from historical SQLite DB for a date range."""
+    import sqlite3
+    conn = sqlite3.connect(HISTORICAL_DB_PATH)
+    query = f"SELECT id, title, content, reference_url, published_at FROM articles WHERE DATE(published_at) BETWEEN '{start_date}' AND '{end_date}' ORDER BY published_at DESC"
+    df = pd.read_sql(query, conn)
+    conn.close()
+    df = df.rename(columns={'published_at': 'liangke_date'})
+    df['tags'] = df['title'].apply(_classify_by_title)
+    return df
 
 
 # ------------------------------------------------------------------

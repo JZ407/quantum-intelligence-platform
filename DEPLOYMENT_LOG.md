@@ -389,3 +389,61 @@ llm:
 - [ ] 用 `rich` 美化 `query_kb.py` 的终端交互
 - [ ] 支持网页抓取（beautifulsoup4）直接入知识库
 - [ ] 评估 ChromaDB（虽然用户当前未选择，但可保留接口）
+
+---
+
+## 14. 历史库全量重抓 + 情报资讯平台深化（2026-05-24）
+
+### 14.1 LLM 切换
+
+**触发条件**：Kimi k2.6 对长列表批量翻译响应不稳定，且用户决定统一使用 DeepSeek。
+
+**改动**：`config.yaml` 中 LLM 配置从 `kimi-k2.6 @ moonshot.cn` 切换为 `deepseek-v4-pro @ api.deepseek.com`。
+
+### 14.2 历史库全量重抓
+
+**背景**：旧历史库存在标题混入正文、无标签、部分链接失效等问题，用户决定从量科网重新抓取全量数据。
+
+**抓取规模**：flash 8,685 篇 + news 150 篇 + reference 100 篇 = **8,935 篇**。
+
+**实现**：`examples/full_scrape_history.py`
+- 分两步执行：列表页抓取（~450 页，10 分钟内完成）+ 详情页抓取 + LLM 打标签
+- **支持断点续传**：中断后重新运行自动从未处理文章继续
+- **标签自动生成**：每篇详情抓取后用 DeepSeek-v4-pro 从 27 个标签中选取适用标签（多选，通常 2-4 个）
+- **标题清洗**：列表页和详情页均提取【】内内容或 h2 标题，丢弃混入的正文
+- **日期提取**：flash 从详情页正则匹配，news 从 span.time 获取
+- 修复 Unicode 打印崩溃问题（GBK 编码）
+- **数据库**：`D:/Claude_code/liangke_historical/historical_v2.db`
+
+**当前状态**：详情抓取后台运行中（约 207/8935 已完成），预计总耗时 10-12 小时。
+
+### 14.3 会议数据库
+
+**触发条件**：用户翻译了会议日期并希望用数据库管理会议信息。
+
+**实现**：
+- 新建 `D:/Claude_code/conference_db/` 项目
+- `conferences.db`：SQLite 数据库，211 条会议，含 date_str / month / name_zh / location_zh / url
+- `build_db.py`：从 Excel 或 JSON 导入数据的建库脚本
+- `daily_report_app.py` 中 load_conferences 改为从 SQLite 读取（60s 缓存）
+
+### 14.4 情报资讯交互深化
+
+**改动**：
+1. **检索架构分离**：
+   - 日期选择器仅用于日报生成和当日浏览
+   - 关键词检索框独立，输入即跨**全库搜索**，不限日期
+   - 搜索结果每条新闻标注日期
+2. **数据导出**（底部独立区域）：
+   - 日期范围选择（开始/结束）
+   - 关键词筛选
+   - 标签筛选（27 个标签多选）
+   - 导出格式：Excel (.xlsx) / SQLite (.db)
+   - 三个筛选条件可组合，导出时重新查询数据库
+3. **新闻列表**：每条新闻显示日期和标签，tag 以 `·` 分隔
+
+**文件**：`examples/daily_report_app.py`、`examples/full_scrape_history.py`
+
+### 14.5 每日新闻抓取
+
+**执行**：`run_daily_pipeline.py` 运行正常，抓取 2026-05-24 当日新闻。新增 12 篇，更新 8 篇，RAG Pro 知识库同步至 893 chunks，总耗时 105.5 秒。

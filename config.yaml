@@ -22,11 +22,11 @@ embedding:
   api_base: null
 
 llm:
-  provider: "openai"  # Kimi uses OpenAI-compatible API
-  model: "kimi-k2.6"
-  api_key: "sk-I2CycISUgpOUOVmnj6mgF0GQ8IlcKzf4Un9EpfPAEi9OaS49"
-  api_base: "https://api.moonshot.cn/v1"
-  temperature: null  # kimi-k2.6 only allows 1; set to null to omit
+  provider: "openai"  # OpenAI-compatible API
+  model: "deepseek-v4-pro"
+  api_key: "sk-a6163ee79eaf4233a50cb03713794d8d"
+  api_base: "https://api.deepseek.com"
+  temperature: null
   max_tokens: 2048
   system_prompt: "你是一个专业的文档问答助手。请基于提供的参考资料回答用户问题。如果资料中没有相关信息，请明确说明。"
 
