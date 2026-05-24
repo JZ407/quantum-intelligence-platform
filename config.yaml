@@ -24,7 +24,7 @@ embedding:
 llm:
   provider: "openai"  # OpenAI-compatible API
   model: "deepseek-v4-pro"
-  api_key: "sk-a6163ee79eaf4233a50cb03713794d8d"
+  api_key: "sk-589d0203dd0b4c96a75914a684139df3"
   api_base: "https://api.deepseek.com"
   temperature: null
   max_tokens: 2048

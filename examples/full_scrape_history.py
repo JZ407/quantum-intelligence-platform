@@ -19,7 +19,7 @@ BASE_URL = 'http://www.qtc.com.cn'
 COOKIE_PATH = 'D:/Claude_code/liangke_historical/qtc_cookies.pkl'
 DB_PATH = 'D:/Claude_code/liangke_historical/historical_v2.db'
 PAGE_DELAY = 1.0
-DETAIL_DELAY = 0.5
+DETAIL_DELAY = 3.0
 LLM_BATCH_SIZE = 1  # process one article at a time for reliability
 
 TAGS_LIST = [

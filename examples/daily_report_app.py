@@ -25,7 +25,7 @@ from docx.oxml.ns import qn
 # Config
 # ------------------------------------------------------------------
 DB_URL = 'mysql+pymysql://scraper:scraper123@127.0.0.1:3306/liangke_scraper?charset=utf8mb4'
-HISTORICAL_DB_PATH = 'D:/Claude_code/liangke_historical/historical.db'
+HISTORICAL_DB_PATH = 'D:/Claude_code/liangke_historical/historical_v2.db'
 CATEGORY_PRIORITY = ['资本运作', '产品动态', '企业资讯', '科技前沿', '宏观态势']
 
 CONF_DB_PATH = 'D:/Claude_code/conference_db/conferences.db'

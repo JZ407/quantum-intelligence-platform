@@ -504,3 +504,32 @@ llm:
 - 摘要每类一段概括，不再拼接标题列表
 - 日期前缀正则扩展至带年份格式，清除内容开头事件日期
 - 新闻内容预处理：正则清理 + LLM 审核双保险
+
+---
+
+## 16. 历史库全量抓取完成 & API 限速处理（2026-05-25）
+
+### 16.1 API 限速与密钥更新
+
+**问题**：全量抓取期间 LLM 调用频率过高，DeepSeek 发送限速警告邮件并终止访问。
+
+**处理**：
+1. 更换新 API key（`config.yaml`）
+2. `full_scrape_history.py` 延迟从 0.5s → **3.0s**，避免触发限速
+
+### 16.2 历史库全量抓取完成
+
+**结果**：8,935/8,935 全部完成，每篇均已打上 LLM 标签。
+
+| 类型 | 数量 |
+|------|------|
+| flash | 8,685 |
+| news | 150 |
+| reference | 100 |
+| **总计** | **8,935** |
+
+**数据库**：`D:/Claude_code/liangke_historical/historical_v2.db`
+
+### 16.3 交互页面切换
+
+`daily_report_app.py` 中 `HISTORICAL_DB_PATH` 从旧库 `historical.db` 切换为 `historical_v2.db`，历史检索使用新版带标签数据。
