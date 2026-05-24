@@ -279,3 +279,46 @@ llm:
 **修复**：在两个脚本开头设置 `os.environ.setdefault('HF_ENDPOINT', 'https://hf-mirror.com')`，使用清华镜像。
 
 **验证**：镜像模式下模型加载秒过，同步 19 篇文章、12 chunks 成功。
+
+### 10.6 日报生成器交互升级（2026-05-24）
+
+**触发条件**：用户希望从「系统自动选 3 条」改为「用户手动勾选 3 条」，增加自由度；同时要求 Word 输出保留全文并首行缩进。
+
+**改动点**：
+1. **手动勾选**：新闻列表左侧增加 `st.checkbox`，用户自选要纳入日报的文章。
+2. **数量提示**：日报生成区根据勾选数量给出动态提示（0 条→提示勾选，1–2 条→提示再选，3 条→可生成，>3 条→取前 3 条）。
+3. **全文保留**：`build_docx()` 去掉原来的 `content[:300]` 截断，完整输出正文。
+4. **首行缩进 2 字符**：正文按换行符拆分，每段独立创建段落并设置 `first_line_indent = Cm(0.74)`（约 14pt 微软雅黑下 2 字符）。
+
+**文件**：`examples/daily_report_app.py`
+
+---
+
+## 11. 周报生成系统（已取消）
+
+**时间**：2026-05-24
+**状态**：项目取消，相关文件已清理，DEPLOYMENT_LOG 保留记录。
+
+### 11.1 已完成的部分
+
+- LaTeX 模板渲染 + xelatex 编译（封面、目录、摘要、5 分类正文、会议表格、招投标表格、专利动态）
+- MySQL → 分类 → LLM 趋势摘要 → PDF 的完整链路
+- 新闻内容预处理：删除模糊时间词、添加日期前缀、清理破折号
+- quantum.info/conf/ 会议抓取 + 月份过滤
+- 会议翻译（LLM 批量英译中，保留缩写）
+- 招投标/专利 Excel 解析（灵活列名匹配）
+- 专利 LLM 筛选 + 按领域分组
+- Streamlit 周报 UI（日期范围、期数、Excel 上传、PDF 下载）
+
+### 11.2 取消原因
+
+- 会议翻译调试过程中发现 kimi-k2.6 对长列表批量翻译的响应不稳定（28 条会议返回空 content），需分批处理，维护成本上升
+- 用户决定暂停该方向，聚焦其他工作
+
+### 11.3 已清理的文件
+
+- `examples/generate_weekly_report.py`
+- `examples/weekly_report_app.py`
+- `examples/conf_fetcher.py`
+- `weekly_templates/weekly_report_template.tex`
+- `weekly_output/` 目录（所有生成的 PDF、tex、log 等）

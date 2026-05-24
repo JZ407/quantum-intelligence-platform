@@ -20,7 +20,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 import streamlit as st
 from docx import Document
-from docx.shared import Pt, RGBColor
+from docx.shared import Pt, RGBColor, Cm
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.oxml.ns import qn
 
@@ -113,12 +113,15 @@ def build_docx(date_str: str, articles: list) -> io.BytesIO:
         _set_run_font(run, YAHEI, 16)
         run.font.bold = True
 
-        # Summary (first 300 chars of content)
+        # Full content (split by newline, indent each paragraph)
         content = art.get('content', '') or ''
-        summary = content[:300].strip()
-        if summary:
+        for line in content.strip().split('\n'):
+            line = line.strip()
+            if not line:
+                continue
             p = doc.add_paragraph()
-            run = p.add_run(summary)
+            p.paragraph_format.first_line_indent = Cm(0.74)  # ~2 Chinese chars
+            run = p.add_run(line)
             _set_run_font(run, YAHEI, 14)
 
         # Reference link
@@ -196,19 +199,25 @@ def main():
         return
 
     # ------------------------------------------------------------------
-    # News list section
+    # News list section (with manual selection)
     # ------------------------------------------------------------------
     st.markdown(f"### 📋 新闻列表（{target_date_str}，共 {len(df)} 条）")
+    st.caption("请勾选您认为最重要的 3 条新闻，下方将据此生成日报。")
 
+    selected_ids = []
     for _, row in df.iterrows():
         with st.container():
-            cols = st.columns([5, 1])
+            cols = st.columns([0.5, 5, 1])
             with cols[0]:
+                checked = st.checkbox("", key=f"sel_{row['id']}", label_visibility="collapsed")
+                if checked:
+                    selected_ids.append(row['id'])
+            with cols[1]:
                 st.markdown(f"**{row['title']}**")
                 tags = row.get('tags', [])
                 if isinstance(tags, list) and tags:
                     st.caption(f"{' | '.join(tags[:3])}")
-            with cols[1]:
+            with cols[2]:
                 if st.button("查看详情", key=f"view_{row['id']}", type="secondary"):
                     show_article_detail(row.to_dict())
         st.divider()
@@ -218,20 +227,26 @@ def main():
     # ------------------------------------------------------------------
     st.markdown("---")
     st.markdown("### 📄 日报生成")
-    st.caption("筛选优先级：资本运作 > 产品动态 > 企业资讯 > 科技前沿 > 宏观态势")
 
-    if st.button("🚀 生成日报", type="primary"):
-        with st.spinner("正在筛选重要新闻..."):
-            top3 = select_top3(df)
+    selected_rows = df[df['id'].isin(selected_ids)].to_dict('records')
+    count = len(selected_rows)
 
-        if not top3:
-            st.warning("未能筛选出合适的新闻。")
-            return
+    if count == 0:
+        st.info("请在上方新闻列表中勾选要纳入日报的文章（建议 3 条）。")
+    elif count < 3:
+        st.warning(f"已勾选 {count} 条，建议再选 {3 - count} 条以达到 3 条。")
+    elif count > 3:
+        st.warning(f"已勾选 {count} 条，建议只保留最重要的 3 条。当前将使用前 3 条生成日报。")
+        selected_rows = selected_rows[:3]
+    else:
+        st.success(f"已勾选 {count} 条，可以生成日报。")
 
-        st.success(f"已筛选 {len(top3)} 条新闻（当日共 {len(df)} 条）")
+    if selected_rows and st.button("🚀 生成日报", type="primary"):
+        rows_to_use = selected_rows[:3]
 
         # Preview
-        for idx, art in enumerate(top3, 1):
+        st.markdown("#### 日报预览")
+        for idx, art in enumerate(rows_to_use, 1):
             with st.container():
                 st.markdown(f"**{idx}. {art['title']}**")
                 tags = art.get('tags', [])
@@ -240,7 +255,7 @@ def main():
                 st.markdown("---")
 
         # Generate docx
-        doc_buf = build_docx(target_date_str, top3)
+        doc_buf = build_docx(target_date_str, rows_to_use)
         file_name = f"日报{target_date_str}.docx"
 
         st.download_button(
