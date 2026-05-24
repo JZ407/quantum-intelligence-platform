@@ -59,7 +59,6 @@ def fetch_articles(target_date: str):
     df['tags'] = df['tags'].apply(_parse_tags)
     return df
 
-
 def select_top3(df: pd.DataFrame):
     """Select top-3 articles by category priority."""
     if df.empty:
@@ -91,7 +90,6 @@ def select_top3(df: pd.DataFrame):
                 break
 
     return selected
-
 
 def build_docx(date_str: str, articles: list) -> io.BytesIO:
     """Generate a Word document and return as BytesIO."""
@@ -154,30 +152,75 @@ def build_docx(date_str: str, articles: list) -> io.BytesIO:
     buf.seek(0)
     return buf
 
+# ------------------------------------------------------------------
+# Article detail dialog
+# ------------------------------------------------------------------
+
+@st.dialog("新闻详情", width="large")
+def show_article_detail(art: dict):
+    """Show article detail in a modal dialog."""
+    st.subheader(art['title'])
+    tags = art.get('tags', [])
+    if isinstance(tags, list) and tags:
+        st.caption(f"标签：{' | '.join(tags)}")
+    st.markdown("---")
+    content = art.get('content', '') or ''
+    if content:
+        st.markdown(content)
+    else:
+        st.info("暂无正文内容")
+    ref_url = art.get('reference_url', '') or art.get('liangke_url', '')
+    if ref_url:
+        st.markdown("---")
+        st.link_button("🔗 打开参考链接", ref_url)
 
 # ------------------------------------------------------------------
 # Streamlit UI
 # ------------------------------------------------------------------
 
 def main():
-    st.set_page_config(page_title="量科每日讯日报生成器", page_icon="📰")
-    st.title("📰 量科每日讯日报生成器")
+    st.set_page_config(page_title="量科每日讯", page_icon="📰", layout="wide")
+    st.title("📰 量科每日讯")
 
     # Date picker
     today = datetime.now().date()
     target_date = st.date_input("选择日期", value=today)
     target_date_str = target_date.strftime('%Y-%m-%d')
 
+    # Fetch articles immediately so the list is always visible
+    with st.spinner("正在读取数据库..."):
+        df = fetch_articles(target_date_str)
+
+    if df.empty:
+        st.warning(f"📭 {target_date_str} 暂无数据。请先运行每日新闻抓取。")
+        return
+
+    # ------------------------------------------------------------------
+    # News list section
+    # ------------------------------------------------------------------
+    st.markdown(f"### 📋 新闻列表（{target_date_str}，共 {len(df)} 条）")
+
+    for _, row in df.iterrows():
+        with st.container():
+            cols = st.columns([5, 1])
+            with cols[0]:
+                st.markdown(f"**{row['title']}**")
+                tags = row.get('tags', [])
+                if isinstance(tags, list) and tags:
+                    st.caption(f"{' | '.join(tags[:3])}")
+            with cols[1]:
+                if st.button("查看详情", key=f"view_{row['id']}", type="secondary"):
+                    show_article_detail(row.to_dict())
+        st.divider()
+
+    # ------------------------------------------------------------------
+    # Daily report generation section
+    # ------------------------------------------------------------------
     st.markdown("---")
+    st.markdown("### 📄 日报生成")
+    st.caption("筛选优先级：资本运作 > 产品动态 > 企业资讯 > 科技前沿 > 宏观态势")
 
     if st.button("🚀 生成日报", type="primary"):
-        with st.spinner("正在读取数据库..."):
-            df = fetch_articles(target_date_str)
-
-        if df.empty:
-            st.warning(f"📭 {target_date_str} 暂无数据。请先运行每日新闻抓取。")
-            return
-
         with st.spinner("正在筛选重要新闻..."):
             top3 = select_top3(df)
 
@@ -206,10 +249,6 @@ def main():
             file_name=file_name,
             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         )
-
-    st.markdown("---")
-    st.caption("筛选优先级：资本运作 > 产品动态 > 企业资讯 > 科技前沿 > 宏观态势")
-
 
 if __name__ == '__main__':
     main()
