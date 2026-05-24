@@ -70,23 +70,32 @@ def preprocess_content(content: str, article_date) -> str:
     # Normalize date to string
     if hasattr(article_date, 'strftime'):
         date_str = article_date.strftime('%Y年%m月%d日')
+        short_date = article_date.strftime('%m月%d日')
     else:
         date_str = str(article_date)
-    # Replace time-sensitive words
-    replacements = {
-        '昨日': '此前一日',
-        '近日': '近期',
-        '日前': '此前',
-        '昨天': '此前一日',
-        '今天': date_str,
-        '当日': date_str,
-        '今早': date_str + '早间',
-        '昨晚': date_str + '晚间',
-    }
-    for old, new in replacements.items():
-        content = content.replace(old, new)
-    # Replace date prefix format: "5月22日——" -> "5月22日消息，"
-    content = re.sub(r'(\d{1,2}月\d{1,2}日)[——\-]', r'\1消息，', content)
+        short_date = date_str
+
+    # 1. Remove all fuzzy time words entirely (not replace)
+    fuzzy_words = ['昨日', '近日', '日前', '昨天', '今天', '当日', '今早', '昨晚', '近期', '不久前', '刚刚']
+    for word in fuzzy_words:
+        content = content.replace(word, '')
+
+    # 2. Clean up leftover punctuation clusters caused by removals
+    content = re.sub(r'[，,]\s*[，,]', '，', content)
+    content = re.sub(r'[。．]\s*[，,]', '。', content)
+    content = re.sub(r'\s{2,}', ' ', content)
+
+    # 3. Strip existing date prefix with any dash variant at the very beginning
+    # Must include \- (ASCII hyphen) and place it carefully inside the char class
+    content = re.sub(r'^\s*\d{1,2}月\d{1,2}日\s*[—–‒‐‑―─━－―—\-]+\s*', '', content)
+    # Also remove "5月22日消息，" if it was previously added
+    content = re.sub(r'^\s*\d{1,2}月\d{1,2}日消息[，,]\s*', '', content)
+
+    # 4. Strip leading stray punctuation left by deletions
+    content = content.lstrip(' \t\n\r，,。．；;')
+
+    # 5. Add new prefix: 量科网发布日期 + 消息
+    content = f"{date_str}消息，{content}"
     return content
 
 
