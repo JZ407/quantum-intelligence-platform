@@ -1,5 +1,5 @@
 """
-Streamlit App: 量科每日讯日报生成器
+Streamlit App: 量科网每日资讯
 
 Usage (local network):
     python -m streamlit run examples/daily_report_app.py --server.address 0.0.0.0 --server.port 8501
@@ -179,8 +179,8 @@ def show_article_detail(art: dict):
 # ------------------------------------------------------------------
 
 def main():
-    st.set_page_config(page_title="量科每日讯", page_icon="📰", layout="wide")
-    st.title("📰 量科每日讯")
+    st.set_page_config(page_title="量科网每日资讯", page_icon="📰", layout="wide")
+    st.title("📰 量科网每日资讯")
 
     # Date picker
     today = datetime.now().date()
