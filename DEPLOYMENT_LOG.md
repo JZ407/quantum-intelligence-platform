@@ -565,3 +565,12 @@ llm:
 - 清理 `D:/Claude_code/` 所有临时文件
 - 配置 Windows 定时任务，每天 13:30 自动抓取（`schtasks` + `daily_scrape.bat`）
 - 交互页面历史库查询修复：列名 `liangke_date`（非 `published_at`）、日期 LIKE 匹配（非精确匹配）、tags JSON 解析
+
+### 17.5 Cookie 路径确认
+
+**发现**：每日抓取脚本读取的实际路径为 `liangke_daily/data/cookies/qtc_cookies.pkl`（非之前以为的 `cookies/` 目录）。extract_cookie.py 之前已存在但 update_cookie.bat 从未创建，本次补上。Cookie 过期后的正确流程：Edge 登录量科网 → 关闭 Edge → 双击 `update_cookie.bat` → 自动同步到两个项目。
+
+### 17.6 项目清理
+
+- 封面图移入 `weekly_templates/Cover_Suzhou.png`，删除旧模板文件夹
+- 清理 `D:/Claude_code/` 及 `rag_system/` 全部临时文件（`.txt`、`.log`、`test_*.docx`、编译中间文件）
