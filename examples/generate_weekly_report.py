@@ -583,7 +583,6 @@ def main():
     # 9. Copy cover image
     cover_candidates = [
         os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'weekly_templates', 'Cover_Suzhou.png'),
-        r'D:\Claude_code\量子行业每周新闻洞察_模板文件夹\量子行业每周新闻洞察_模板文件夹\Cover_Suzhou.png',
     ]
     for cover_src in cover_candidates:
         if os.path.exists(cover_src):

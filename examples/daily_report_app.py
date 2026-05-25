@@ -98,15 +98,11 @@ def fetch_historical_articles(target_date: str):
     """Fetch articles from historical SQLite DB for a specific date."""
     import sqlite3
     conn = sqlite3.connect(HISTORICAL_DB_PATH)
-    query = f"SELECT id, title, content, reference_url, liangke_url, published_at FROM articles WHERE DATE(published_at) = '{target_date}' ORDER BY published_at DESC"
+    query = f"SELECT id, title, content, reference_url, liangke_url, liangke_date, tags FROM articles WHERE liangke_date LIKE '{target_date}%' ORDER BY liangke_date DESC"
     df = pd.read_sql(query, conn)
     conn.close()
-    # Normalize column names to match daily DB
-    df = df.rename(columns={'published_at': 'liangke_date'})
-    # For historical DB, prefer liangke_url as the primary reference_url
-    # since original links may be dead
     df['reference_url'] = df['liangke_url'].fillna(df['reference_url'])
-    df['tags'] = df['title'].apply(_classify_by_title)
+    df['tags'] = df['tags'].apply(_parse_tags)
     return df
 
 def select_top3(df: pd.DataFrame):
@@ -438,11 +434,10 @@ def fetch_historical_articles_range(start_date: str, end_date: str) -> pd.DataFr
     """Fetch articles from historical SQLite DB for a date range."""
     import sqlite3
     conn = sqlite3.connect(HISTORICAL_DB_PATH)
-    query = f"SELECT id, title, content, reference_url, published_at FROM articles WHERE DATE(published_at) BETWEEN '{start_date}' AND '{end_date}' ORDER BY published_at DESC"
+    query = f"SELECT id, title, content, reference_url, liangke_date, tags FROM articles WHERE liangke_date >= '{start_date}' AND liangke_date < '{end_date} 23:59:59' ORDER BY liangke_date DESC"
     df = pd.read_sql(query, conn)
     conn.close()
-    df = df.rename(columns={'published_at': 'liangke_date'})
-    df['tags'] = df['title'].apply(_classify_by_title)
+    df['tags'] = df['tags'].apply(_parse_tags)
     return df
 
 

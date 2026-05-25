@@ -533,3 +533,35 @@ llm:
 ### 16.3 交互页面切换
 
 `daily_report_app.py` 中 `HISTORICAL_DB_PATH` 从旧库 `historical.db` 切换为 `historical_v2.db`，历史检索使用新版带标签数据。
+
+---
+
+## 17. Cookie 过期 & 提取方式修复（2026-05-25）
+
+### 17.1 问题链
+
+1. 每日抓取返回"注册用户继续阅读" → 量科网 Cookie 过期
+2. 尝试从 Edge SQLite 直读 Cookie → 解密失败（Edge 存的是 `encrypted_value` 密文）
+3. 用户手动 F12 获取 Cookie 值 → 写成 pickle，但路径错误（多个项目各自读不同路径）
+
+### 17.2 两个项目的 Cookie 路径
+
+| 项目 | Cookie 路径 |
+|------|-------------|
+| `liangke_daily` | `data/cookies/qtc_cookies.pkl` |
+| `liangke_historical` | `qtc_cookies.pkl`（项目根） |
+
+每次 Cookie 过期需**同步更新两份**。
+
+### 17.3 解决方案
+
+- 创建 `update_cookie.bat`：通过 Edge CDP 协议自动提取 Cookie（`core/extract_cookie.py`，之前已存在），绕过 SQLite 加密，自动同步到两个项目
+- 后续 Cookie 过期：Edge 登录量科网 → 关闭 Edge → 双击 `update_cookie.bat`
+
+### 17.4 其他修复
+
+- 每日抓取 `scrape_daily.py` 增加空内容/注册墙检测，跳过无内容文章
+- 封面图移入 `weekly_templates/`，清理旧模板文件夹
+- 清理 `D:/Claude_code/` 所有临时文件
+- 配置 Windows 定时任务，每天 13:30 自动抓取（`schtasks` + `daily_scrape.bat`）
+- 交互页面历史库查询修复：列名 `liangke_date`（非 `published_at`）、日期 LIKE 匹配（非精确匹配）、tags JSON 解析
