@@ -664,3 +664,7 @@ llm:
 ### 19.6 统一入库（`data_all/` + `build_all_kb.py`）
 
 `lang_detect.py` 基于字符比例判断文档语言，`build_all_kb.py` 扫描 `data_all/` 自动路由到 Pro/EN 库。支持单文件同时入双库。旧 `data_lite/data_pro/data_en` 保留可用。
+
+### 19.7 光子盒报告抓取（`examples/scrape_reports_photon.py`）
+
+Playwright 无头浏览器抓取 `quantumchina.com/bg`，提取 10 份年度量子产业报告（2023–2026），含发布日期、下载链接。交互页面「报告提醒」分两个标签：新闻中发现的报告 + 光子盒报告库。

@@ -768,25 +768,81 @@ def page_weekly_report():
 
 def page_report_alerts():
     st.header("报告提醒")
-    alert_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'report_alerts.json')
-    if not os.path.exists(alert_path):
-        st.info("暂无报告提醒。每日抓取后运行 scan_reports.py 即可自动扫描。")
-        return
-    with open(alert_path, 'r', encoding='utf-8') as f:
-        alerts = json.load(f)
-    if not alerts:
-        st.info("暂无报告提醒。")
-        return
-    st.caption(f"共 {len(alerts)} 条报告提醒")
-    for a in alerts:
-        with st.container():
-            st.markdown(f"### {a.get('report_name', '未知')}")
-            st.caption(f"📅 {a.get('date', '')}  |  🏛️ {a.get('publisher', '')}")
-            st.markdown(a.get('note', ''))
-            if a.get('url'):
-                st.link_button("🔗 下载链接", a['url'])
-            st.caption(f"来源：{a.get('title', '')[:80]}")
-            st.markdown("---")
+
+    tab1, tab2 = st.tabs(["📰 新闻中发现的报告", "📚 光子盒报告"])
+
+    with tab1:
+        alert_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'report_alerts.json')
+        if not os.path.exists(alert_path):
+            st.info("暂无报告提醒。每日抓取后运行 scan_reports.py 即可自动扫描。")
+        else:
+            with open(alert_path, 'r', encoding='utf-8') as f:
+                alerts = json.load(f)
+            if not alerts:
+                st.info("暂无报告提醒。")
+            else:
+                st.caption(f"共 {len(alerts)} 条（LLM 从每日新闻中自动识别）")
+                for a in alerts:
+                    with st.container():
+                        st.markdown(f"### {a.get('report_name', '未知')}")
+                        st.caption(f"📅 {a.get('date', '')}  |  🏛️ {a.get('publisher', '')}")
+                        st.markdown(a.get('note', ''))
+                        if a.get('url'):
+                            st.link_button("🔗 查看原文", a['url'])
+                        st.caption(f"来源：{a.get('title', '')[:80]}")
+                        st.markdown("---")
+
+    with tab2:
+        resources_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'resources.db')
+        if not os.path.exists(resources_path):
+            st.info("暂无光子盒报告。运行 scrape_reports_photon.py 抓取。")
+        else:
+            import sqlite3
+            conn = sqlite3.connect(resources_path)
+            conn.row_factory = sqlite3.Row
+            c = conn.cursor()
+            c.execute("SELECT * FROM reports ORDER BY publish_date DESC")
+            rows = [dict(r) for r in c.fetchall()]
+            conn.close()
+            if not rows:
+                st.info("暂无光子盒报告。")
+            else:
+                st.caption(f"共 {len(rows)} 份年度行业报告")
+                for r in rows:
+                    with st.container():
+                        st.markdown(f"### {r.get('title', '')}")
+                        st.caption(f"🏛️ {r.get('publisher', '')}  |  📅 {r.get('publish_date', '')}")
+                        dl = r.get('download_url', '')
+                        if dl:
+                            st.link_button("📥 下载 PDF", dl)
+                        st.markdown("---")
+
+    with tab2:
+        resources_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'resources.db')
+        if not os.path.exists(resources_path):
+            st.info("暂无外部资源。运行 scrape_reports_photon.py 可抓取光子盒等行业报告。")
+        else:
+            import sqlite3
+            conn = sqlite3.connect(resources_path)
+            conn.row_factory = sqlite3.Row
+            c = conn.cursor()
+            c.execute("SELECT * FROM reports ORDER BY publish_date DESC")
+            rows = [dict(r) for r in c.fetchall()]
+            conn.close()
+            if not rows:
+                st.info("暂无外部资源。")
+            else:
+                st.caption(f"共 {len(rows)} 份行业报告（外部网站抓取）")
+                for r in rows:
+                    with st.container():
+                        st.markdown(f"### {r.get('title', '')}")
+                        st.caption(f"🏛️ {r.get('publisher', '')}  |  📅 {r.get('publish_date', '')}")
+                        link = r.get('download_url') or r.get('source_url', '')
+                        if link:
+                            st.link_button("🔗 查看", link)
+                        if r.get('abstract'):
+                            st.markdown(r['abstract'])
+                        st.markdown("---")
 
 
 def main():
