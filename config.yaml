@@ -12,7 +12,7 @@ kb:
   bm25_b: 0.75
 
 reranker:
-  model: null  # 设为模型名启用，如 "BAAI/bge-reranker-base"
+  model: "BAAI/bge-reranker-base"
   top_k: 20    # 召回候选数，rerank 后取 kb.top_k
 
 embedding:

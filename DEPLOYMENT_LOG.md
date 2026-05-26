@@ -574,3 +574,50 @@ llm:
 
 - 封面图移入 `weekly_templates/Cover_Suzhou.png`，删除旧模板文件夹
 - 清理 `D:/Claude_code/` 及 `rag_system/` 全部临时文件（`.txt`、`.log`、`test_*.docx`、编译中间文件）
+
+---
+
+## 18. RAG 四大优化 + 统一入库（2026-05-26）
+
+### 18.1 Metadata 过滤（`retriever.py`）
+
+**实现**：检索时支持 `filter_tags`（27 个标签）和 `date_from`/`date_to`（日期范围）。后过滤策略：先召回 3 倍候选 → Python 条件筛选 → reranker 精排。
+
+**CLI 交互**：`/tags 资本运作,融资` `/from 2026-05-01` `/to 2026-05-25` `/clear`
+
+**穿透**：`retriever.py` → `pipeline.py` → `kb_manager.py` → `query_kb.py`
+
+### 18.2 混合检索 Dense + BM25（`retriever.py` + `kb_manager.py`）
+
+**实现**：每次查询并行搜索两路：
+- FAISS dense（bge-large-zh-v1.5 语义向量）
+- BM25 sparse（关键词 IDF 向量，`bm25_store`）
+
+结果用 RRF（倒数排名融合）合并去重。BM25 store 与 FAISS 同步增量更新，独立持久化为 `kb_index.bm25`。
+
+### 18.3 Query 改写（`pipeline.py`）
+
+**实现**：可配置的 LLM 预改写步骤。`config_pro.yaml` 中 `rag.query_rewrite: true` 开启后，用户口语化问题先送 LLM 转为检索关键词短语再查询。关闭则直搜。
+
+### 18.4 跨语言 EN fallback（`retriever.py` + `kb_manager.py`）
+
+**实现**：`enable_cross_en()` 方法加载 EN 索引，每次查询同时搜 Pro + EN，两路 RRF 合并。无阈值门槛，始终双路。按钮配置：`config_pro.yaml` 中 `cross_en_fallback: true`。
+
+### 18.5 Lite Reranker 启用
+
+`config.yaml` 中 `reranker.model` 从 `null` 改为 `"BAAI/bge-reranker-base"`，一行改动。
+
+### 18.6 统一入库 (`data_all/` + `build_all_kb.py`)
+
+**新增文件**：
+- `rag_system/lang_detect.py`：字符比例语言检测（中文/英文 ratio 计算）
+- `examples/build_all_kb.py`：扫描 `data_all/` → 自动判断语言 → 路由到对应 KB → 构建
+
+**路由规则**：CN chars > 40% → Pro，EN chars > 40% → EN，两者都达标 → Pro + EN。
+
+**使用方式**：文件丢 `data_all/` → `python examples/build_all_kb.py`。
+
+### 18.7 修复
+
+- `vector_store.py`：FAISS 索引越界保护
+- `config_pro.yaml`：LLM 从 kimi-k2.6 切换为 deepseek-v4-pro

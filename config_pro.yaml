@@ -32,6 +32,8 @@ llm:
 
 rag:
   max_context_length: 3000
+  query_rewrite: false  # set true to enable LLM query rewriting
+  cross_en_fallback: true       # always merge EN index with Pro results
   context_template: |
     以下是参考资料：
     {context}

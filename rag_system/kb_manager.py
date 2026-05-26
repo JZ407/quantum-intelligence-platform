@@ -25,6 +25,12 @@ class KnowledgeBaseManager:
         self.retriever: Optional[HybridRetriever] = None
         self.pipeline: Optional[RAGPipeline] = None
         self._is_fitted = False
+        # Hybrid: always maintain a BM25 store for keyword search
+        self.bm25_store = VectorStore()
+        self.bm25_embedder = Bm25Embedder(
+            k1=self.config.get("kb.bm25_k1", 1.5),
+            b=self.config.get("kb.bm25_b", 0.75),
+        )
 
     def _create_embedder(self) -> BaseEmbedder:
         provider = self.config.get("embedding.provider", "bm25")
@@ -97,6 +103,19 @@ class KnowledgeBaseManager:
 
         vectors = self.embedder.embed_batch(texts)
         self.store.add_batch(docs, vectors)
+
+        # Hybrid: also populate BM25 store for keyword search
+        # BM25 needs full rebuild on incremental adds (IDF depends on corpus)
+        if len(self.bm25_store) > 0:
+            all_docs = self.bm25_store.documents + [dict(d) for d in docs]
+        else:
+            all_docs = [dict(d) for d in docs]
+        all_texts = [d["text"] for d in all_docs]
+        self.bm25_embedder.fit(all_texts)
+        bm25_vecs = self.bm25_embedder.embed_batch(all_texts)
+        self.bm25_store = VectorStore()
+        self.bm25_store.add_batch(all_docs, bm25_vecs)
+
         return len(docs)
 
     def ingest_directory(self, dir_path: str, recursive: bool = True) -> int:
@@ -119,9 +138,27 @@ class KnowledgeBaseManager:
         self.retriever = HybridRetriever(
             self.store, self.embedder, top_k=k,
             reranker=reranker,
-            rerank_top_k=self.config.get("reranker.top_k", k * 4)
+            rerank_top_k=self.config.get("reranker.top_k", k * 4),
+            bm25_store=self.bm25_store,
+            bm25_embedder=self.bm25_embedder,
         )
         return self.retriever
+
+    def enable_cross_en(self, en_config_path: str = None):
+        """Enable cross-language fallback: when Pro results are weak, also search EN index."""
+        if self.retriever is None:
+            self.build_retriever()
+        try:
+            from .config import Config
+            en_cfg = Config.from_yaml(en_config_path or
+                os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config_en.yaml'))
+            en_kb = KnowledgeBaseManager(en_cfg)
+            en_kb.load()
+            en_kb.build_retriever()
+            self.retriever.en_retriever = en_kb.retriever
+            print(f"[INFO] Cross-language EN search enabled (always-on)")
+        except Exception as e:
+            print(f"[WARN] Cross-language EN fallback not available: {e}")
 
     def build_pipeline(self, llm_client: Optional[LLMClient] = None) -> RAGPipeline:
         """Build full RAG pipeline."""
@@ -139,18 +176,30 @@ class KnowledgeBaseManager:
         self.pipeline = RAGPipeline(self.retriever, llm_client, self.config)
         return self.pipeline
 
-    def query(self, question: str, top_k: Optional[int] = None) -> List[Dict[str, Any]]:
-        """Keyword/semantic search only (no LLM)."""
+    def query(self, question: str, top_k: Optional[int] = None,
+              filter_tags: Optional[List[str]] = None,
+              date_from: Optional[str] = None,
+              date_to: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Keyword/semantic search only (no LLM). Supports metadata filtering."""
         if self.retriever is None:
             self.build_retriever(top_k)
-        return self.retriever.retrieve(question)
+        return self.retriever.retrieve(
+            question, filter_tags=filter_tags,
+            date_from=date_from, date_to=date_to
+        )
 
     def ask(self, question: str, top_k: Optional[int] = None,
-            system_prompt: Optional[str] = None) -> Dict[str, Any]:
-        """Full RAG ask (retrieve + LLM answer)."""
+            system_prompt: Optional[str] = None,
+            filter_tags: Optional[List[str]] = None,
+            date_from: Optional[str] = None,
+            date_to: Optional[str] = None) -> Dict[str, Any]:
+        """Full RAG ask (retrieve + LLM answer). Supports metadata filtering."""
         if self.pipeline is None:
             self.build_pipeline()
-        return self.pipeline.run(question, top_k=top_k, system_prompt=system_prompt)
+        return self.pipeline.run(
+            question, top_k=top_k, system_prompt=system_prompt,
+            filter_tags=filter_tags, date_from=date_from, date_to=date_to
+        )
 
     def save(self, index_path: Optional[str] = None) -> None:
         if index_path is None:
@@ -163,7 +212,10 @@ class KnowledgeBaseManager:
         else:
             path = index_path
         self.store.save(path)
-        print(f"[INFO] Index saved to {path}")
+        # Also save BM25 store
+        bm25_path = path + ".bm25" if not path.endswith(".json") else path.replace(".json", ".bm25.json")
+        self.bm25_store.save(bm25_path)
+        print(f"[INFO] Index saved to {path} + {bm25_path}")
 
     def load(self, index_path: Optional[str] = None) -> None:
         if index_path is None:
@@ -178,6 +230,18 @@ class KnowledgeBaseManager:
         # Re-fit embedder on loaded docs
         texts = [d["text"] for d in self.store.documents]
         self.embedder.fit(texts)
+        # Load or rebuild BM25 store
+        bm25_path = path + ".bm25" if not path.endswith(".json") else path.replace(".json", ".bm25.json")
+        try:
+            self.bm25_store.load(bm25_path)
+            print(f"  + BM25 index loaded")
+        except Exception:
+            # Rebuild BM25 store from main docs
+            self.bm25_embedder.fit(texts)
+            bm25_vecs = self.bm25_embedder.embed_batch(texts)
+            self.bm25_store = VectorStore()
+            self.bm25_store.add_batch([dict(d) for d in self.store.documents], bm25_vecs)
+            print(f"  + BM25 index rebuilt ({len(self.bm25_store)} chunks)")
         self._is_fitted = True
         print(f"[INFO] Index loaded from {path}")
 

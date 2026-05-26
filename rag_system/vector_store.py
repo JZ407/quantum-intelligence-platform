@@ -129,7 +129,7 @@ class FaissVectorStore:
         scores, indices = self.index.search(arr, top_k)
         results = []
         for score, idx in zip(scores[0], indices[0]):
-            if idx == -1 or score < threshold:
+            if idx == -1 or idx >= len(self.documents) or score < threshold:
                 continue
             doc = dict(self.documents[idx])
             doc["score"] = round(float(score), 4)

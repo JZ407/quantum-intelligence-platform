@@ -15,9 +15,38 @@ class RAGPipeline:
         self.llm = llm_client
         self.config = config or Config()
 
+    def rewrite_query(self, question: str) -> str:
+        """Use LLM to rewrite a conversational query into search-optimized keywords.
+        Returns the original question if rewriting fails or is disabled."""
+        if not self.config.get("rag.query_rewrite", False):
+            return question
+        try:
+            prompt = (
+                "将以下问题改写成适合语义检索的关键词短语，保留核心术语和机构名，去掉口语化表达。"
+                "只输出改写后的短语，不要解释。\n\n"
+                f"问题：{question}"
+            )
+            rewritten = self.llm.simple_chat(prompt, system_prompt="你是检索查询改写助手。")
+            if rewritten and len(rewritten) > 3:
+                return rewritten.strip()
+        except Exception:
+            pass
+        return question
+
     def run(self, question: str, top_k: Optional[int] = None,
-            system_prompt: Optional[str] = None) -> Dict[str, Any]:
+            system_prompt: Optional[str] = None,
+            filter_tags: Optional[List[str]] = None,
+            date_from: Optional[str] = None,
+            date_to: Optional[str] = None) -> Dict[str, Any]:
         """Execute full RAG pipeline.
+
+        Args:
+            question: user query
+            top_k: number of results
+            system_prompt: override system prompt
+            filter_tags: only include docs with these tags
+            date_from: filter docs from this date (YYYY-MM-DD)
+            date_to: filter docs up to this date (YYYY-MM-DD)
 
         Returns dict with keys:
             - answer: str (LLM generated answer)
@@ -25,9 +54,15 @@ class RAGPipeline:
             - context: str (formatted context string)
             - prompt: str (full prompt sent to LLM)
         """
-        # 1. Retrieve relevant chunks
+        # 0. Optional: rewrite query for better retrieval
+        search_query = self.rewrite_query(question)
+
+        # 1. Retrieve relevant chunks (with optional metadata filter)
         k = top_k or self.config.get("kb.top_k", 5)
-        results = self.retriever.retrieve(question)
+        results = self.retriever.retrieve(
+            search_query, filter_tags=filter_tags,
+            date_from=date_from, date_to=date_to
+        )
         if len(results) > k:
             results = results[:k]
 
