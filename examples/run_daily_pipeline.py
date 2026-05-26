@@ -71,10 +71,20 @@ def main():
     if not run_sync():
         sys.exit(1)
 
+    # Scan for report/whitepaper mentions
+    sep = '=' * 50
+    print(f'\n{sep}')
+    print('STEP: Scan for report mentions')
+    print(sep)
+    import subprocess
+    scanner = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scan_reports.py')
+    subprocess.run([sys.executable, scanner, '--days', '3'],
+                   capture_output=False, timeout=120)
+
     total_elapsed = time.time() - total_start
-    print(f'\n{"="*50}')
+    print(f'\n{sep}')
     print(f'Daily pipeline complete in {total_elapsed:.1f}s')
-    print(f'{"="*50}')
+    print(sep)
 
 
 if __name__ == '__main__':

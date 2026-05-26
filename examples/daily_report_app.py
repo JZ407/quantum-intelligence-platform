@@ -762,11 +762,38 @@ def page_weekly_report():
 # Page: Conferences
 # ------------------------------------------------------------------
 
+# ------------------------------------------------------------------
+# Page: Report Alerts
+# ------------------------------------------------------------------
+
+def page_report_alerts():
+    st.header("报告提醒")
+    alert_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'report_alerts.json')
+    if not os.path.exists(alert_path):
+        st.info("暂无报告提醒。每日抓取后运行 scan_reports.py 即可自动扫描。")
+        return
+    with open(alert_path, 'r', encoding='utf-8') as f:
+        alerts = json.load(f)
+    if not alerts:
+        st.info("暂无报告提醒。")
+        return
+    st.caption(f"共 {len(alerts)} 条报告提醒")
+    for a in alerts:
+        with st.container():
+            st.markdown(f"### {a.get('report_name', '未知')}")
+            st.caption(f"📅 {a.get('date', '')}  |  🏛️ {a.get('publisher', '')}")
+            st.markdown(a.get('note', ''))
+            if a.get('url'):
+                st.link_button("🔗 下载链接", a['url'])
+            st.caption(f"来源：{a.get('title', '')[:80]}")
+            st.markdown("---")
+
+
 def main():
     st.set_page_config(page_title="量子科技情报", page_icon="📰", layout="wide")
     st.title("📰 量子科技情报")
 
-    page = st.sidebar.radio("导航", ["每日资讯", "周报生成", "会议信息"])
+    page = st.sidebar.radio("导航", ["每日资讯", "周报生成", "会议信息", "报告提醒"])
 
     if page == "每日资讯":
         page_daily_news()
@@ -774,6 +801,8 @@ def main():
         page_weekly_report()
     elif page == "会议信息":
         page_conferences()
+    elif page == "报告提醒":
+        page_report_alerts()
 
 
 if __name__ == '__main__':
