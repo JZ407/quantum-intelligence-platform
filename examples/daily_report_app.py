@@ -180,7 +180,7 @@ def fetch_institution_articles():
     if not os.path.exists(INSTITUTION_DB_PATH):
         return pd.DataFrame()
     conn = sqlite3.connect(INSTITUTION_DB_PATH)
-    df = pd.read_sql("SELECT id, title, content, url, source, publish_date, tags, summary FROM articles ORDER BY CASE WHEN publish_date IS NULL OR publish_date = '' THEN 1 ELSE 0 END, publish_date DESC, id DESC", conn)
+    df = pd.read_sql("SELECT id, title, content, url, source, publish_date, tags, summary, summary_cn FROM articles ORDER BY CASE WHEN publish_date IS NULL OR publish_date = '' THEN 1 ELSE 0 END, publish_date DESC, id DESC", conn)
     conn.close()
     df = df.rename(columns={'publish_date': 'liangke_date'})
     df['tags'] = df['title'].apply(_classify_inst_tags)
@@ -321,9 +321,14 @@ def show_article_detail(art: dict):
     if caption_parts:
         st.caption(' · '.join(caption_parts))
     st.markdown("---")
+    summary_cn = art.get('summary_cn', '') or ''
+    if summary_cn:
+        st.markdown("**中文摘要**")
+        st.info(summary_cn)
     content = art.get('content', '') or ''
     if content:
-        st.markdown(content)
+        with st.expander("原文内容", expanded=False):
+            st.markdown(content)
     else:
         st.info("暂无正文内容")
     ref_url = art.get('url', '') or art.get('reference_url', '') or art.get('liangke_url', '')
