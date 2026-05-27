@@ -26,6 +26,7 @@ from docx.oxml.ns import qn
 # ------------------------------------------------------------------
 DB_URL = 'mysql+pymysql://scraper:scraper123@127.0.0.1:3306/liangke_scraper?charset=utf8mb4'
 HISTORICAL_DB_PATH = 'D:/Claude_code/liangke_historical/historical_v2.db'
+INSTITUTION_DB_PATH = 'D:/Claude_code/institution_news/institutions.db'
 CATEGORY_PRIORITY = ['资本运作', '产品动态', '企业资讯', '科技前沿', '宏观态势']
 
 CONF_DB_PATH = 'D:/Claude_code/conference_db/conferences.db'
@@ -75,19 +76,27 @@ def _classify_by_title(title: str) -> list:
     t = title.lower()
 
     # 资本运作（最高优先级）
-    if any(k in t for k in ['融资', '投资', 'ipo', '并购', '资本', '轮', '美元', '亿元', '估值', '收购', '领投', 'fund', 'invest', 'merger', 'acquisition', 'capital', 'financing', 'valuation', '独角兽', '上市']):
+    cn_finance = ['融资', '投资', 'ipo', '并购', '资本', '轮', '美元', '亿元', '估值', '收购', '领投', '独角兽', '上市']
+    en_finance = ['funding', 'fund', 'invest', 'merger', 'acquisition', 'capital', 'financing', 'valuation', 'raised', 'series a', 'series b', 'series c', 'seed round', '$m', '$b', 'million', 'billion', 'stake', 'acquire', 'acquires', 'investor', 'backing', 'venture', 'spin-off', 'spinoff', 'goes public', 'listed']
+    if any(k in t for k in cn_finance + en_finance):
         return ['资本运作']
 
     # 产品动态
-    if any(k in t for k in ['产品', '发布', '推出', '芯片', '计算机', '软件', '系统', '设备', '仪器', '平台', '上线', '原型机', '量子计算机', '量子芯片', 'product', 'launch', 'release', 'chip', 'computer', 'software', 'system', 'device', 'platform', 'processor']):
+    cn_product = ['产品', '发布', '推出', '芯片', '计算机', '软件', '系统', '设备', '仪器', '平台', '上线', '原型机', '量子计算机', '量子芯片']
+    en_product = ['product', 'launch', 'launches', 'release', 'releases', 'unveil', 'unveils', 'introduces', 'chip', 'computer', 'software', 'system', 'device', 'platform', 'processor', 'roadmap', 'road map', 'available now', 'now available', 'announces new', 'announced new', 'next-gen', 'next-generation', 'upgrade', 'debut', 'debuts', 'preview', 'beta', 'demo', 'demonstrated', 'demonstrates', 'showcases']
+    if any(k in t for k in cn_product + en_product):
         return ['产品动态']
 
     # 企业资讯
-    if any(k in t for k in ['公司', '企业', '合作', '签约', '战略', '成立', '总部', '裁员', '人事', '任命', 'ceo', '总裁', '总监', 'company', 'enterprise', 'cooperation', 'partnership', 'strategic', 'founded', 'appointed', 'president', 'director']):
+    cn_biz = ['公司', '企业', '合作', '签约', '战略', '成立', '总部', '裁员', '人事', '任命', 'ceo', '总裁', '总监']
+    en_biz = ['partner', 'partnership', 'collaboration', 'collaborate', 'agreement', 'appoints', 'appointed', 'named', 'joins', 'hires', 'leadership', 'executive', 'expands', 'expand', 'expansion', 'opens office', 'headquarters', 'company', 'enterprise', 'strategic', 'founded', 'president', 'director', 'alliance', 'consortium', 'mou', 'memorandum', 'team up', 'teams up', 'joint venture']
+    if any(k in t for k in cn_biz + en_biz):
         return ['企业资讯']
 
     # 科技前沿
-    if any(k in t for k in ['论文', '研究', '突破', '实验', '量子比特', '纠错', '算法', '物理', '科学', 'nature', 'science', '发表', '期刊', 'paper', 'research', 'breakthrough', 'experiment', 'qubit', 'algorithm', 'physics', '论文', '学术', '实验室', '原理', '理论']):
+    cn_science = ['论文', '研究', '突破', '实验', '量子比特', '纠错', '算法', '物理', '科学', '发表', '期刊', '学术', '实验室', '原理', '理论']
+    en_science = ['paper', 'research', 'researchers', 'breakthrough', 'experiment', 'qubit', 'qubits', 'algorithm', 'algorithms', 'physics', 'science', 'nature', 'published', 'journal', 'peer-reviewed', 'preprint', 'arxiv', 'discovery', 'discovered', 'achieved', 'record', 'milestone', 'novel', 'method', 'technique', 'fidelity', 'error correction', 'error mitigation', 'entanglement', 'coherence', 'superconducting', 'ion trap', 'neutral atom', 'photonic', 'topological', 'logical qubit', 'fault-tolerant', 'fault tolerant', 'simulation', 'simulator', 'advantage', 'supremacy']
+    if any(k in t for k in cn_science + en_science):
         return ['科技前沿']
 
     # 宏观态势（兜底）
@@ -104,6 +113,80 @@ def fetch_historical_articles(target_date: str):
     df['reference_url'] = df['liangke_url'].fillna(df['reference_url'])
     df['tags'] = df['tags'].apply(_parse_tags)
     return df
+
+
+FINE_TAG_MAP = {
+    '量子计算': ['quantum comput', 'quantum processor', 'quantum chip', 'quantum algorithm', 'quantum circuit',
+                  'qubit', 'qubits', 'quantum advantage', 'quantum supremacy',
+                  '量子计算', '量子计算机', '量子处理器', '量子芯片', '量子比特', '量子算法', '量子霸权', '量子优越'],
+    '量子纠错': ['error correct', 'error mitigat', 'fault-tolerant', 'fault tolerant', 'logical qubit',
+                  'surface code', 'decoherence', 'quantum error', 'fidelity',
+                  '量子纠错', '纠错码', '容错', '逻辑量子比特', '退相干', '保真度'],
+    '超导': ['superconducting', 'superconductor', 'transmon', 'josephson',
+              '超导', '约瑟夫森'],
+    '离子阱': ['ion trap', 'trapped ion', 'ytterbium', 'barium',
+               '离子阱', '囚禁离子'],
+    '光量子': ['photonic', 'photon', 'optical', 'squeezed light', '光量子', '光子'],
+    '中性原子': ['neutral atom', 'rydberg', 'optical tweezer', '中性原子', '里德堡', '光镊'],
+    '拓扑': ['topological', 'majorana', 'anyon', '拓扑', '马约拉纳'],
+    'AI/ML': ['machine learning', 'deep learning', 'neural network', 'llm', 'gpt',
+              'artificial intelligence', 'ai ', ' ai', 'ai-powered', 'transformer',
+              '人工智能', '机器学习', '深度学习', '神经网络', '大模型'],
+    '量子通信': ['quantum communic', 'qkd', 'quantum key', 'quantum network', 'quantum internet',
+                  'teleportation', '量子通信', '量子密钥', '量子网络', '量子互联网', '隐形传态'],
+    '量子传感': ['quantum sens', 'magnetometer', 'gravimeter', '量子传感', '磁力计', '重力仪'],
+    '融资商业': ['funding', 'fund', 'invest', 'series a', 'series b', 'series c', 'raised',
+                  'million', 'billion', 'ipo', 'venture', 'capital', 'valuation', 'acquire',
+                  'acquisition', 'merger', 'stake', 'backing', 'spin-off', 'listed',
+                  '融资', '投资', '亿元', '并购', '收购', '上市', '独角兽', '估值'],
+    '后量子密码': ['post-quantum', 'pqc', 'cryptograph', 'encryption', 'nist',
+                   '后量子密码', '量子密码', '加密', '抗量子'],
+    '政策标准': ['policy', 'regulation', 'standard', 'framework', 'initiative', 'government',
+                  '政策', '标准', '框架', '政府', '倡议', '监管'],
+    '半导体': ['semiconductor', 'cmos', 'fabrication', 'foundry', 'wafer',
+               '半导体', '芯片制造', '晶圆', '代工'],
+    '产品动态': ['product', 'launch', 'launches', 'release', 'unveil', 'unveils', 'introduces',
+                  'processor', 'roadmap', 'road map', 'sdk', 'cloud', 'available now',
+                  'now available', 'next-gen', 'next generation', 'debut', 'upgrade', 'beta',
+                  '产品', '发布', '推出', '上线', '平台', '软件', '系统', '设备', '原型机'],
+    '企业资讯': ['partner', 'partnership', 'collaborat', 'alliance', 'consortium', 'joint venture',
+                  'appoints', 'appointed', 'named', 'joins', 'hires', 'ceo', 'president',
+                  'executive', 'headquarters', 'expands', 'expand', 'expansion',
+                  '企业', '公司', '合作', '战略', '任命', '总部', '成立'],
+    '科技前沿': ['research', 'researchers', 'breakthrough', 'paper', 'published', 'journal',
+                  'nature', 'science', 'discovery', 'milestone', 'record', 'novel',
+                  'method', 'technique', 'experiment', 'physics', 'simulation',
+                  '论文', '研究', '突破', '实验', '发表', '期刊', '学术', '物理', '科学'],
+    '宏观态势': ['market', 'industry', 'report', 'forecast', 'trend', 'outlook',
+                  '市场', '行业', '报告', '预测', '趋势', '前景'],
+}
+
+
+def _classify_inst_tags(title: str) -> list:
+    """Fine-grained multi-tag classification for institution news (EN/CN)."""
+    t = title.lower()
+    tags = []
+    for tag, keywords in FINE_TAG_MAP.items():
+        if any(k in t for k in keywords):
+            tags.append(tag)
+    if not tags:
+        tags.append('宏观态势')
+    return tags
+
+
+def fetch_institution_articles():
+    """Fetch all articles from institution news DB."""
+    import sqlite3
+    if not os.path.exists(INSTITUTION_DB_PATH):
+        return pd.DataFrame()
+    conn = sqlite3.connect(INSTITUTION_DB_PATH)
+    df = pd.read_sql("SELECT id, title, content, url, source, publish_date, tags, summary FROM articles ORDER BY CASE WHEN publish_date IS NULL OR publish_date = '' THEN 1 ELSE 0 END, publish_date DESC, id DESC", conn)
+    conn.close()
+    df = df.rename(columns={'publish_date': 'liangke_date'})
+    df['tags'] = df['title'].apply(_classify_inst_tags)
+    df['source_tag'] = df['source']
+    return df
+
 
 def select_top3(df: pd.DataFrame):
     """Select top-3 articles by category priority."""
@@ -229,15 +312,21 @@ def show_article_detail(art: dict):
     """Show article detail in a modal dialog."""
     st.subheader(art['title'])
     tags = art.get('tags', [])
+    inst = art.get('source', '') or art.get('source_tag', '')
+    caption_parts = []
+    if inst:
+        caption_parts.append(f"机构：{inst}")
     if isinstance(tags, list) and tags:
-        st.caption(f"标签：{' | '.join(tags)}")
+        caption_parts.append(f"标签：{' | '.join(tags)}")
+    if caption_parts:
+        st.caption(' · '.join(caption_parts))
     st.markdown("---")
     content = art.get('content', '') or ''
     if content:
         st.markdown(content)
     else:
         st.info("暂无正文内容")
-    ref_url = art.get('reference_url', '') or art.get('liangke_url', '')
+    ref_url = art.get('url', '') or art.get('reference_url', '') or art.get('liangke_url', '')
     if ref_url:
         st.markdown("---")
         st.link_button("🔗 打开参考链接", ref_url)
@@ -254,14 +343,17 @@ def page_daily_news():
     today = datetime.now().date()
     col1, col2, col3 = st.columns([2, 2, 2])
     with col1:
-        source = st.selectbox("数据源", options=["量科每日库", "量科历史库"], index=0)
+        source = st.selectbox("数据源", options=["量科每日库", "量科历史库", "机构新闻库"], index=0)
     with col2:
         if source == "量科每日库":
             min_date = datetime(2026, 4, 11).date()
             caption = "📌 每日库记录始于 2026-04-11"
-        else:
+        elif source == "量科历史库":
             min_date = datetime(2021, 11, 18).date()
             caption = "📌 历史库记录始于 2021-11-18"
+        else:
+            min_date = datetime(2020, 1, 1).date()
+            caption = "📌 IBM/Quantinuum/NVIDIA/Google 官方新闻"
         target_date = st.date_input("选择日期", value=today, min_value=min_date)
     with col3:
         st.caption(caption)
@@ -270,7 +362,13 @@ def page_daily_news():
     keyword = st.text_input("🔍 关键词检索（搜索全库，不限日期）", placeholder="输入关键词搜索全库...")
 
     with st.spinner("正在读取数据库..."):
-        if keyword:
+        if source == "机构新闻库":
+            df = fetch_institution_articles()
+            if keyword:
+                kw = keyword.strip()
+                mask = df['title'].str.contains(kw, case=False, na=False) | df['content'].str.contains(kw, case=False, na=False)
+                df = df[mask]
+        elif keyword:
             # Search entire database, ignore date
             if source == "量科历史库":
                 df = fetch_historical_articles_range('2021-01-01', '2030-01-01')
@@ -297,7 +395,12 @@ def page_daily_news():
         st.markdown(f"### 📋 新闻列表（{target_str}，共 {len(df)} 条）")
         st.caption("请勾选您认为最重要的 3 条新闻，下方将据此生成日报。")
 
-    source_key = "daily" if source == "量科每日库" else "hist"
+    if source == "量科历史库":
+        source_key = "hist"
+    elif source == "机构新闻库":
+        source_key = "inst"
+    else:
+        source_key = "daily"
     selected_ids = []
     for _, row in df.iterrows():
         with st.container():
@@ -307,19 +410,26 @@ def page_daily_news():
                 if checked:
                     selected_ids.append(row['id'])
             with cols[1]:
-                st.markdown(f"**{row['title']}**")
+                art_url = row.get('url', '') or row.get('reference_url', '') or row.get('liangke_url', '')
+                if art_url:
+                    st.markdown(f"[**{row['title']}**]({art_url})")
+                else:
+                    st.markdown(f"**{row['title']}**")
                 tags = row.get('tags', [])
                 date_str = row.get('liangke_date', '')
                 # For historical DB, truncate datetime to date
                 if date_str and len(str(date_str)) > 10:
                     date_str = str(date_str)[:10]
                 tag_text = ' | '.join(tags[:3]) if isinstance(tags, list) and tags else ''
+                inst = row.get('source', '') or row.get('source_tag', '')
                 if tag_text and date_str:
-                    st.caption(f"{date_str} · {tag_text}")
+                    st.caption(f"{date_str} · {tag_text}{' · ' + inst if inst else ''}")
                 elif date_str:
-                    st.caption(f"{date_str}")
+                    st.caption(f"{date_str}{' · ' + inst if inst else ''}")
                 elif tag_text:
-                    st.caption(tag_text)
+                    st.caption(f"{tag_text}{' · ' + inst if inst else ''}")
+                elif inst:
+                    st.caption(inst)
             with cols[2]:
                 if st.button("查看详情", key=f"view_{source_key}_{row['id']}", type="secondary"):
                     show_article_detail(row.to_dict())
@@ -379,7 +489,9 @@ def page_daily_news():
 
     if st.button("📤 导出数据", type="primary", key="btn_export"):
         with st.spinner("正在读取数据库..."):
-            if source == "量科历史库":
+            if source == "机构新闻库":
+                exp_df = fetch_institution_articles()
+            elif source == "量科历史库":
                 exp_df = fetch_historical_articles_range(exp_start.strftime('%Y-%m-%d'), exp_end.strftime('%Y-%m-%d'))
             else:
                 exp_df = _fetch_daily_articles_range(exp_start.strftime('%Y-%m-%d'), exp_end.strftime('%Y-%m-%d'))
