@@ -27,7 +27,21 @@ from docx.oxml.ns import qn
 DB_URL = 'mysql+pymysql://scraper:scraper123@127.0.0.1:3306/liangke_scraper?charset=utf8mb4'
 HISTORICAL_DB_PATH = 'D:/Claude_code/liangke_historical/historical_v2.db'
 INSTITUTION_DB_PATH = 'D:/Claude_code/institution_news/institutions.db'
-INST_LIST = ['IBM Quantum', 'Quantinuum', 'Google Quantum AI', 'Microsoft Azure Quantum', 'NVIDIA Quantum']
+@st.cache_data(ttl=300)
+def _get_inst_list():
+    """Get distinct institution names from DB (cached 5 min)."""
+    try:
+        import sqlite3
+        if not os.path.exists(INSTITUTION_DB_PATH):
+            return []
+        conn = sqlite3.connect(INSTITUTION_DB_PATH)
+        c = conn.cursor()
+        c.execute('SELECT DISTINCT source FROM articles ORDER BY source')
+        result = [r[0] for r in c.fetchall()]
+        conn.close()
+        return result
+    except Exception:
+        return []
 CATEGORY_PRIORITY = ['资本运作', '产品动态', '企业资讯', '科技前沿', '宏观态势']
 
 CONF_DB_PATH = 'D:/Claude_code/conference_db/conferences.db'
@@ -363,7 +377,8 @@ def page_daily_news():
         target_date = st.date_input("选择日期", value=today, min_value=min_date)
     with col3:
         if source == "机构新闻库":
-            inst_filter = st.selectbox("机构筛选", options=["全部"] + INST_LIST, index=0)
+            inst_list = _get_inst_list()
+            inst_filter = st.selectbox("机构筛选", options=["全部"] + inst_list, index=0)
         else:
             inst_filter = "全部"  # dummy, not used for other sources
         st.caption(caption)
@@ -472,9 +487,38 @@ def page_daily_news():
         source_key = "inst"
     else:
         source_key = "daily"
+
+    # Page reset on source/keyword change
+    page_key = f"page_{source_key}"
+    trigger_key = f"trigger_{source_key}_{keyword}_{target_str}"
+    if "last_trigger" not in st.session_state or st.session_state.get("last_trigger") != trigger_key:
+        st.session_state[page_key] = 1
+        st.session_state["last_trigger"] = trigger_key
+
+    # Pagination
+    PAGE_SIZE = 20
+    total_pages = max(1, (len(df) + PAGE_SIZE - 1) // PAGE_SIZE)
+    current_page = st.session_state.get(page_key, 1)
+
+    if total_pages > 1:
+        pc1, pc2, pc3 = st.columns([1, 2, 1])
+        with pc1:
+            if st.button("◀ 上一页", disabled=(current_page <= 1), key=f"prev_{source_key}"):
+                st.session_state[page_key] = max(1, current_page - 1)
+                st.rerun()
+        with pc2:
+            st.markdown(f"<div style='text-align:center;padding-top:5px'>第 {current_page} / {total_pages} 页</div>", unsafe_allow_html=True)
+        with pc3:
+            if st.button("下一页 ▶", disabled=(current_page >= total_pages), key=f"next_{source_key}"):
+                st.session_state[page_key] = min(total_pages, current_page + 1)
+                st.rerun()
+
+    start_idx = (current_page - 1) * PAGE_SIZE
+    df_page = df.iloc[start_idx:start_idx + PAGE_SIZE]
+
     show_checkbox = (source == "量科每日库")
     selected_ids = []
-    for _, row in df.iterrows():
+    for _, row in df_page.iterrows():
         with st.container():
             cols = st.columns(([0.5, 5, 1] if show_checkbox else [5, 1]))
             col_idx = 0
