@@ -27,6 +27,7 @@ from docx.oxml.ns import qn
 DB_URL = 'mysql+pymysql://scraper:scraper123@127.0.0.1:3306/liangke_scraper?charset=utf8mb4'
 HISTORICAL_DB_PATH = 'D:/Claude_code/liangke_historical/historical_v2.db'
 INSTITUTION_DB_PATH = 'D:/Claude_code/institution_news/institutions.db'
+INST_LIST = ['IBM Quantum', 'Quantinuum', 'Google Quantum AI', 'Microsoft Azure Quantum', 'NVIDIA Quantum']
 CATEGORY_PRIORITY = ['资本运作', '产品动态', '企业资讯', '科技前沿', '宏观态势']
 
 CONF_DB_PATH = 'D:/Claude_code/conference_db/conferences.db'
@@ -361,6 +362,10 @@ def page_daily_news():
             caption = "📌 IBM/Quantinuum/NVIDIA/Google 官方新闻"
         target_date = st.date_input("选择日期", value=today, min_value=min_date)
     with col3:
+        if source == "机构新闻库":
+            inst_filter = st.selectbox("机构筛选", options=["全部"] + INST_LIST, index=0)
+        else:
+            inst_filter = "全部"  # dummy, not used for other sources
         st.caption(caption)
     target_str = target_date.strftime('%Y-%m-%d')
 
@@ -369,6 +374,8 @@ def page_daily_news():
     with st.spinner("正在读取数据库..."):
         if source == "机构新闻库":
             df = fetch_institution_articles()
+            if inst_filter != "全部":
+                df = df[df['source'] == inst_filter]
             if keyword:
                 kw = keyword.strip()
                 mask = df['title'].str.contains(kw, case=False, na=False) | df['content'].str.contains(kw, case=False, na=False)
@@ -496,6 +503,8 @@ def page_daily_news():
         with st.spinner("正在读取数据库..."):
             if source == "机构新闻库":
                 exp_df = fetch_institution_articles()
+                if inst_filter != "全部":
+                    exp_df = exp_df[exp_df['source'] == inst_filter]
             elif source == "量科历史库":
                 exp_df = fetch_historical_articles_range(exp_start.strftime('%Y-%m-%d'), exp_end.strftime('%Y-%m-%d'))
             else:
