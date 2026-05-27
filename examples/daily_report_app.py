@@ -408,6 +408,64 @@ def page_daily_news():
         if source == "量科每日库":
             st.caption("请勾选您认为最重要的 3 条新闻，下方将据此生成日报。")
 
+    # Data export (collapsible, placed above news list)
+    with st.expander("📤 数据导出", expanded=False):
+        exp_col1, exp_col2 = st.columns(2)
+        with exp_col1:
+            exp_start = st.date_input("开始日期", value=target_date, min_value=min_date, key="exp_start")
+        with exp_col2:
+            exp_end = st.date_input("结束日期", value=target_date, min_value=min_date, key="exp_end")
+        exp_kw = st.text_input("关键词筛选", placeholder="留空=全部", key="exp_kw")
+        exp_tags = st.multiselect("标签筛选（留空=全部）", options=TAGS_LIST, default=[], key="exp_tags")
+        exp_format = st.radio("导出格式", ["Excel (.xlsx)", "SQLite (.db)"], horizontal=True, key="exp_format")
+
+        if st.button("📤 导出数据", type="primary", key="btn_export"):
+            with st.spinner("正在读取数据库..."):
+                if source == "机构新闻库":
+                    exp_df = fetch_institution_articles()
+                    if inst_filter != "全部":
+                        exp_df = exp_df[exp_df['source'] == inst_filter]
+                elif source == "量科历史库":
+                    exp_df = fetch_historical_articles_range(exp_start.strftime('%Y-%m-%d'), exp_end.strftime('%Y-%m-%d'))
+                else:
+                    exp_df = _fetch_daily_articles_range(exp_start.strftime('%Y-%m-%d'), exp_end.strftime('%Y-%m-%d'))
+            if exp_kw:
+                kw = exp_kw.strip()
+                mask = exp_df['title'].str.contains(kw, case=False, na=False) | exp_df['content'].str.contains(kw, case=False, na=False)
+                exp_df = exp_df[mask]
+            if exp_tags:
+                mask = exp_df['tags'].apply(lambda t: isinstance(t, list) and any(tag in t for tag in exp_tags))
+                exp_df = exp_df[mask]
+            if exp_df.empty:
+                st.warning("未找到匹配的数据。")
+            else:
+                if exp_format == "Excel (.xlsx)":
+                    buf = io.BytesIO()
+                    exp_df.to_excel(buf, index=False, engine='openpyxl')
+                    buf.seek(0)
+                    st.download_button(
+                        label="📥 下载 Excel",
+                        data=buf,
+                        file_name=f"export_{exp_start.strftime('%Y%m%d')}_{exp_end.strftime('%Y%m%d')}.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    )
+                    st.success(f"已导出 {len(exp_df)} 条数据")
+                else:
+                    import sqlite3
+                    tmp_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'export_tmp.db')
+                    os.makedirs(os.path.dirname(tmp_path), exist_ok=True)
+                    tmp_conn = sqlite3.connect(tmp_path)
+                    exp_df.to_sql('articles', tmp_conn, index=False, if_exists='replace')
+                    tmp_conn.close()
+                    with open(tmp_path, 'rb') as f:
+                        st.download_button(
+                            label="📥 下载 SQLite 数据库",
+                            data=f,
+                            file_name=f"export_{exp_start.strftime('%Y%m%d')}_{exp_end.strftime('%Y%m%d')}.db",
+                            mime="application/octet-stream",
+                        )
+                    st.success(f"已导出 {len(exp_df)} 条数据")
+
     if source == "量科历史库":
         source_key = "hist"
     elif source == "机构新闻库":
@@ -492,65 +550,6 @@ def page_daily_news():
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             )
 
-    # Data export section
-    st.markdown("---")
-    st.markdown("### 📤 数据导出")
-
-    exp_col1, exp_col2 = st.columns(2)
-    with exp_col1:
-        exp_start = st.date_input("开始日期", value=target_date, min_value=min_date, key="exp_start")
-    with exp_col2:
-        exp_end = st.date_input("结束日期", value=target_date, min_value=min_date, key="exp_end")
-    exp_kw = st.text_input("关键词筛选", placeholder="留空=全部", key="exp_kw")
-    exp_tags = st.multiselect("标签筛选（留空=全部）", options=TAGS_LIST, default=[], key="exp_tags")
-    exp_format = st.radio("导出格式", ["Excel (.xlsx)", "SQLite (.db)"], horizontal=True, key="exp_format")
-
-    if st.button("📤 导出数据", type="primary", key="btn_export"):
-        with st.spinner("正在读取数据库..."):
-            if source == "机构新闻库":
-                exp_df = fetch_institution_articles()
-                if inst_filter != "全部":
-                    exp_df = exp_df[exp_df['source'] == inst_filter]
-            elif source == "量科历史库":
-                exp_df = fetch_historical_articles_range(exp_start.strftime('%Y-%m-%d'), exp_end.strftime('%Y-%m-%d'))
-            else:
-                exp_df = _fetch_daily_articles_range(exp_start.strftime('%Y-%m-%d'), exp_end.strftime('%Y-%m-%d'))
-        if exp_kw:
-            kw = exp_kw.strip()
-            mask = exp_df['title'].str.contains(kw, case=False, na=False) | exp_df['content'].str.contains(kw, case=False, na=False)
-            exp_df = exp_df[mask]
-        if exp_tags:
-            mask = exp_df['tags'].apply(lambda t: isinstance(t, list) and any(tag in t for tag in exp_tags))
-            exp_df = exp_df[mask]
-        if exp_df.empty:
-            st.warning("未找到匹配的数据。")
-        else:
-            if exp_format == "Excel (.xlsx)":
-                buf = io.BytesIO()
-                exp_df.to_excel(buf, index=False, engine='openpyxl')
-                buf.seek(0)
-                st.download_button(
-                    label="📥 下载 Excel",
-                    data=buf,
-                    file_name=f"export_{exp_start.strftime('%Y%m%d')}_{exp_end.strftime('%Y%m%d')}.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                )
-                st.success(f"已导出 {len(exp_df)} 条数据")
-            else:
-                import sqlite3
-                tmp_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'export_tmp.db')
-                os.makedirs(os.path.dirname(tmp_path), exist_ok=True)
-                tmp_conn = sqlite3.connect(tmp_path)
-                exp_df.to_sql('articles', tmp_conn, index=False, if_exists='replace')
-                tmp_conn.close()
-                with open(tmp_path, 'rb') as f:
-                    st.download_button(
-                        label="📥 下载 SQLite 数据库",
-                        data=f,
-                        file_name=f"export_{exp_start.strftime('%Y%m%d')}_{exp_end.strftime('%Y%m%d')}.db",
-                        mime="application/octet-stream",
-                    )
-                st.success(f"已导出 {len(exp_df)} 条数据")
 
 
 def _fetch_daily_articles_range(start_date: str, end_date: str) -> pd.DataFrame:
