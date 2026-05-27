@@ -405,7 +405,8 @@ def page_daily_news():
         st.caption(f"全文检索 \"{keyword}\" ，跨全库")
     else:
         st.markdown(f"### 📋 新闻列表（{target_str}，共 {len(df)} 条）")
-        st.caption("请勾选您认为最重要的 3 条新闻，下方将据此生成日报。")
+        if source == "量科每日库":
+            st.caption("请勾选您认为最重要的 3 条新闻，下方将据此生成日报。")
 
     if source == "量科历史库":
         source_key = "hist"
@@ -413,15 +414,20 @@ def page_daily_news():
         source_key = "inst"
     else:
         source_key = "daily"
+    show_checkbox = (source == "量科每日库")
     selected_ids = []
     for _, row in df.iterrows():
         with st.container():
-            cols = st.columns([0.5, 5, 1])
-            with cols[0]:
-                checked = st.checkbox("", key=f"sel_{source_key}_{row['id']}", label_visibility="collapsed")
-                if checked:
-                    selected_ids.append(row['id'])
-            with cols[1]:
+            cols = st.columns(([0.5, 5, 1] if show_checkbox else [5, 1]))
+            col_idx = 0
+            if show_checkbox:
+                with cols[0]:
+                    checked = st.checkbox("", key=f"sel_{source_key}_{row['id']}", label_visibility="collapsed")
+                    if checked:
+                        selected_ids.append(row['id'])
+                col_idx = 1
+            with cols[col_idx]:
+            with cols[col_idx]:
                 art_url = row.get('url', '') or row.get('reference_url', '') or row.get('liangke_url', '')
                 if art_url:
                     st.markdown(f"[**{row['title']}**]({art_url})")
@@ -429,7 +435,6 @@ def page_daily_news():
                     st.markdown(f"**{row['title']}**")
                 tags = row.get('tags', [])
                 date_str = row.get('liangke_date', '')
-                # For historical DB, truncate datetime to date
                 if date_str and len(str(date_str)) > 10:
                     date_str = str(date_str)[:10]
                 tag_text = ' | '.join(tags[:3]) if isinstance(tags, list) and tags else ''
@@ -442,49 +447,51 @@ def page_daily_news():
                     st.caption(f"{tag_text}{' · ' + inst if inst else ''}")
                 elif inst:
                     st.caption(inst)
-            with cols[2]:
+            detail_col = cols[2] if show_checkbox else cols[1]
+            with detail_col:
                 if st.button("查看详情", key=f"view_{source_key}_{row['id']}", type="secondary"):
                     show_article_detail(row.to_dict())
         st.divider()
 
-    # Daily report generation section
-    st.markdown("---")
-    st.markdown("### 📄 日报生成")
+    # Daily report generation section (only for daily news)
+    if source == "量科每日库":
+        st.markdown("---")
+        st.markdown("### 📄 日报生成")
 
-    selected_rows = df[df['id'].isin(selected_ids)].to_dict('records')
-    count = len(selected_rows)
+        selected_rows = df[df['id'].isin(selected_ids)].to_dict('records')
+        count = len(selected_rows)
 
-    if count == 0:
-        st.info("请在上方新闻列表中勾选要纳入日报的文章（建议 3 条）。")
-    elif count < 3:
-        st.warning(f"已勾选 {count} 条，建议再选 {3 - count} 条以达到 3 条。")
-    elif count > 3:
-        st.warning(f"已勾选 {count} 条，建议只保留最重要的 3 条。当前将使用前 3 条生成日报。")
-        selected_rows = selected_rows[:3]
-    else:
-        st.success(f"已勾选 {count} 条，可以生成日报。")
+        if count == 0:
+            st.info("请在上方新闻列表中勾选要纳入日报的文章（建议 3 条）。")
+        elif count < 3:
+            st.warning(f"已勾选 {count} 条，建议再选 {3 - count} 条以达到 3 条。")
+        elif count > 3:
+            st.warning(f"已勾选 {count} 条，建议只保留最重要的 3 条。当前将使用前 3 条生成日报。")
+            selected_rows = selected_rows[:3]
+        else:
+            st.success(f"已勾选 {count} 条，可以生成日报。")
 
-    if selected_rows and st.button("🚀 生成日报", type="primary"):
-        rows_to_use = selected_rows[:3]
+        if selected_rows and st.button("🚀 生成日报", type="primary"):
+            rows_to_use = selected_rows[:3]
 
-        st.markdown("#### 日报预览")
-        for idx, art in enumerate(rows_to_use, 1):
-            with st.container():
-                st.markdown(f"**{idx}. {art['title']}**")
-                tags = art.get('tags', [])
-                if isinstance(tags, list) and tags:
-                    st.caption(f"标签：{' | '.join(tags)}")
-                st.markdown("---")
+            st.markdown("#### 日报预览")
+            for idx, art in enumerate(rows_to_use, 1):
+                with st.container():
+                    st.markdown(f"**{idx}. {art['title']}**")
+                    tags = art.get('tags', [])
+                    if isinstance(tags, list) and tags:
+                        st.caption(f"标签：{' | '.join(tags)}")
+                    st.markdown("---")
 
-        doc_buf = build_docx(target_str, rows_to_use)
-        file_name = f"日报{target_str}.docx"
+            doc_buf = build_docx(target_str, rows_to_use)
+            file_name = f"日报{target_str}.docx"
 
-        st.download_button(
-            label="📥 下载 Word 日报",
-            data=doc_buf,
-            file_name=file_name,
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        )
+            st.download_button(
+                label="📥 下载 Word 日报",
+                data=doc_buf,
+                file_name=file_name,
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            )
 
     # Data export section
     st.markdown("---")
