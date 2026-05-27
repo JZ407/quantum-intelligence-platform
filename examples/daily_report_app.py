@@ -427,7 +427,6 @@ def page_daily_news():
                         selected_ids.append(row['id'])
                 col_idx = 1
             with cols[col_idx]:
-            with cols[col_idx]:
                 art_url = row.get('url', '') or row.get('reference_url', '') or row.get('liangke_url', '')
                 if art_url:
                     st.markdown(f"[**{row['title']}**]({art_url})")
