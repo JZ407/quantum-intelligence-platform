@@ -668,3 +668,84 @@ llm:
 ### 19.7 光子盒报告抓取（`examples/scrape_reports_photon.py`）
 
 Playwright 无头浏览器抓取 `quantumchina.com/bg`，提取 10 份年度量子产业报告（2023–2026），含发布日期、下载链接。交互页面「报告提醒」分两个标签：新闻中发现的报告 + 光子盒报告库。
+	
+## 20. 机构新闻抓取系统（`institution_news/`）
+
+### 20.1 系统概览
+
+新建独立项目 `D:/Claude_code/institution_news/`，从 IBM、Quantinuum、Google、Microsoft、NVIDIA 五家第一梯队量子机构官网直接抓取新闻/博客。
+
+最终成果：**166 篇**文章入库，日期覆盖率 95%+。
+
+| 机构 | 文章数 | 日期覆盖 | 抓取方式 |
+|------|--------|----------|----------|
+| Microsoft Azure Quantum | 58 | 100% | 博客列表 + 自动翻页 |
+| Quantinuum | 40 | 100% | 博客列表 + 5页分页 |
+| Google Quantum AI | 36 | 100% | sitemap.xml |
+| IBM Quantum | 17 | 88%* | 博客列表 |
+| NVIDIA Quantum | 15 | 100% | 博客列表 |
+
+*IBM 缺失的 2 篇为季度总结页面，原文无日期。
+
+### 20.2 日期提取演进
+
+**问题**：首次抓取 55 篇，仅 Google 1 篇有日期。IBM 博客页面日期存在于纯文本 `16 Mar 2026` 格式，原代码只查 `<meta>` 和 `<time>` 标签。
+
+**方案**：`fetch_detail()` 新增四层回退：
+1. `<meta property="article:published_time">` 等
+2. `<time datetime="...">` 标签
+3. `<script type="application/ld+json">` JSON-LD 结构化数据
+4. 正文正则：`DD Mon YYYY` / `Month DD, YYYY` / `YYYY-MM-DD`
+
+`crawl_listing()` 列表页同步升级日期提取正则。
+
+**结果**：新增 `backfill_dates.py` 对存量 39 篇无日期文章批量补采，17 篇成功获取日期（其余为产品/导航页，已清理）。
+
+### 20.3 翻页支持
+
+**问题**：Quantinuum 博客有 5 页，但首次只抓了第一页 10 篇（实际应有 40+）；Microsoft 博客也受影响。
+
+**根因**：`crawl_listing()` 无翻页逻辑。
+
+**方案**：
+- 新增 `_find_next_page()`：优先匹配 `_page=N` 格式的分页链接（Quantinuum 的 `?f06a1293_page=2`），次选 `<link rel="next">`
+- 页间去重：`seen_urls` 集合跨页查重
+- `max_pages` 配置限制最大翻页数（默认 5）
+
+**踩坑**：早期版本用 `'next' in text` 做关键词匹配，结果 `<a>` 文本 "GuppyProgram the **next** generation..." 被误识别为翻页链接。修复为优先检查 `href` 中是否含 `_page=\d+`。
+
+### 20.4 Sitemap 模式（Google 专项）
+
+**问题**：Google 博客无量子专属列表页，`blog.google/technology/research/?q=quantum` 搜索页只返回 3 篇量子相关。但 [sitemap](https://blog.google/en-us/sitemap.xml) 中 11296 个 URL，搜索 "quantum" 命中 37 个。
+
+**方案**：新增 `crawl_sitemap()` 函数 + `type: 'sitemap'` 源类型。解析 XML sitemap，按 `url_pattern` 关键词过滤 URL，`<lastmod>` 直接作为发布日期。
+
+**结果**：Google 1 → 36 篇（排除 1 个 topic hub 页）。
+
+### 20.5 URL 过滤 Bug 修复
+
+**问题**：Quantinuum 产品页（`/products-solutions/`）、About 页（`/company/about`）等导航链接被误抓。
+
+**根因**：`crawl_listing()` 过滤逻辑有漏洞——`href.startswith('/')` 的链接不做 `url_pattern` 检查直接放行。
+
+**修复**：先将 `href` 补全为绝对 URL，再统一检查 `url_pattern`。
+
+### 20.6 quantum_native 标记
+
+**问题**：Quantinuum 列表页标题为 "Read our blogpost"、"Hardware RoadmapExplore..." 等破碎文本，LLM 量子相关性过滤因标题太差而大量误拒。
+
+**方案**：源配置新增 `quantum_native: True`，量子原生公司跳过 `filter_quantum_llm()`，所有文章直接入库。仅 Google（综合博客）保留过滤。
+
+### 20.7 标题修正
+
+**问题**：部分网站列表页标题质量差（如前所述 Quantinuum）。
+
+**方案**：`fetch_detail()` 新增 `_extract_page_title()`，优先取 `og:title` → `<meta name="title">` → `<h1>` → `<title>`。`main()` 中比较列表标题与详情标题长度，用更长的那个。
+
+### 20.8 UI 升级
+
+交互页面机构新闻库改进：
+- **细粒度标签**：`FINE_TAG_MAP` 18 类标签（量子计算/量子纠错/超导/离子阱/AI·ML/融资商业...），中英文关键词混合匹配，替代原有 5 大类单标签
+- **标题可点击**：列表标题直接链接原文 URL
+- **日期排序**：`ORDER BY publish_date DESC`，无日期置底
+- **机构显示**：列表和详情弹窗均显示来源机构名
