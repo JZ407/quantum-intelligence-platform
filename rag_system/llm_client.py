@@ -40,18 +40,20 @@ class LLMClient:
         self.max_tokens = max_tokens
         self.timeout = timeout
 
-    def chat(self, messages: List[Dict[str, str]], stream: bool = False) -> str:
+    def chat(self, messages: List[Dict[str, str]], stream: bool = False,
+             max_tokens: int = None) -> str:
         """Send chat completion request. Returns full response text."""
         if self.provider == "claude":
-            return self._chat_claude(messages, stream)
-        return self._chat_openai_compatible(messages, stream)
+            return self._chat_claude(messages, stream, max_tokens)
+        return self._chat_openai_compatible(messages, stream, max_tokens)
 
-    def _chat_openai_compatible(self, messages: List[Dict[str, str]], stream: bool) -> str:
+    def _chat_openai_compatible(self, messages: List[Dict[str, str]], stream: bool,
+                                 max_tokens: int = None) -> str:
         url = f"{self.api_base}/chat/completions"
         payload: Dict[str, Any] = {
             "model": self.model,
             "messages": messages,
-            "max_tokens": self.max_tokens,
+            "max_tokens": max_tokens or self.max_tokens,
             "stream": stream,
         }
         if self.temperature is not None:
@@ -68,7 +70,8 @@ class LLMClient:
             result = json.loads(body)
             return result["choices"][0]["message"]["content"]
 
-    def _chat_claude(self, messages: List[Dict[str, str]], stream: bool) -> str:
+    def _chat_claude(self, messages: List[Dict[str, str]], stream: bool,
+                      max_tokens: int = None) -> str:
         url = f"{self.api_base}/messages"
         # Claude API format
         system_msg = ""
