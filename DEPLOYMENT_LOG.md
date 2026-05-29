@@ -884,3 +884,41 @@ Quantinuum 有两个内容板块：Blog（/news/blog）和 Press Release（/news
 - Google Quantum AI / Google Quantum Research
 
 **累计总文章数**：Quantinuum 210 + IBM 282 + Google 309 = 801 篇（不含其他已抓取来源）。
+
+---
+
+## 20.18 Microsoft Azure Quantum 独立抓取 (2026-05-29)
+
+**Azure Quantum Blog** (`sources/microsoft_azure_quantum.py`)：
+- URL: `https://azure.microsoft.com/en-us/blog/quantum/`
+- 翻页: `page/{n}/`，12 页有内容
+- 日期优先从 `<meta name="awa-publishedDate" content="YYYYMMDD">`，回退 URL 路径 `YYYY/MM/DD`
+- 标题从 og:title（去尾 "- Microsoft Azure Quantum Blog"），正文 `<main>` 标签
+- **139 篇新文章**，100% 日期覆盖，2016-06 ~ 2026-01
+- cloudblogs.microsoft.com 已全迁移至此域
+
+---
+
+## 20.19 NVIDIA Quantum 独立抓取 (2026-05-29)
+
+**NVIDIA Quantum** (`sources/nvidia_quantum.py`)：
+- Atom Feed: `https://developer.nvidia.com/blog/tag/quantum-computing/feed/`
+- 标题 og:title（去尾 "| NVIDIA Technical Blog"），正文 `<article>` 标签
+- **47 篇新文章**，100% 日期覆盖，2022-03 ~ 2025-12
+- Newsroom (`nvidianews.nvidia.com`) RSS 验证：20 条 PR 中 0 条量子相关，无需单独抓取
+
+---
+
+## 20.20 IonQ 双源独立抓取 (2026-05-29)
+
+**IonQ** (`sources/ionq.py`)：
+- Sitemap: `https://www.ionq.com/sitemap.xml`（488 URL）
+- 两段过滤：`/news/`（229 篇）+ `/blog/`（89 篇）
+- sitemap 无 `<lastmod>` 日期，需逐页提取
+- 标题：h1（news 页面 og:title 残缺 "IonQ |"），回退 og:title 去前缀
+- 正文: `.rich-text` div，日期: `Month DD, YYYY` 文本正则
+- **318 篇新文章**（229 News + 89 Blog），99.7% 日期覆盖
+- 时间跨度：2017-07 ~ 2026-05
+- 全部为量子相关（IonQ 本身即为量子公司，无需额外过滤）
+
+**累计**：第一梯队 987 + IonQ 318 = 1,305 篇。
