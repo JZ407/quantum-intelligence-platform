@@ -829,3 +829,58 @@ Quantinuum 有两个内容板块：Blog（/news/blog）和 Press Release（/news
 **架构决策**：不再强制共用 `BaseCrawler`。每个机构源文件自包含抓取逻辑，仅引用 `core/` 工具函数（DB、LLM、提取器）。数据库共用。
 
 **累计**：Quantinuum Blog 147 + Press 63 = 210 篇。
+
+---
+
+## 20.15 IBM Quantum 双源独立抓取 (2026-05-28)
+
+**IBM Quantum Blog** (`sources/ibm_quantum_blog.py`)：
+- URL: `https://www.ibm.com/quantum/blog`
+- 翻页: `?page={n}`，13 页有内容（14 页+为空）
+- 日期+标题从链接文本提取：`"Title text26 May 2026• Author"` 格式，`DD Mon YYYY`
+- 详情页：og:title（去尾 "| IBM Quantum Computing Blog"），正文 `post-body` div，日期 `Date DD Mon YYYY`
+- **202 篇新文章**，100% 日期覆盖，2017-09 ~ 2026-05
+- 每年分布：2017(1) 2018(1) 2019(4) 2020(7) 2021(31) 2022(34) 2023(20) 2024(40) 2025(47) 2026(3)
+
+**IBM Quantum PR** (`sources/ibm_quantum_pr.py`)：
+- URL: `https://newsroom.ibm.com/index.php?s=20322&query=quantum computers`
+- 翻页: `&o=0,50,100...` 偏移分页
+- 过滤 `newsroom.ibm.com/` 域名 + URL/文本含 quantum/qubit/qiskit + 排除 campaign?item=/index.php
+- 详情页：og:title，正文 `div.wd_content`，日期优先文本后回退 URL `YYYY-MM-DD`
+- **80 篇新 PR**，100% 日期覆盖，2021 ~ 2026-05
+
+**累计**：IBM Blog 202 + PR 80 = 282 篇。
+
+---
+
+## 20.16 Google Quantum 三源独立抓取 (2026-05-28)
+
+**Google Quantum AI Blog** (`sources/google_quantum_blog.py`)：
+- Sitemap: `https://blog.google/en-us/sitemap.xml`（11,299 URL）
+- 过滤词: quantum/willow/sycamore/qubit/qsim，命中 37 篇
+- 详情页：JSON-LD `NewsArticle` 提取 `headline` + `datePublished`，正文 `<article>` 标签
+- 日期覆盖 36/37（1 篇为 quantum-computing 主题页，无日期）
+- 时间跨度：2019-10 ~ 2026-05
+
+**Google Research Blog** (`sources/google_quantum_research.py`)：
+- Sitemap: `https://research.google/sitemap_main.xml`（20,340 URL）
+- 两段过滤：`/blog/` + quantum 关键词（43 篇）+ `/pubs/` + quantum 关键词（230 篇）
+- 详情页：og:title，正文 `<main>` 标签，日期从文本 `Month DD, YYYY` 提取
+- Blog：42 篇新（1 篇重复），100% 日期覆盖，2009-12 ~ 2026-03
+- Papers：230 篇新，**0% 日期覆盖**（research.google/pubs/ 页面不含发布日期）
+
+**累计**：Blog 37 + Research Blog 42 + Papers 230 = 309 篇。
+
+**已知问题**：学术论文缺少发布日期，需要后续从 sitemap `<lastmod>` 或 PDF 元数据补充。
+
+---
+
+## 20.17 run_all.py 改造 (2026-05-28)
+
+将 `run_all.py` 从 `BaseCrawler(mod.SOURCE)` 模式改为 `runpy.run_module()` 模式，兼容独立抓取文件（无 SOURCE dict、不依赖 BaseCrawler）。
+
+新增 SOURCES 条目：
+- IBM Quantum Blog / IBM Quantum PR
+- Google Quantum AI / Google Quantum Research
+
+**累计总文章数**：Quantinuum 210 + IBM 282 + Google 309 = 801 篇（不含其他已抓取来源）。
