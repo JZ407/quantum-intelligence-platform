@@ -1022,11 +1022,206 @@ def page_report_alerts():
                         st.markdown("---")
 
 
+def page_knowledge_graph():
+    """知识图谱页面：pyvis 交互式实体关系网络."""
+    import json, os
+    from collections import defaultdict
+    from pyvis.network import Network
+
+    GRAPH_PATH = 'D:/Claude_code/knowledge_graph/knowledge_graph.json'
+
+    st.title('量子科技情报知识图谱')
+    st.caption('从 11,000+ 篇文章中抽取的实体和关系网络')
+
+    if not os.path.exists(GRAPH_PATH):
+        st.warning('图谱文件不存在，请先运行 knowledge_graph/build_graph.py')
+        return
+
+    with open(GRAPH_PATH, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    stats = data['meta']['stats']
+
+    # Sidebar filters
+    st.sidebar.markdown('---')
+    st.sidebar.subheader('图谱筛选')
+
+    node_types = defaultdict(int)
+    for n in data['nodes']:
+        node_types[n['type']] += 1
+
+    entity_type_options = [t for t in sorted(node_types.keys()) if t != 'article']
+    selected_types = st.sidebar.multiselect(
+        '实体类型',
+        options=entity_type_options,
+        default=[t for t in ['institution', 'technology', 'product', 'topic', 'person'] if t in entity_type_options],
+    )
+    min_count = st.sidebar.slider('最少文章数', 1, 200, 1)
+    search = st.sidebar.text_input('搜索实体', placeholder='输入名称...')
+
+    st.sidebar.metric('总节点', stats['total_nodes'])
+    st.sidebar.metric('总边', stats['total_edges'])
+    st.sidebar.caption(f'文章: {stats["node_types"].get("article", 0)} 篇')
+    st.sidebar.caption(f'每 6 小时自动更新')
+
+    # Filter nodes
+    COLORS = {
+        'institution': '#4e79a7', 'technology': '#f28e2b', 'product': '#e15759',
+        'topic': '#76b7b2', 'person': '#59a14f',
+    }
+
+    filtered = [n for n in data['nodes'] if n['type'] in selected_types and n['count'] >= min_count
+                and (not search or search.lower() in n['id'].lower())]
+    entity_ids = {n['id'] for n in filtered}
+
+    edges_filtered = [e for e in data['edges'] if e['source'] in entity_ids and e['target'] in entity_ids]
+
+    # Relation type translations
+    REL_CN = {
+        'PARTNERS_WITH': '合作', 'ACQUIRES': '收购', 'SUPPLIES_TO': '供应',
+        'COMPETES_WITH': '竞争', 'MENTIONS': '提及', 'PUBLISHED_BY': '发布',
+        'COVERS_TOPIC': '覆盖主题', 'USES_TECH': '使用技术', 'RELEASES': '发布产品',
+        'WORKS_AT': '任职',
+    }
+
+    st.subheader(f'实体关系网络 ({len(filtered)} 节点, {len(edges_filtered)} 边)')
+    st.caption('点击边查看关联新闻')
+
+    net = Network(height='650px', width='100%', directed=True, notebook=False)
+    net.set_options("""
+    {
+      "physics": {"barnesHut": {"gravitationalConstant": -3000, "centralGravity": 0.3,
+                  "springLength": 200, "springConstant": 0.04}, "minVelocity": 0.75},
+      "interaction": {"hover": true, "tooltipDelay": 100},
+      "edges": {"smooth": false}
+    }
+    """)
+
+    # Build edge data JS - embed article titles for click display
+    edge_data_js = {}
+    for e in edges_filtered:
+        eid = f"{e['source']}|||{e['target']}|||{e['relation']}"
+        arts = []
+        try:
+            raw = e.get('articles', '')
+            arts = json.loads(raw) if isinstance(raw, str) else (raw or [])
+        except (json.JSONDecodeError, TypeError):
+            pass
+        edge_data_js[eid] = {
+            'source': e['source'], 'target': e['target'],
+            'relation': REL_CN.get(e['relation'], e['relation']),
+            'count': e.get('count', 0),
+            'articles': arts[:20],
+            'reason': e.get('reason', ''),
+        }
+
+    max_count = max((n['count'] for n in filtered), default=1)
+    for n in filtered:
+        size = 10 + 30 * (n['count'] / max_count)
+        label = n['id'] if n['type'] not in ('institution', 'product') else f'{n["id"]}\n({n["count"]}篇)'
+        net.add_node(n['id'], label=label, title=f'{n["id"]}\n类型: {n["type"]}\n文章数: {n["count"]}',
+                     color=COLORS.get(n['type'], '#999'), size=size)
+
+    for e in edges_filtered:
+        cn_rel = REL_CN.get(e['relation'], e['relation'])
+        year_info = ''
+        years = e.get('years', [])
+        if years and len(years) > 0:
+            year_info = f' ({years[0]}' + (f'~{years[-1]}' if len(years) > 1 else '') + ')'
+        tooltip = f"{cn_rel}: {e['source']} → {e['target']}{year_info} ({e.get('count', '?')}篇)"
+        net.add_edge(e['source'], e['target'], title=tooltip, label=f"{cn_rel}{year_info}", arrows='to')
+
+    html_path = 'D:/Claude_code/knowledge_graph/graph_temp.html'
+    net.save_graph(html_path)
+
+    # Inject JS for click-to-show-articles + right panel CSS
+    with open(html_path, 'r', encoding='utf-8') as f:
+        html = f.read()
+
+    edge_json = json.dumps(edge_data_js, ensure_ascii=False)
+    inject_js = f"""
+    <style>
+    #edge-panel {{ position:fixed; right:10px; top:60px; width:320px; max-height:80vh;
+      background:#fff; border:1px solid #ddd; border-radius:8px; padding:15px;
+      box-shadow:0 4px 12px rgba(0,0,0,.15); overflow-y:auto; z-index:9999; display:none;
+      font-family:-apple-system,BlinkMacSystemFont,sans-serif; font-size:13px; }}
+    #edge-panel h4 {{ margin:0 0 8px; font-size:15px; color:#333; }}
+    #edge-panel .rel-tag {{ display:inline-block; background:#4e79a7; color:#fff;
+      padding:2px 8px; border-radius:4px; font-size:12px; margin-bottom:10px; }}
+    #edge-panel .art-item {{ padding:6px 0; border-bottom:1px solid #eee; color:#555; line-height:1.4; }}
+    #edge-panel .art-item:last-child {{ border-bottom:none; }}
+    #edge-panel .close-btn {{ float:right; cursor:pointer; font-size:18px; color:#999; }}
+    #edge-panel .close-btn:hover {{ color:#333; }}
+    </style>
+    <div id="edge-panel"><span class="close-btn" onclick="closePanel()">×</span><div id="edge-content"></div></div>
+    <script>
+    var edgeData = {edge_json};
+    var network = null;
+    function showPanel(edgeId) {{
+        var data = edgeData[edgeId];
+        if (!data) return;
+        var panel = document.getElementById('edge-panel');
+        var content = document.getElementById('edge-content');
+        var html = '<h4>'+data.relation+': '+data.source+' → '+data.target+'</h4>';
+        html += '<span class="rel-tag">'+data.count+'篇</span>';
+        if (data.reason) html += '<p style="color:#888;font-size:12px;margin-top:6px;">'+data.reason+'</p>';
+        if (data.articles && data.articles.length > 0) {{
+            html += '<div style="margin-top:10px;">';
+            for (var i=0; i<data.articles.length; i++) {{
+                html += '<div class="art-item">• '+data.articles[i]+'</div>';
+            }}
+            html += '</div>';
+        }} else {{
+            html += '<p style="color:#aaa;margin-top:10px;">暂无关联文章</p>';
+        }}
+        content.innerHTML = html;
+        panel.style.display = 'block';
+    }}
+    function closePanel() {{ document.getElementById('edge-panel').style.display = 'none'; }}
+    </script>
+    """
+
+    # Insert edge data + CSS before </body>, and hook selectEdge event
+    html = html.replace('</body>', inject_js + '</body>')
+    # Add edge click handler right after network creation
+    edge_handler = """
+    network.on("selectEdge", function(params) {
+        if (params.edges.length > 0) {
+            var edge = network.body.data.edges.get(params.edges[0]);
+            if (edge) {
+                var prefix = edge.from + "|||" + edge.to + "|||";
+                for (var k in edgeData) {
+                    if (k.indexOf(prefix) === 0) { showPanel(k); break; }
+                }
+            }
+        }
+    });
+    network.on("deselectEdge", function() { closePanel(); });
+    """
+    html = html.replace('network = new vis.Network(container, data, options);',
+                        'network = new vis.Network(container, data, options);\n' + edge_handler)
+    st.components.v1.html(html, height=750, scrolling=True)
+
+    # Entity table
+    st.markdown('---')
+    st.subheader('实体列表')
+    rows = []
+    for n in sorted(filtered, key=lambda x: -x['count']):
+        connected = set()
+        for e in edges_filtered:
+            if e['source'] == n['id']:
+                connected.add(f'{e["target"]}({e["relation"]})')
+            elif e['target'] == n['id']:
+                connected.add(f'{e["source"]}({e["relation"]})')
+        rows.append({'名称': n['id'], '类型': n['type'], '文章数': n['count'], '关联': ', '.join(sorted(connected)[:5])})
+    st.dataframe(rows, use_container_width=True, hide_index=True)
+
+
 def main():
     st.set_page_config(page_title="量子科技情报", page_icon="📰", layout="wide")
     st.title("📰 量子科技情报")
 
-    page = st.sidebar.radio("导航", ["每日资讯", "周报生成", "会议信息", "报告提醒"])
+    page = st.sidebar.radio("导航", ["每日资讯", "周报生成", "会议信息", "报告提醒", "知识图谱"])
 
     if page == "每日资讯":
         page_daily_news()
@@ -1036,6 +1231,8 @@ def main():
         page_conferences()
     elif page == "报告提醒":
         page_report_alerts()
+    elif page == "知识图谱":
+        page_knowledge_graph()
 
 
 if __name__ == '__main__':

@@ -922,3 +922,51 @@ Quantinuum 有两个内容板块：Blog（/news/blog）和 Press Release（/news
 - 全部为量子相关（IonQ 本身即为量子公司，无需额外过滤）
 
 **累计**：第一梯队 987 + IonQ 318 = 1,305 篇。
+
+---
+
+## 20.21 第二梯队全部完成 (2026-05-29)
+
+**Rigetti** (`sources/rigetti.py`)：News 262 + Research 79 = 341 篇，sitemap 双索引递归
+**PsiQuantum** (`sources/psiquantum.py`)：35 篇 news-import，sitemap 路径
+**OQC** (`sources/oqc.py`)：Newsroom 74 + Resources 57 = 131 篇，WordPress sitemap
+**Q-CTRL** (`sources/q_ctrl.py`)：204 篇 blog，JSON-LD 日期提取
+**QuEra** (`sources/quera.py`)：Blog 157 + Press 67 + Podcasts 58 + Case Studies 10 = 292 篇，sitemap
+**Atom Computing** (`sources/atom_computing.py`)：News 43 + Publications 8 = 51 篇，HTML listing
+**Classiq** (`sources/classiq.py`)：325 篇 insights，JSON-LD 日期提取
+**QunaSys** (`sources/qunasys.py`)：JP 123 + EN 71 = 194 篇，page/N 翻页
+
+**全部独立文件**：15 个源文件，覆盖 14 家机构，共约 2,871 篇机构新闻。
+
+---
+
+## 20.22 知识图谱系统 (2026-05-29)
+
+**独立项目**：`D:/Claude_code/knowledge_graph/`
+**数据源**：institutions(2,871) + liangke_historical(8,953) + liangke_daily(172) = ~12,000 篇
+
+**核心模块**：
+- `core/adapters.py` — DB 适配器模式，SQLite/MySQL 统一接口，新库即插即用
+- `core/entity_dict.py` — 实体词典：84 机构、38 主题、28 技术平台、30 产品、16 人物
+- `core/extractor.py` — 规则匹配（词边界）+ LLM 补充抽取
+- `core/graph.py` — NetworkX 图存储，JSON 导出，增量持久化
+- `build_relations.py` — 机构间关系深度扫描（LLM 批量分类）
+
+**图谱规模**：12,159 节点、24,512 边
+**机构关系**：84 机构间 70 条关系边（51 合作 + 16 供应 + 2 收购 + 1 任职）
+**时间维度**：边带 years 字段，可视化显示关系起止年份
+**可视化**：集成到 Streamlit 8501 知识图谱 Tab，pyvis 交互式网络，点击边查看关联文章
+
+**定期自动更新**：Windows 计划任务，每 6 小时运行 `build_graph.py`
+
+---
+
+## 20.23 每日抓取修复 (2026-05-29)
+
+- 标题提取：增加 og:title/h1/h2 兜底逻辑，修复 reference/flash 页面"无标题"
+- 内容提取：增加 article/main/body fallback，修复 div 类名变更导致空内容
+- 标签关键词：资本运作新增英文关键词（funding/raise/acquires 等）
+- 全库 172 篇重新打标，9 篇无标题 + 6 篇无内容全部补全
+- 周报 LaTeX 模板：修复 `\url{}` 超链接空格断裂
+
+**累计总文章数**：机构新闻 2,871 + 量科历史 8,953 + 量科每日 172 ≈ 12,000 篇。
