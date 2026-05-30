@@ -1122,14 +1122,16 @@ def page_knowledge_graph():
         net.add_node(n['id'], label=label, title=f'{n["id"]}\n类型: {n["type"]}\n文章数: {n["count"]}',
                      color=COLORS.get(n['type'], '#999'), size=size)
 
+    DIRECTIONAL = {'收购', '供应', '任职', '发布产品'}
     for e in edges_filtered:
         cn_rel = REL_CN.get(e['relation'], e['relation'])
         year_info = ''
         years = e.get('years', [])
         if years and len(years) > 0:
             year_info = f' ({years[0]}' + (f'~{years[-1]}' if len(years) > 1 else '') + ')'
-        tooltip = f"{cn_rel}: {e['source']} → {e['target']}{year_info} ({e.get('count', '?')}篇)"
-        net.add_edge(e['source'], e['target'], title=tooltip, label=f"{cn_rel}{year_info}", arrows='to')
+        tooltip = f"{cn_rel}: {e['source']} ↔ {e['target']}{year_info} ({e.get('count', '?')}篇)"
+        arrows = 'to' if cn_rel in DIRECTIONAL else ''
+        net.add_edge(e['source'], e['target'], title=tooltip, label=f"{cn_rel}{year_info}", arrows=arrows, physics=True)
 
     html_path = 'D:/Claude_code/knowledge_graph/graph_temp.html'
     net.save_graph(html_path)
@@ -1162,7 +1164,7 @@ def page_knowledge_graph():
         if (!data) return;
         var panel = document.getElementById('edge-panel');
         var content = document.getElementById('edge-content');
-        var html = '<h4>'+data.relation+': '+data.source+' → '+data.target+'</h4>';
+        var html = '<h4>'+data.relation+': '+data.source+' ↔ '+data.target+'</h4>';
         html += '<span class="rel-tag">'+data.count+'篇</span>';
         if (data.reason) html += '<p style="color:#888;font-size:12px;margin-top:6px;">'+data.reason+'</p>';
         if (data.articles && data.articles.length > 0) {{

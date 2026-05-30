@@ -1,0 +1,118 @@
+\contentsline {section}{摘要}{1}{Doc-Start}%
+\contentsline {section}{ 5月量子科技行业国内、国际会议}{2}{Doc-Start}%
+\contentsline {section}{\numberline {1}宏观态势}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1} Synergy Quantum宣布推出面向移动通信的量子安全安卓操作系统 }{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2} 波兰波兹南理工大学部署首台本地型量子计算机，欲推动量子教学与科研发展 }{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3} BitGo将与Silence Laboratories共同开发量子安全的MPC钱包基础设施 }{3}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4} 网络安全公司Genience宣布进军量子安全市场 }{4}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5} ESL Shipping与QMill将合作探索量子计算在复杂航运决策领域的应用潜力 }{4}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6} 印度储备银行新设Q-SAFE八人专家组，以全面评估量子威胁与加密转型 }{4}{subsection.1.6}%
+\contentsline {subsection}{\numberline {1.7} 印度量子安全技术初创公司Pramatra Space获得种子前融资 }{5}{subsection.1.7}%
+\contentsline {subsection}{\numberline {1.8} 新加坡出台一系列新举措，助力企业应对AI革命与量子威胁双重挑战 }{5}{subsection.1.8}%
+\contentsline {subsection}{\numberline {1.9} 法国重金押注未来：马克龙宣布追加10亿欧元发展量子技术 }{5}{subsection.1.9}%
+\contentsline {subsection}{\numberline {1.10} 南卡罗来纳大学力邀前NASA及国土安全部专家，以加速量子信息技术布局 }{6}{subsection.1.10}%
+\contentsline {subsection}{\numberline {1.11} 美国伊利诺伊州发布该州首份量子教育全景报告 }{6}{subsection.1.11}%
+\contentsline {subsection}{\numberline {1.12} 美国商务部拟资助PsiQuantum 1亿美元，推动光量子计算核心技术本土化 }{6}{subsection.1.12}%
+\contentsline {subsection}{\numberline {1.13} 英国创新署量子PNT项目第一阶段结束，Xairos助力构建非GNSS授时体系 }{7}{subsection.1.13}%
+\contentsline {subsection}{\numberline {1.14} Quantinuum将获美联邦资金支持，联手本土供应商开发容错型离子阱量子计算机 }{7}{subsection.1.14}%
+\contentsline {subsection}{\numberline {1.15} Rigetti与美国商务部签署意向书，以相应股权换1亿美元量子研发资金 }{7}{subsection.1.15}%
+\contentsline {subsection}{\numberline {1.16} 七国集团G7央行发布首份量子技术报告 }{8}{subsection.1.16}%
+\contentsline {subsection}{\numberline {1.17} 西班牙成立量子联盟以推动量子技术生态系统发展 }{8}{subsection.1.17}%
+\contentsline {section}{\numberline {2}科技前沿}{9}{section.2}%
+\contentsline {subsection}{\numberline {2.1} QuantumCT联合康涅狄格大学与耶鲁大学启动新一阶段试点项目以推动量子创新 }{9}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2} 莫纳什大学开发的纳米电路可在单一芯片上实现光信息生成、引导与读取 }{9}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3} 美国科学家开发的新型声学器件可简化量子传感器设计 }{9}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4} 日本科学家发现将分子与量子点组合可显著提升太阳能电池效率 }{10}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5} 北京量子院研究团队利用生成式AI实现连续原生门量子线路的混合扩散-优化合成 }{10}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6} 浙江大学量子物态与器件研究中心：耗散塑造响应 }{10}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7} 南京大学邹欣晔和程建春课题组实现轨道诱导的三维ℤ分类高阶拓扑绝缘体 }{10}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8} 普林斯顿大学推出AI机器人实验室系统可实现石墨烯与量子材料自主制备 }{11}{subsection.2.8}%
+\contentsline {subsection}{\numberline {2.9} Quantum Midi Posse在IBM硬件上完成一项基准测试，成功验证其QSCE框架 }{11}{subsection.2.9}%
+\contentsline {subsection}{\numberline {2.10} 从障碍到资源：卡尔斯鲁厄理工学院首次实现对超导体磁涡旋进行量子控制 }{11}{subsection.2.10}%
+\contentsline {subsection}{\numberline {2.11} 研究人员利用经典计算机成功求解被认为不可能完成的复杂量子物理问题 }{12}{subsection.2.11}%
+\contentsline {subsection}{\numberline {2.12} OIST新研究重新定义自旋玻璃，为量子自旋液体提供了更稳健研究路径 }{12}{subsection.2.12}%
+\contentsline {subsection}{\numberline {2.13} 德国科学家成功实现对有机分子进行单分子级的量子调控 }{12}{subsection.2.13}%
+\contentsline {subsection}{\numberline {2.14} WISER与弗劳恩霍夫的新联合研究探索了量子机器学习在异常检测中的应用 }{13}{subsection.2.14}%
+\contentsline {subsection}{\numberline {2.15} 科学家化障碍为利器：散射介质可变身为量子信息安全传输新组件 }{13}{subsection.2.15}%
+\contentsline {subsection}{\numberline {2.16} 金刚石超导机制获新解：美研究人员为开发多功能量子芯片奠定了基础 }{13}{subsection.2.16}%
+\contentsline {subsection}{\numberline {2.17} 华东师大团队《自然》发文：量子增强电子隧穿 }{14}{subsection.2.17}%
+\contentsline {subsection}{\numberline {2.18} 中国科大发现镍基高温超导机制的重要实验证据 }{14}{subsection.2.18}%
+\contentsline {subsection}{\numberline {2.19} 法国团队突破性研究：利用量子纠缠实现不透明介质透明化 }{14}{subsection.2.19}%
+\contentsline {subsection}{\numberline {2.20} Atom Computing与美国商务部签署意向书，欲推动中性原子量子计算商业化 }{14}{subsection.2.20}%
+\contentsline {subsection}{\numberline {2.21} Pasqal首次在真实量子处理器上验证逻辑量子比特要显著优于传统方法 }{15}{subsection.2.21}%
+\contentsline {subsection}{\numberline {2.22} 美国商务部拟向D-Wave提供1亿美元资金支持，助力其发展量子计算技术 }{15}{subsection.2.22}%
+\contentsline {subsection}{\numberline {2.23} 量子计算先驱Seth Lloyd加入Planckian，助力其全局控制量子纠错策略研发 }{15}{subsection.2.23}%
+\contentsline {subsection}{\numberline {2.24} Pasqal首次利用中性原子量子计算机演示逻辑比特在求解微分方程方面要强于物理比特 }{16}{subsection.2.24}%
+\contentsline {subsection}{\numberline {2.25} Xanadu量子技术公司宣布QROM算法突破，可将Toffoli门数量减半 }{16}{subsection.2.25}%
+\contentsline {subsection}{\numberline {2.26} Infleqtion公布多项量子计算研究进展，持续推进其实用级容错量子计算路线 }{17}{subsection.2.26}%
+\contentsline {section}{\numberline {3}产品动态}{18}{section.3}%
+\contentsline {subsection}{\numberline {3.1} 中性原子量子计算公司Pasqal拟借壳上市，已提交业务合并注册声明 }{18}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2} Qubic获首个低温放大器合同，携手Quantum Machines优化量子计算性能 }{20}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3} Pasqal已与特殊目的收购公司联合向美国证券交易委员会提交F-4表格注册声明 }{21}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4} Qubic与Quantum Machines签署合同，其低温放大器迎来首个客户 }{22}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5} GlobalPlatform推出集成了后量子密码技术的开源硅芯片分发方案 }{22}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6} D-Wave获NORDTECH第二年项目资金支持，将推动超导量子比特材料制造升级 }{22}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7} ORCA Computing与Digital Realty合作，探索量子加速与AI基础设施融合 }{23}{subsection.3.7}%
+\contentsline {subsection}{\numberline {3.8} Telia Finland与QMill联合开发面向移动网络的量子增强消息加密技术 }{23}{subsection.3.8}%
+\contentsline {subsection}{\numberline {3.9} SeQure Quantum成功在智利部署一条量子安全通信链路 }{23}{subsection.3.9}%
+\contentsline {subsection}{\numberline {3.10} 拉西瑞亚大学与enQase正合作推进量子安全基础设施部署 }{23}{subsection.3.10}%
+\contentsline {subsection}{\numberline {3.11} 罗马尼亚将投资超1亿欧元部署该国首台量子计算机 }{24}{subsection.3.11}%
+\contentsline {subsection}{\numberline {3.12} 英国量子计算初创公司Universal Quantum受到多家SPAC公司关注 }{24}{subsection.3.12}%
+\contentsline {subsection}{\numberline {3.13} Scaleway与QbitSoft联手推出欧洲首个云原生量子采用计划 }{24}{subsection.3.13}%
+\contentsline {subsection}{\numberline {3.14} Crypto4A正式发布量子安全密钥管理平台QxVault }{25}{subsection.3.14}%
+\contentsline {subsection}{\numberline {3.15} Rigetti采购牛津仪器的原子层蚀刻系统，以提升其量子晶圆厂制造能力 }{25}{subsection.3.15}%
+\contentsline {subsection}{\numberline {3.16} Aegiq启用英国新总部，计划投数百万英镑打造光子量子计算卓越中心 }{25}{subsection.3.16}%
+\contentsline {subsection}{\numberline {3.17} QuiX发布光子组装控制单元 可降低光量子系统复杂度并提升集成与维护效率 }{26}{subsection.3.17}%
+\contentsline {subsection}{\numberline {3.18} 法国量子计算初创公司Alice \& Bob获得英伟达风投部门投资 }{26}{subsection.3.18}%
+\contentsline {subsection}{\numberline {3.19} SBQuantum获得加拿大国防部两份价值300万加元的量子磁力计合同 }{26}{subsection.3.19}%
+\contentsline {subsection}{\numberline {3.20} PacketLight携手Quantum XChange，融合PQC与QKD强化光网络安全 }{27}{subsection.3.20}%
+\contentsline {subsection}{\numberline {3.21} Superpositions Studio推出面向企业的量子机器学习平台 }{27}{subsection.3.21}%
+\contentsline {subsection}{\numberline {3.22} 后量子密码学护航AI机器人：WISeKey推出WISeRobot.ch平台应对量子威胁 }{27}{subsection.3.22}%
+\contentsline {subsection}{\numberline {3.23} Quantinuum与美国商务部签署意向书，将加速美国在量子计算领域的领先地位 }{27}{subsection.3.23}%
+\contentsline {subsection}{\numberline {3.24} 20亿美元联邦激励落地，美国推动实用化容错量子计算机研发 }{28}{subsection.3.24}%
+\contentsline {subsection}{\numberline {3.25} Kipu Quantum发布新量子-经典混合框架，推动机器学习模型实现企业级部署 }{29}{subsection.3.25}%
+\contentsline {subsection}{\numberline {3.26} 中国移动集团密集造访中科酷原，深化量子合作，同筑算力未来 }{29}{subsection.3.26}%
+\contentsline {subsection}{\numberline {3.27} PsiQuantum在昆士兰州推进全球首台实用级量子计算机项目建设 }{30}{subsection.3.27}%
+\contentsline {subsection}{\numberline {3.28} 意大利电信运营商Sparkle借助Equinix扩展量子安全连接能力 }{30}{subsection.3.28}%
+\contentsline {subsection}{\numberline {3.29} Quantum X Labs成功将谷歌公开的表面码数据集集成到其量子纠错转换器中 }{31}{subsection.3.29}%
+\contentsline {subsection}{\numberline {3.30} 东芝与Quantum Bridge成功演示基于QKD技术的全球量子安全网络能力 }{31}{subsection.3.30}%
+\contentsline {subsection}{\numberline {3.31} IBM投资10亿美元+10亿CHIPS补贴，成立专注于量子晶圆制造的Anderon公司 }{32}{subsection.3.31}%
+\contentsline {section}{\numberline {4}专利动态}{34}{section.4}%
+\contentsline {subsection}{\numberline {4.1} 低温环境系统 }{34}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1} 用于在低温工作温度下操作一组量子比特的系统和方法 }{34}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2} 一种基于热电转换效应的笔记本电脑废热回收利用系统及方法 }{34}{subsubsection.4.1.2}%
+\contentsline {subsubsection}{\numberline {4.1.3} 温度梯度控制的蒸发造粒塔制备煤基量子碳点缓释肥料的方法 }{35}{subsubsection.4.1.3}%
+\contentsline {subsubsection}{\numberline {4.1.4} 一种高浓度尿素废水中非挥发性酸根定向去除与尿素回收的方法和系统 }{35}{subsubsection.4.1.4}%
+\contentsline {subsubsection}{\numberline {4.1.5} 一种高性能深紫外发光器件及其制备方法 }{36}{subsubsection.4.1.5}%
+\contentsline {subsubsection}{\numberline {4.1.6} 用于量子计算测控的集成滤波放大装置 }{36}{subsubsection.4.1.6}%
+\contentsline {subsection}{\numberline {4.2} 超导量子测控技术 }{37}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1} 量子计算控制装置、量子计算机及量子计算控制方法 }{37}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2} 用于量子计算测控的集成滤波放大装置 }{37}{subsubsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.3} 量子控制信号优化方法、装置、终端设备及存储介质 }{38}{subsubsection.4.2.3}%
+\contentsline {subsubsection}{\numberline {4.2.4} 确定量子比特相互作用的控制序列的方法,以及相关的量子电路、量子器件和解决问题的方法。 }{38}{subsubsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.3} 量子软件与算法 }{39}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1} 量子计算控制装置、量子计算机及量子计算控制方法 }{39}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2} 基于FPGA的蒙特卡罗路径积分-模拟量子退火方法及系统 }{39}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3} 基于量子计算的CNC切削路径优化方法及系统 }{40}{subsubsection.4.3.3}%
+\contentsline {subsubsection}{\numberline {4.3.4} 转译过程中的手动量子比特映射 }{40}{subsubsection.4.3.4}%
+\contentsline {subsubsection}{\numberline {4.3.5} 结合量子计算、博弈论优化及相关方法的射频信号分类装置 }{41}{subsubsection.4.3.5}%
+\contentsline {subsubsection}{\numberline {4.3.6} 量子比特注册表命名空间 }{41}{subsubsection.4.3.6}%
+\contentsline {subsubsection}{\numberline {4.3.7} 一种量子控制器网络通信开销测试方法及系统 }{42}{subsubsection.4.3.7}%
+\contentsline {subsubsection}{\numberline {4.3.8} 量子控制信号优化方法、装置、终端设备及存储介质 }{42}{subsubsection.4.3.8}%
+\contentsline {subsection}{\numberline {4.4} 量子科技长三角产业创新中心 }{43}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1} 一种场路协同仿真方法、系统、介质及电子设备 }{43}{subsubsection.4.4.1}%
+\contentsline {subsubsection}{\numberline {4.4.2} 一种堆叠量子芯片支撑结构 }{43}{subsubsection.4.4.2}%
+\contentsline {section}{\numberline {5}企业资讯}{45}{section.5}%
+\contentsline {subsection}{\numberline {5.1} Eurofiber与Colt凭借量子密钥分发创新荣获LCL运营商社区奖 }{45}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2} Diraq将获美国商务部最高3800万美元资金支持，加速推进硅基量子芯片规模化 }{45}{subsection.5.2}%
+\contentsline {section}{\numberline {6}资本运作}{47}{section.6}%
+\contentsline {subsection}{\numberline {6.1} 芬兰量子算法初创公司Quanscient宣布完成1000万欧元A轮融资 }{47}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2} Terra Quantum将以35亿美元估值通过SPAC方式上市 }{47}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3} 量子投资基金Ground State Ventures将一名投资总监提升为合伙人 }{47}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4} 加拿大资助555万加元发起两项量子挑战，聚焦北极光学地面站与远距离量子中继 }{48}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5} Arqit公布新财务业绩：营收仅62.3万美元，月均运营支出降至260万 }{48}{subsection.6.5}%
+\contentsline {subsection}{\numberline {6.6} SBQuantum获400万加元种子轮融资，加速金刚石量子磁力计商业化 }{48}{subsection.6.6}%
+\contentsline {subsection}{\numberline {6.7} 超导量子整机研发企业上海矩量光启获2亿元天使轮融资 }{49}{subsection.6.7}%
+\contentsline {subsection}{\numberline {6.8} 格芯成立量子技术解决方案部门，并获美国商务部3.75亿美元拨款 }{49}{subsection.6.8}%
+\contentsline {subsection}{\numberline {6.9} 美国商务部拟向Infleqtion资助最高1亿美元，以推动中性原子量子系统研发 }{49}{subsection.6.9}%
+\contentsline {subsection}{\numberline {6.10} 光量子计算公司Xanadu与Yorkville达成3亿美元股权融资计划 }{50}{subsection.6.10}%

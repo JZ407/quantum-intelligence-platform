@@ -1,0 +1,50 @@
+IBM                           :   325
+IonQ                          :   272
+NIST                          :   210
+D-Wave                        :   196
+Rigetti                       :   174
+NVIDIA                        :   160
+DOE/美国能源部                     :   142
+Quantinuum                    :   130
+Google                        :   111
+MIT                           :   108
+Infleqtion                    :   108
+Xanadu                        :   101
+Oxford                        :    99
+Amazon/AWS                    :    96
+芝加哥大学                         :    83
+QuEra                         :    80
+DARPA                         :    77
+NSF                           :    75
+Microsoft                     :    66
+Pasqal                        :    64
+PsiQuantum                    :    56
+Quandela                      :    55
+Fraunhofer                    :    53
+EU/欧盟委员会                      :    52
+中国科大                          :    51
+东芝                            :    47
+富士通                           :    44
+Origin Quantum/本源量子           :    43
+TU Delft                      :    40
+中科院                           :    40
+Intel                         :    36
+VTT                           :    30
+Oxford Ionics                 :    30
+Atom Computing                :    25
+Science                       :    23
+Quantum Motion                :    20
+IMEC                          :    19
+中移动                           :    17
+EuroQCI                       :    17
+白宫                            :    16
+Physical Review               :    14
+Nord Quantique                :    13
+Infineon                      :    12
+三星                            :    11
+G7                            :     8
+麦肯锡                           :     8
+WEF                           :     8
+华为                            :     7
+Nature                        :     6
+IQT                           :     6

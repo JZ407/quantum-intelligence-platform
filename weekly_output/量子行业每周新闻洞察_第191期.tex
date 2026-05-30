@@ -1,0 +1,629 @@
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{fontspec}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{multicol}
+\usepackage{xurl}
+\usepackage{tocloft}
+
+\renewcommand{\cfttoctitlefont}{\hfill\bfseries\Large}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\definecolor{black}{RGB}{0,0,0}
+\definecolor{mainblue}{RGB}{0,82,147}
+\definecolor{accentgold}{RGB}{180,140,60}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{80,80,80}
+\definecolor{mainred}{RGB}{230,1,45}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=mainblue,
+    citecolor=mainblue,
+    pdfborder={0 0 0}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{darkgray}\textbf{量子行业每周新闻洞察}}
+\fancyhead[R]{\small\color{darkgray}\textbf{总第191期}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\titleformat{\section}
+    {\Large\bfseries\color{mainred}}
+    {\thesection、}{0em}{}
+\titleformat{\subsection}
+    {\large\bfseries\color{mainred}}
+    {\thesubsection、}{0em}{}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\begin{document}
+
+% ==================== 封面 ====================
+\begin{titlepage}
+\begin{tikzpicture}[remember picture,overlay]
+    \fill[mainred] ([yshift=-0.5cm]current page.north west) rectangle ([yshift=-1.2cm]current page.north east);
+    \fill[mainred] ([yshift=1.2cm]current page.south west) rectangle ([yshift=0.5cm]current page.south east);
+\end{tikzpicture}
+
+\vspace*{4cm}
+
+\begin{center}
+    {\fontsize{44}{52}\selectfont\bfseries\color{black} \textbf{量子行业每周新闻洞察}}
+
+    \vspace{0.8cm}
+
+    {\fontsize{16}{22}\selectfont\color{darkgray} 2026.05.16 — 2026.05.22 }
+    {\fontsize{16}{22}\selectfont\color{darkgray} \textbf{WEEKLY NEWS}}
+
+    \vspace{1.5cm}
+
+    {\fontsize{20}{26}\selectfont\color{mainred}\textbf{（总第\textbf{ 191 }期）}}
+
+    \vspace{4cm}
+
+    \includegraphics[width=\textwidth]{Cover_Suzhou.png}
+
+    \vfill
+
+    {\fontsize{12}{16}\selectfont\color{darkgray} 量子科技长三角产业创新中心\\编制：战略情报与成果专利室、产业发展部（理事会办公室）}
+\end{center}
+\end{titlepage}
+
+% ==================== 目录 ====================
+\pagenumbering{roman}
+\newpage
+\tableofcontents
+
+\newpage
+
+% ==================== 摘要 ====================
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\begin{center}
+{\Large\bfseries\color{mainred} 摘\hspace{2em}要}
+\end{center}
+\addcontentsline{toc}{section}{摘要}
+
+
+\textbf{ 宏观态势：}
+
+全球对量子技术战略价值的认知正从理论探讨转向风险防范与生态构建。七国集团央行与穆迪接连发出警告，凸显量子计算对金融安全的颠覆性威胁，推动后量子密码成为关键防线。与此同时，各国加速布局，西班牙成立量子联盟，印度启动技能发展计划，美国高校成立首个本科跨学科量子中心，显示出从基础科研到人才培养的全链条生态正在形成。美国能源部剑指2028年前部署科学级容错量子计算机，表明主要国家已确立明确的实用化时间表。
+
+
+\textbf{ 科技前沿：}
+
+前沿探索呈现出硬件与算法并进、基础与应用交融的态势。在硬件层面，中国科大在碳化硅色心制备和复旦大学对量子场论缺陷的研究，展示了基础物理的纵深突破；韩国室温量子光源和德国量子点器件的进展，则为量子光源实用化提供新路径。在算法与系统层面，Xanadu的算法突破可将关键门数量减半，BNB Chain将后量子密码引入加密基础设施，预示着量子科技正从实验室局部突破迈向系统级集成验证，能源效率也成为新的关注焦点。
+
+
+\textbf{ 产品动态：}
+
+行业正密集跨越从实验室原型到商用部署的鸿沟，呈现多元化落地景象。量子计算方面，PsiQuantum在澳洲推进首台实用级量子计算机，MAQCS项目致力于中性原子计算机与超算的集成，Imec则首次用高数值孔径极紫外光刻制造量子比特器件，标志着工程化进程的里程碑。量子安全领域更为活跃，东芝与Quantum Bridge演示了全球量子安全网络，西部数据和KT则分别在存储与国防系统中启动后量子密码迁移，实用化进程显著提速。
+
+
+\textbf{ 企业资讯：}
+
+企业间的合作与荣誉凸显量子安全正从技术研发走向产业实践与市场认可。Eurofiber与Colt凭借量子密钥分发创新获奖，表明电信运营商已将量子安全视为核心网络服务的差异化优势。三井住友银行与东芝合作开发量子驱动的金融指数，展示了量子技术向金融应用场景的渗透。Diraq获得美国政府巨额资金支持，以及Quantum Bridge的融资和Quantum eMotion的芯片联盟，均反映出硅基量子芯片和后量子硬件安全方案正成为产业布局和资本追逐的新焦点。
+
+
+\textbf{ 资本运作：}
+
+资本力量正以前所未有的力度和精准度驱动量子竞赛升级。美国商务部向Infleqtion拟资助高达1亿美元，重点押注中性原子量子系统路线，显示官方资本对特定技术路径的战略性扶持。Xanadu与Yorkville达成的3亿美元股权融资计划和Nord Quantique的最新估值，表明光量子与容错量子计算仍是资本市场的吸金热点。欧洲启动的跨成员国光学地面站网络项目，则体现了区域联合投资在量子通信基础设施建设中的关键作用。
+
+
+
+
+
+
+% ==================== 会议列表 ====================
+{
+    \newpage
+    \section*{ 5月量子科技行业国内、国际会议}
+    \addcontentsline{toc}{section}{ 5月量子科技行业国内、国际会议}
+    \scriptsize
+    \begin{longtable}{C{0.8cm}L{2.5cm}L{3cm}L{7cm}}
+        \toprule[1.5pt]
+        \textbf{序号} & \textbf{日期} & \textbf{地点} & \textbf{会议名称} \\
+        \midrule
+        \endfirsthead
+        \toprule
+        \textbf{序号} & \textbf{日期} & \textbf{地点} & \textbf{会议名称} \\
+        \midrule
+        \endhead
+        \bottomrule
+        \endfoot
+        
+        1 & 5月4日-7日 & 圣巴巴拉, 美国 & 超越门型量子计算：定义容错前时代的量子优势 \\
+        \midrule[0.05pt]
+        
+        2 & 5月8日-10日 & 格拉纳达, 西班牙 & 量子人工智能研讨会 \\
+        \midrule[0.05pt]
+        
+        3 & 5月8日-10日 & 格拉纳达, 西班牙 & 2026年国际量子计算与人工智能会议（ICQCAI） \\
+        \midrule[0.05pt]
+        
+        4 & 5月13日 & 哈威尔, 英国 & NQCC软件工程会议2026 \\
+        \midrule[0.05pt]
+        
+        5 & 5月13日-15日 & 博尔德, 美国 & 量子预标准化研讨会：量子技术计量学 \\
+        \midrule[0.05pt]
+        
+        6 & 5月17日-21日 & 夏洛特, 美国 & 激光与电光学会议2026（CLEO 2026） \\
+        \midrule[0.05pt]
+        
+        7 & 5月18日 & 埃文斯顿, 美国 & 使用PsiQuantum构建容错量子算法 \\
+        \midrule[0.05pt]
+        
+        8 & 5月18日-19日 & 东京, 日本 & ICEPP-QUP量子研讨会2026 \\
+        \midrule[0.05pt]
+        
+        9 & 5月18日-20日 & 毕尔巴鄂, 西班牙 & Q-Expo 2026 \\
+        \midrule[0.05pt]
+        
+        10 & 5月18日-21日 & 乔木提恩, 泰国 & 第2届暹罗量子科学与技术国际会议（SQST） \\
+        \midrule[0.05pt]
+        
+        11 & 5月18日-22日 & 巴塞罗那, 西班牙 & 第3届量子能源倡议研讨会 \\
+        \midrule[0.05pt]
+        
+        12 & 5月18日-22日 & 圣塞巴斯蒂安, 西班牙 & 量子计算、复杂性与控制2026（QCCC） \\
+        \midrule[0.05pt]
+        
+        13 & 5月19日-21日 & 阿姆斯特丹, 荷兰 & Quantum Meets 2026 \\
+        \midrule[0.05pt]
+        
+        14 & 5月19日-21日 & 厄巴纳-香槟, 美国 & 伊利诺伊大学量子电路会议：超导量子电路的挑战与前沿 \\
+        \midrule[0.05pt]
+        
+        15 & 5月19日-21日 & 林茨, 奥地利 & 林茨量子传感2026（QSL26） \\
+        \midrule[0.05pt]
+        
+        16 & 5月20日-22日 & 帕多瓦, 意大利 & 帕多瓦空间量子信息研讨会2026 \\
+        \midrule[0.05pt]
+        
+        17 & 5月21日 & 线上, 德国 & 开放互操作量子计算生态系统研讨会 \\
+        \midrule[0.05pt]
+        
+        18 & 5月22日-26日 & 锡根, 德国 & PenteQost 量子科学春季学校 2026 \\
+        \midrule[0.05pt]
+        
+        19 & 5月24日 & 格拉斯哥, 英国 & 超越6G：地面、非地面与量子网络融合 \\
+        \midrule[0.05pt]
+        
+        20 & 5月24日-29日 & 萨巴尔莫奥斯泰格, 英国 & 高等量子信息学春季学校 \\
+        \midrule[0.05pt]
+        
+        21 & 5月24日-30日 & 波利卡, 意大利 & 量子计算时代的介观物理 \\
+        \midrule[0.05pt]
+        
+        22 & 5月24日-6月6日 & 贝纳斯克, 西班牙 & 原子电子学 \\
+        \midrule[0.05pt]
+        
+        23 & 5月25日-29日 & 曼谷, 泰国 & 第28届高能物理与核物理计算会议 \\
+        \midrule[0.05pt]
+        
+        24 & 5月25日-29日 & 线上, 波兰 & 量子计算与编程研讨会 \\
+        \midrule[0.05pt]
+        
+        25 & 5月25日-29日 & 滑铁卢, 加拿大 & 量子信息物理学 II \\
+        \midrule[0.05pt]
+        
+        26 & 5月25日-6月5日 & 滑铁卢, 加拿大 & 实验量子信息处理本科生学校 \\
+        \midrule[0.05pt]
+        
+        27 & 5月25日-6月5日 & 哥德堡, 瑞典 & 第三届巨型原子发射器量子光学国际研讨会 \\
+        \midrule[0.05pt]
+        
+        28 & 5月28日 & 帕萨迪纳, 美国 & 量子工程研讨会 2026 \\
+        \midrule[0.05pt]
+        
+    \end{longtable}
+}
+
+
+
+
+% ==================== 宏观态势 ====================
+\newpage
+\section{宏观态势}
+\vspace{-0.5em}
+\noindent\rule{\linewidth}{1.5pt}
+
+\subsection{ 七国集团G7央行发布首份量子技术报告 }
+
+2026年05月22日消息，七国集团中央银行发布首份关于量子技术及其对金融体系潜在影响的报告。这份题为《迎接量子技术：金融行业关键考量》的报告，探讨了这些创新带来的机遇与风险，重点阐述了对安全性、韧性、市场运作和信息技术处理能力的潜在影响。该报告旨在提供一个共同的分析框架，以支持各央行和金融行业行业相关方应对量子技术发展所带来的挑战。
+此项工作由量子技术工作组（QTWG）开展。该工作组于2025年成立，成员由七国集团各央行组成，由法国央行和加拿大央行共同主持。工作组旨在围绕这一新兴议题推动公共机构、金融行业和技术运营商之间的对话。
+
+\noindent\textbf{报道链接：}\url{ https://www.bancaditalia.it/media/notizia/g7-central-banks-publish-first-report-on-quantum-technologies/?dotcache=refresh }
+
+\subsection{ 西班牙成立量子联盟以推动量子技术生态系统发展 }
+
+西班牙53家机构在毕尔巴鄂成立“西班牙量子联盟”（SQuA），旨在加速量子技术工业创新与研发，覆盖所有技术成熟度，力争成为欧洲及全球标杆。此举响应欧盟整合量子生态的呼声，以抓住麦肯锡预测2035年可达千亿美元的全球量子市场机遇。
+
+\noindent\textbf{报道链接：}\url{ https://qsnp.eu/squa-is-born-the-spanish-association-that-brings-together-the-quantum-technologies-ecosystem/ }
+
+\subsection{ 穆迪公司警告称：量子计算威胁将重塑全球数字金融风险 }
+
+2026年05月21日消息，穆迪公司在一份新报告中表示，随着数字资产基础设施逐步进入主流金融市场，金融机构正将量子计算视为未来可能带来运营及系统性影响的网络安全风险。该报告指出，摩根大通和汇丰银行等主要金融机构已开始测试后量子密码学、加密敏捷系统以及量子安全通信技术。同时，随着基于区块链的金融系统日益互联且不可逆，美国、欧洲和亚洲的监管机构正加大对网络韧性及后量子准备工作的关注。
+
+\noindent\textbf{报道链接：}\url{ https://thequantuminsider.com/2026/05/20/moodys-report-warns-quantum-threat-could-reshape-digital-finance-risk/ }
+
+\subsection{ HiPEQ项目团队开发出面向量子技术应用的高稳定性微型激光光源 }
+
+2026年05月21日消息，在名为HiPEQ的项目中，由产业界与科研机构组成的一个联合团队开发了多种基于激光的技术方案，以实现面向量子技术应用的小型化、高稳定性激光源。在研究过程中，该团队还利用激光生长了新型光学绝缘晶体。该项目由TOPTICA负责协调推进。据研究团队称，他们已完成两款小型化激光源原型机的开发，其外部尺寸仅为22×9×6立方厘米，并集成了全部系统组件。此外，该设计还可适配不同波长，可应用于多种量子技术场景。
+
+\noindent\textbf{报道链接：}\url{ https://www.ilt.fraunhofer.de/en/press/press-releases/2026/5-19-hipeq-crystal-growth-for-quantum-technology.html }
+
+\subsection{ Quantinuum与Synopsys达成战略合作，将推进量子计算在工业设计中的应用 }
+
+2026年05月21日消息，量子计算公司Quantinuum日前宣布与电子设计自动化及工程仿真领域的领先企业Synopsys达成战略合作，双方将重点推动将量子计算融入现代工程工具体系，以应对被认为正限制工业创新速度的“计算壁垒”。根据合作规划，双方将构建可扩展的端到端工作流程，使量子算法能够直接集成至现有工业软件及相关库中。
+
+\noindent\textbf{报道链接：}\url{ https://www.quantinuum.com/press-releases/quantinuum-announces-collaboration-with-synopsys-toward-advancing-industrial-design-with-quantum-computing }
+
+\subsection{ 九种候选方案晋级后量子密码标准化流程附加数字签名第三轮评选 }
+
+2026年05月19日消息，经过18个月的评估，美国国家标准与技术研究院（NIST）已从后量子密码（PQC）标准化流程的额外数字签名方案中遴选出九项候选算法，进入第三轮评选。入选的数字签名算法包括：FAEST、HAWK、MAYO、MQOM、QR-UOV、SDitH、SNOVA、SQIsign、UOV。
+NIST内部报告（IR）8610详细阐述了评估标准与遴选流程。这些第三轮候选算法将有机会提交更新后的技术规范与实现方案（即“优化调整”）。NIST将另行向各提交团队提供具体细则。第三轮评估与审核阶段预计将持续约两年时间。
+NIST还计划于2027年春末夏初举办第七届NIST PQC标准化会议。会议地点很可能设在马里兰州盖瑟斯堡市内或周边地区。
+
+\noindent\textbf{报道链接：}\url{ https://csrc.nist.gov/News/2026/nist-advances-9-candidates-to-the-3rd-round-of-pqc }
+
+\subsection{ QNu Labs被MarketsandMarkets评为量子密钥分发市场的明星企业 }
+
+QNu Labs在360Quadrants平台被评为量子密钥分发市场“明星公司”。其Armos QKD方案利用量子力学保障密钥安全交换，近期在印度国家量子使命下成功演示长达1000公里的量子通信网络，并在国防等领域推动抗量子安全框架。
+
+\noindent\textbf{报道链接：}\url{ https://www.prnewswire.com/news-releases/qnu-labs-is-recognized-as-a-star-player-in-the-marketsandmarkets-360quadrants-for-the-quantum-key-distribution-qkd-market-302772109.html }
+
+\subsection{ 用于集成量子光子学的超导单光子探测器 }
+
+2026年05月16日消息，单光子探测能力是量子技术（包括量子通信、量子计算和量子传感）的一项基本要求。为实现可扩展性和实际部署，将探测器与光子集成电路集成正受到越来越多的关注，因为光子集成电路具有紧凑性和与大规模生产的兼容性。超导纳米线单光子探测器已成为领先的解决方案，它兼具接近完美的效率、高时间性能，并能够嵌入到广泛的光子材料平台中。在这篇综述中，该团队追溯了集成超导纳米线单光子探测器从早期演示到最新进展的发展历程，概述了器件架构、材料工程和集成策略方面的进展。该研究还讨论了性能基准、新兴的替代设计方案，以及这一快速发展的领域所面临的未来机遇与挑战。
+
+\noindent\textbf{报道链接：}\url{ https://arxiv.org/abs/2605.14829 }
+
+\subsection{ 美国能源部发布容错量子计算RFI通知，剑指2028年前部署科学级FTQC系统 }
+
+2026年05月19日消息，美国能源部（DOE）日前已发布信息征求请求（RFI），面向有能力在2028年前部署科学上具有实际意义的容错量子计算（FTQC）系统的公司。此次RFI旨在进行市场调研，为战略规划、项目设计及未来资助提供参考，同时显示了DOE计划从实验性NISQ设备向可靠、实用的量子计算基础设施转型。据悉，此RFI重点关注FTQC系统在解决DOE关键科学任务中的应用潜力。美国能源部预计，到2030年代初至中期，实现等离子体物理、高能物理等领域的广泛科研应用，将需要超过1000个逻辑量子比特和约109次硬件门操作。
+
+\noindent\textbf{报道链接：}\url{ https://quantumcomputingreport.com/u-s-department-of-energy-issues-rfi-for-2028-fault-tolerant-quantum-computer/ }
+
+\subsection{ 印度马哈拉施特拉邦启动量子技术技能发展计划，多方机构参与共建 }
+
+2026年05月19日消息，印度马哈拉施特拉邦政府上周五批准了一项州级量子技术与技能发展计划，该计划与印度中央政府的国家量子任务保持一致。根据该计划，印度科学教育与研究学院浦那分校的I-Hub量子技术基金会将作为核心机构牵头实施，参与机构包括印度浦那科技大学工程学院、巴巴萨海布·安贝德卡理工大学、维尔马塔·吉贾拜技术学院和维斯瓦拉亚理工大学。该州政府表示，资助资金将用于在各参与机构建设量子技术实验室、搭建高性能计算和仿真设施、开发云平台，并提供专业培训，以支持量子技术研究和人才培养。
+
+\noindent\textbf{报道链接：}\url{ https://www.hindustantimes.com/cities/pune-news/quantum-tech-training-hub-to-come-up-at-iiser-pune-101778957495435-amp.html }
+
+\subsection{ 克莱姆森大学获65万美元资助，支持打造可扩展量子计算系统实验室 }
+
+2026年05月19日消息，美国克莱姆森大学日前启动了一项65万美元计划，支持可扩展高性能与量子计算系统实验室（ScaLab），以提升南卡罗来纳州的量子研究能力，并优化量子程序在实际硬件上的执行效果。据了解，该计划延续了南卡罗来纳州在量子信息科学与技术领域的早期投资。2023年，该州政府承诺投入1500万美元，以推动各机构和产业的量子准备工作。ScaLab的建设体现了其向持续、项目驱动型研究的转型，既增强了技术深度，也完善了支撑州内长期量子能力的人才队伍与科研基础设施。
+
+\noindent\textbf{报道链接：}\url{ https://www.scquantum.org/news/clemson-university-advances-quantum-software-research-through-650000-initiative-focused-real }
+
+\subsection{ 伊利诺伊卫斯理大学成立全美首个本科跨学科量子中心 }
+
+2026年05月19日消息，美国伊利诺伊卫斯理大学日前宣布成立费舍尔跨学科量子科学与工程中心，这是首个面向本科生的跨学科量子项目，整合了多个学科领域教育，旨在培养学生在量子科技这一新兴领域的职业能力。费舍尔量子中心的建立，使伊利诺伊卫斯理大学成为了美国首所开设跨学科量子课程的文理本科院校，同时也将该校及所在州确立为量子科技领域的重要参与力量。
+
+\noindent\textbf{报道链接：}\url{ https://www.iwu.edu/news/2026/illinois-wesleyan-announces-interdisciplinary-undergraduate-quantum-science-engineering-center.html }
+
+\subsection{ 七国集团警告量子风险：金融安全面临变革，后量子密码成关键防线 }
+
+2026年05月19日消息，七国集团（G7）在一份报告中警告称，量子技术可能在未来改变金融安全、支付系统及市场基础设施，这促使金融机构开始应对长期风险和潜在运营变革。该报告指出，后量子密码技术是防范未来量子攻击、保护金融系统的核心手段，但相关迁移将涉及互联系统和供应商之间的复杂协调。同时，G7强调，量子技术在投资组合优化、欺诈检测和宏观经济建模等领域仍处于实验阶段，相关技术挑战、治理问题及集中化风险尚未解决。
+
+\noindent\textbf{报道链接：}\url{ https://thequantuminsider.com/2026/05/18/the-good-the-bad-and-the-buggy-g7-paper-outlines-promises-and-threats-of-quantum-tech-for-the-financial-system/ }
+
+
+% ==================== 科技前沿 ====================
+\newpage
+\section{科技前沿}
+\vspace{-0.5em}
+\noindent\rule{\linewidth}{1.5pt}
+
+\subsection{ Xanadu量子技术公司宣布QROM算法突破，可将Toffoli门数量减半 }
+
+Xanadu宣布在量子只读存储器（QROM）算法上突破，将执行高级量子应用所需的Toffoli门数量减少约一半，直接克服近期容错量子计算机的硬件瓶颈，打破该领域七年无进展的僵局，显著降低资源需求。
+
+\noindent\textbf{报道链接：}\url{ https://www.prnewswire.com/news-releases/xanadu-breakthrough-lowers-the-cost-of-quantum-applications-302778615.html }
+
+\subsection{ Infleqtion公布多项量子计算研究进展，持续推进其实用级容错量子计算路线 }
+
+2026年05月22日消息，Infleqtion公司昨日公布了多项量子计算研究进展，进一步推进了其实用级容错量子计算路线。这些相关成果包括：发布开源架构级资源估算工具resource-superstaq；实现创纪录的铷-铯双物种纠缠门操作；由Infleqtion量子信息首席科学家Mark Saffman教授共同参与的最新理论预印本提出了实现超过99.9\%保真度中性原子纠缠门的路径；以及一种用于亚多普勒冷却和光学原子传输的静态磁场方法。
+
+\noindent\textbf{报道链接：}\url{ https://infleqtion.com/infleqtion-strengthens-neutral-atom-quantum-computing-platform-with-new-technical-breakthroughs/ }
+
+\subsection{ 中国科大实现碳化硅氧-空位色心的高效制备与结构识别 }
+
+中国科大郭光灿团队与匈牙利合作，发展氧离子注入法高效制备4H-碳化硅中四类氧相关改性双空位色心，并通过同位素分辨测量直接确认其为氧-空位色心。该成果解决了此类色心可控、规模化制备与微观结构识别的两大瓶颈，发表于《先进材料》。
+
+\noindent\textbf{报道链接：}\url{ https://doi.org/10.1002/adma.73419 }
+
+\subsection{ 半导体元件界面工程实现无电压量子电子态双向调控 }
+
+台大物理系邱雅萍团队在《自然通讯》发表成果，利用半金属铋纳米薄膜与二维半导体MoS2的界面工程，结合莫尔位能与量子局限效应，无需外加电压即可在水平和垂直方向精准调控电子空间排列，为超低功耗电荷量子位及下一代芯片提供新方向。
+
+\noindent\textbf{报道链接：}\url{ http://www.qtc.com.cn/article/177933594432781.html }
+
+\subsection{ 复旦大学周洋课题组揭示量子场论中“缺陷”对基态能量与纠缠结构的普适贡献 }
+
+复旦大学周洋课题组在《物理评论快报》发文，揭示六维(2,0)超共形场论中1/2-BPS Wilson面缺陷的Weyl反常可普适决定缺陷对卡西米尔能量和Rényi熵的贡献，通过场论局域化、等变积分及全息计算三种方法印证，为高维量子场论缺陷研究提供重要进展。
+
+\noindent\textbf{报道链接：}\url{ https://journals.aps.org/prl/abstract/10.1103/fz81-ysss }
+
+\subsection{ UCSB科学家首次在扭曲二硒化钨超晶格中观测到奇异的中性电荷准粒子 }
+
+2026年05月20日消息，美国加州大学圣塔芭芭拉分校（UCSB）的研究人员首次在扭曲二硒化钨超晶格中观测到戈德斯通模。据介绍，这是一种不携带电荷且难以探测的准粒子，与超导等量子现象及其他集体量子行为密切相关。该研究团队利用超快成像技术，直接捕捉到了相关集体激发过程。研究人员表示，该方法突破了传统光学测量的局限，使他们能够获取更多动态信息。相关研究成果已于日前发表在《自然·物理》期刊。
+
+\noindent\textbf{报道链接：}\url{ https://news.ucsb.edu/2026/022575/first-time-direct-observation-exotic-charge-neutral-quasiparticles-twisted-tungsten }
+
+\subsection{ 德累斯顿工业大学正式启用两个新研究实验室 包括一个量子实验室 }
+
+德累斯顿工业大学在资助下启用“量子通信、计算与传感实验室”，聚焦三领域集成，旨在开发6G等新型网络架构。该跨学科方法力图超越孤立应用，创建通信、计算与传感协同的集成系统，以解锁商业潜能。
+
+\noindent\textbf{报道链接：}\url{ https://www.squad-germany.de/en/new-quantum-lab-at-tu-dresden/ }
+
+\subsection{ 量子计算机的能源效率 }
+
+2026年05月16日消息，量子计算机消耗多少能量？它们比经典计算机更高效吗？在这项工作中，研究人员中，该团队朝着回答这些问题迈出了一步。研究人员将量子计算机的能效定义为：在给定时间内其能执行的算法数量与硬件在此期间硬件消耗的能量之比。研究人员分析了目前设想的五种最具代表性的物理平台进行了分析，这些平台被视为量子计算机的构建单元：超导量子比特、硅自旋量子比特、离子阱、中性原子和光子量子比特。结合来自所有上述技术领域专家的见解专家的意见，并考虑算法编译约束也被纳入考量，该团队从能源角度讨论了每种平台的优缺点。除了提供当前。除了提供量子计算机能耗的具体数值，该团队还为一个框架奠定了基础，该框架可用于衡量任何未来量子计算机架构的能效。
+
+\noindent\textbf{报道链接：}\url{ https://arxiv.org/abs/2605.15090 }
+
+\subsection{ BNB Chain完成加密基础设施升级，引入后量子密码抵御量子计算威胁 }
+
+2026年05月19日消息，BNB Chain日前宣布完成加密基础设施升级，引入后量子密码技术以增强网络安全，应对未来量子计算可能带来的威胁。据了解，升级内容包括ML DSA 44，这是一种基于格的数字签名算法，由美国国家标准与技术研究院（NIST）于2024年标准化，同时还引入了pqSTARK聚合技术用于区块链共识操作。在新框架下，BNB Chain已用ML DSA 44替代原有的ECDSA secp256k1签名系统进行交易认证，网络内的共识投票聚合也依靠pqSTARK技术实现了对大规模加密证明集的更高效压缩和验证。
+
+\noindent\textbf{报道链接：}\url{ https://www.cointrust.com/market-news/bnb-chain-adopts-post-quantum-security-upgrade }
+
+\subsection{ 韩国联合研究团队开发新型量子光源 室温下可发射明亮光信号 }
+
+2026年05月19日消息，韩国基础科学研究院（IBS）多维碳材料中心的一个联合研究团队最近成功研制出一种高效率量子光源，它可在室温下发射明亮光信号。据研究人员称，这一成果突破了二维半导体长期存在的局限。由于二维半导体是原子级厚的材料，通常比人类头发细约十万倍，以往要实现高效发光，需要依赖低温环境或复杂电控结构。相关研究成果已于日前发表在《科学进展》期刊。
+
+\noindent\textbf{报道链接：}\url{ https://ibs.re.kr/cop/bbs/BBSMSTR\_000000000738/selectBoardArticle.do;jsessionid=A737976C75203FB4AD235825DFFF716C?nttId=26633\&pageIndex=1\&searchCnd=\&searchWrd= }
+
+
+% ==================== 产品动态 ====================
+\newpage
+\section{产品动态}
+\vspace{-0.5em}
+\noindent\rule{\linewidth}{1.5pt}
+
+\subsection{ Kipu Quantum发布新量子-经典混合框架，推动机器学习模型实现企业级部署 }
+
+2026年05月22日消息，近日，Kipu Quantum发布了全新的量子-经典混合框架。该框架允许在量子处理器上训练量子增强型机器学习模型，并完全部署在经典硬件上，运行速度、成本和运营特性均能满足企业级生产流水线的要求。量子特征提取已在多项经同行评审的研究中得到研究，其能比经典特征工程生成更丰富的数据表示。Kipu Quantum与其他团队合作已在IBM量子处理器（包括156量子比特的Heron r2量子处理器）上验证了这一结论。
+
+\noindent\textbf{报道链接：}\url{ https://kipu-quantum.com/news/quantum-enhanced-ai-production }
+
+\subsection{ 中国移动集团密集造访中科酷原，深化量子合作，同筑算力未来 }
+
+中国移动集团、湖北公司及香港MyLink高层一周内密集考察中科酷原，参观“汉原”系列原子量子计算与精密测量产品线。各方高度认可其中性原子量子计算技术实力与商业化成果，并围绕测控软件系统开发等方向研讨，深化战略合作。
+
+\noindent\textbf{报道链接：}\url{ https://mp.weixin.qq.com/s/IUUFzeFvqVqERKUYa4vvsQ }
+
+\subsection{ PsiQuantum在昆士兰州推进全球首台实用级量子计算机项目建设 }
+
+2026年05月22日消息，PsiQuantum公司昨日宣布，在澳大利亚昆士兰州莫顿湾中心推进全球首台实用级量子计算机项目建设。目前，项目前期工程已启动，更多早期施工工作将在未来数周内展开，正式动工仪式预计于6月举行。据悉，为落实能够满足实用级量子计算基础设施与运营需求的建设地点，PsiQuantum此前已与莫顿湾市政府进行了密切合作。
+
+\noindent\textbf{报道链接：}\url{ https://www.psiquantum.com/news-import/psiquantum-unveils-new-australian-site-at-moreton-bay-central }
+
+\subsection{ 意大利电信运营商Sparkle借助Equinix扩展量子安全连接能力 }
+
+Sparkle的量子安全互连（QSI）服务已覆盖欧洲、美洲及亚洲20个Equinix数据中心站点。该软件覆盖方案基于IPsec隧道，可为VPN、混合云等提供量子安全保护，支持灵活网络即服务模式，帮助企业逐步向抗量子连接转型。
+
+\noindent\textbf{报道链接：}\url{ https://www.tisparkle.com/media/press-release/sparkle-expands-quantum-safe-connectivity-equinix }
+
+\subsection{ Quantum X Labs成功将谷歌公开的表面码数据集集成到其量子纠错转换器中 }
+
+2026年05月22日消息，Quantum X Labs公司日前宣布，其持股30\%的子公司已成功交付一套集成层，可将谷歌Quantum AI公开发布的实验性表面码数据集接入其量子纠错（QECC）Transformer流程中，该相关知识产权目前处于专利申请阶段。据了解，该基于Transformer的量子解码技术面向先进量子纠错应用开发，包括云部署神经解码器。相关解码器知识产权由以色列特拉维夫大学技术转移公司Ramot授权，目前同样处于专利申请阶段。
+
+\noindent\textbf{报道链接：}\url{ https://www.globenewswire.com/news-release/2026/05/21/3299300/0/en/quantum-x-labs-successfully-integrates-google-s-public-surface-code-dataset-into-its-deep-quantum-error-correction-transformer.html }
+
+\subsection{ 东芝与Quantum Bridge成功演示基于QKD技术的全球量子安全网络能力 }
+
+2026年05月22日消息，东芝欧洲有限公司与Quantum Bridge Technologies Inc.（QBT）最近联合宣布，双方已成功演示一项国际通信网络，实现了可证明安全的量子安全数据传输。据了解，该系统部署于实地光纤基础设施之上，并在KDDI Corporation旗下子公司的协作下完成。据悉，该系统整合了东芝的量子密钥分发（QKD）技术与QBT的分布式对称密钥建立平台。
+
+\noindent\textbf{报道链接：}\url{ https://www.toshiba.eu/quantum/news/toshiba-europe-limited-and-quantum-bridge-technologies-demonstrate-global-quantum-safe-networking-capability/ }
+
+\subsection{ IBM投资10亿美元+10亿CHIPS补贴，成立专注于量子晶圆制造的Anderon公司 }
+
+IBM与美国商务部达成意向，将获10亿美元CHIPS激励，并投入10亿美元现金及资产，共同成立独立公司Anderon，在纽约州奥尔巴尼建设美国首个300毫米量子晶圆代工厂，旨在巩固美国量子领导地位，抢占预计2040年达8500亿美元的市场。
+
+\noindent\textbf{报道链接：}\url{ https://newsroom.ibm.com/ibm-and-u-s-department-of-commerce-announce-americas-first-purpose-built-quantum-foundry }
+
+\subsection{ 瑞典科学家开发的新型芯片可模拟量子系统与周围环境的交互行为 }
+
+2026年05月21日消息，瑞典皇家理工学院（KTH）一个研究团队开发出一款用于量子系统模拟的芯片，可模拟多种量子系统在与周围环境发生能量或信息交换时的行为过程。研究人员表示，该成果进一步增强了量子计算机在量子系统及自然界量子过程模拟方面的应用潜力。据他们介绍，该研究利用芯片中的光粒子（光子）作为被模拟系统中粒子的替代对象，并通过对这一高度可控的量子系统，重现并研究了其他类型系统中的光子行为。相关研究成果已于日前发表在《自然·通讯》期刊。
+
+\noindent\textbf{报道链接：}\url{ https://via.tt.se/pressmeddelande/4386261/new-chip-offers-way-to-make-use-of-quantum-system-imperfections?publisherId=3236652\&lang=en }
+
+\subsection{ MAQCS项目将实现1000量子比特中性原子计算机与HPC设施集成 }
+
+2026年05月21日消息，德国联邦教育、研究与技术部（BMFTR）资助的MAQCS项目，总投资2000万欧元，计划在德国莱布尼茨计算中心（LRZ）开发并部署一台完全数字化的1000量子比特中性原子量子计算机。据悉，该系统基于排列在光学晶格中的中性原子构建，形成可通用编程的量子计算架构。当量子比特数量突破1000阈值后，系统将为相关应用提供更强的计算基础。该项目目标达是到技术就绪等级TRL 6，使该量子计算机从实验室装置转变为完全集成的量子加速器，并嵌入在LRZ的高性能计算（HPC）生态系统中。在应用层面，LRZ用户将可通过云接口实现访问。系统集成由慕尼黑量子软件栈（MQSS）支持，以实现量子硬件与HPC工作流的紧密耦合。
+
+\noindent\textbf{报道链接：}\url{ https://planqc.eu/technology/maqcs-custom-system }
+
+\subsection{ 西班牙BSC-CNS超算中心已部署并集成一枚35量子比特超导量子芯片 }
+
+2026年05月21日消息，西班牙巴塞罗那超级计算中心—国家超级计算中心（BSC-CNS）日前宣布，其量子分区MareNostrum Ona通过新部署一枚35量子比特芯片，进一步推进了其量子计算基础设施的建设。该系统采用100\%欧洲技术开发，并由西班牙联合体Qilimanjaro-GMV完成安装与调试。它采用开放访问模式，BSC也由此成为欧洲部署此类量子系统的重要机构之一。该量子系统基于超导技术，并已集成至MareNostrum 5超级计算机，可用于探索融合经典计算与量子计算能力的新型计算模式。
+
+\noindent\textbf{报道链接：}\url{ https://www.hpcwire.com/off-the-wire/bsc-expands-its-quantum-computer-capacity-and-consolidates-open-access-infrastructure/ }
+
+\subsection{ Terra Quantum在马耳他现有电信网络中成功部署其量子密钥分发系统 }
+
+2026年05月21日消息，Terra Quantum最近在马耳他的一个现有电信光纤网络中成功部署了其量子密钥分发（QKD）系统，并通过与Merqury Cybersecurity合作，在两座数据中心间建立了量子安全通信链路。该部署属于欧洲量子通信基础设施（EuroQCI）计划下PRISM项目的一部分。据悉，该项目的核心目标之一，是验证量子安全通信能够在已承载业务的光纤基础设施上运行，而无需依赖专用暗光纤。
+
+\noindent\textbf{报道链接：}\url{ https://terraquantum.swiss/news/terra-quantum-deploys-quantum-secure-network-link-in-malta/ }
+
+\subsection{ 日本研究人员利用反铁磁材料开发出非易失性量子开关器件 }
+
+2026年05月20日消息，来自东京大学与日本理化学研究所（RIKEN）的研究人员利用反铁磁材料Mn3Sn，演示了一种由40皮秒电脉冲驱动的非易失性量子开关器件。他们的研究结果表明，自旋轨道力矩能够实现超高速开关，并相比传统方案降低了热量产生、提升了器件耐久性。此外，该研究团队还通过60皮秒光电流脉冲实现了开关操作，为光信号与非易失性自旋电子存储系统间构建了潜的在关联。
+
+\noindent\textbf{报道链接：}\url{ https://www.s.u-tokyo.ac.jp/en/press/11143/ }
+
+\subsection{ 德国科学家在基于半导体量子点的量子光源研究方面取得重要进展 }
+
+德国QR.N联盟研究人员首次实现来自不同半导体量子点的光子量子态隐形传态。他们利用量子点产生单光子和纠缠对，通过精确匹配光子特性与精细激光操控，为未来量子中继器和量子互联网迈出重要一步，成果发表于《自然·通讯》。
+
+\noindent\textbf{报道链接：}\url{ https://www.squad-germany.de/en/new-article-on-quantum-teleportation-published-2/ }
+
+\subsection{ 全球首例：Imec展示采用高数值孔径极紫外光刻技术的量子点量子比特器件 }
+
+imec在ITF World展示全球首个用High NA EUV光刻技术制造的量子点量子比特器件。该团队利用硅量子点与CMOS工艺兼容优势，制造出功能性量子比特，为实现可扩展、高可靠量子比特的工业化迈出里程碑。
+
+\noindent\textbf{报道链接：}\url{ https://www.imec-int.com/en/press/world-first-imec-presents-quantum-dot-qubit-device-using-high-na-euv-lithography }
+
+\subsection{ 西部数据推出基于后量子密码学技术的升级版Ultrastar硬盘 }
+
+2026年05月20日消息，西部数据（Western Digital）日前宣布，它已在最新高容量Ultrastar UltraSMR硬盘中集成后量子密码学（PQC）技术，以提升下一代数据基础设施的安全能力。其中，新款Ultrastar DC HC6100 UltraSMR硬盘采用的PQC方案，旨在保障设备从制造到现场维护全过程中的信任链安全。在加密方案方面，该系统采用ML-DSA-87（NIST FIPS 204）来实现高安全等级的代码签名，并结合RSA-3072实现双重签名机制，通过融合现有与新兴加密标准，这增强了整体安全防护能力。
+
+\noindent\textbf{报道链接：}\url{ https://www.westerndigital.com/en-kw/company/newsroom/press-releases/2026/2026-05-18-wd-advances-next-generation-trusted-infrastructure-with-post-quantum-cryptography }
+
+\subsection{ 韩国电信KT宣布今年启动后量子密码试点迁移，将应用于关键国防系统 }
+
+2026年05月20日消息，韩国电信公司（KT）日前表示，它将在今年的试点迁移计划中把后量子密码学（PQC）技术应用于关键国防系统。据悉，该计划名为“2026后量子密码学试点迁移支持项目”，由韩国科学技术信息通信部、韩国互联网与安全局牵头推进。该项目旨在应对量子计算技术发展带来的安全风险，并通过测试与验证抗量子加密技术，为其在国家关键基础设施中的应用提供支持。
+
+\noindent\textbf{报道链接：}\url{ https://www.telecompaper.com/news/kt-to-deploy-post-quantum-cryptography-across-south-korean-defence-systems--1571452 }
+
+\subsection{ Q.ANT在人工智能电力需求激增之际，将光子AI计算推向商业化 }
+
+光子计算公司Q.ANT与云服务商IONOS达成协议，将其原生处理服务器（NPS）作为光子AI加速器引入商业云环境。第二代NPU在评估中能效提升高达30倍，性能提升达50倍，作为GPU协处理器运作，旨在应对AI的高能耗挑战。
+
+\noindent\textbf{报道链接：}\url{ https://qant.com/news/q-ant-takes-photonic-ai-computing-commercial-as-ais-power-demand-surges/ }
+
+\subsection{ 富士通与东京科学大学设立联合研究基地，推进量子硬件研发与人才培养 }
+
+富士通与东京科学大学成立“富士通量子与HPC基础设施联合研究集群”，旨在系统化培养量子硬件设计、制造、控制与评估人才。双方将利用大学设施，开展融合高性能计算与量子技术的研究，以支持实用量子计算机开发。
+
+\noindent\textbf{报道链接：}\url{ https://global.fujitsu/en-global/pr/news/2026/05/15-02 }
+
+\subsection{ Infleqtion报告2026年第一季度营收创纪录，客户需求加速增长 }
+
+中性原子量子技术领导者Infleqtion公布2026年Q1营收950万美元，同比增长14\%，全部来自量子业务。公司上调全年营收指引至至少4000万美元，并披露与国际空间站、赛峰等合作里程碑，其量子传感、计算与应用活动持续扩张。
+
+\noindent\textbf{报道链接：}\url{ https://infleqtion.com/infleqtion-reports-record-q1-revenue-as-customer-demand-accelerates/ }
+
+\subsection{ 科学家描绘出可变革计算技术的材料发展路线图 }
+
+渥太华大学与MIT联合发布磁性拓扑材料全面路线图。该综述梳理四大材料家族及其量子效应，如量子反常霍尔效应，有望实现无能耗电子流动，为超低功耗电子器件、自旋电子学等提供重大机遇。
+
+\noindent\textbf{报道链接：}\url{ https://www.uottawa.ca/about-us/news-all/scientists-chart-path-toward-materials-could-transform-computing }
+
+\subsection{ 让“光”轻松完成计算任务 }
+
+宾夕法尼亚大学物理团队在《物理评论快报》发文，利用激子-极化激元实现光计算信号切换。这种准粒子结合光速与物质强相互作用，可分担电子计算负载，尤其为高能耗的人工智能数据处理提供低损耗解决方案。
+
+\noindent\textbf{报道链接：}\url{ https://penntoday.upenn.edu/news/making-light-work-computing }
+
+\subsection{ 韩国科学家利用二维半导体在室温下实现明亮量子光发射 }
+
+基础科学研究院（IBS）团队将二维半导体中的激子束缚于纳米级应变诱导陷阱，成功在室温下实现高效、稳定的量子光源。该成果克服了二维材料中激子室温易扩散、非辐射损耗高的障碍，为超薄光学器件开辟路径。
+
+\noindent\textbf{报道链接：}\url{ https://ibs.re.kr/cop/bbs/BBSMSTR\_000000000738/selectBoardArticle.do;jsessionid=A737976C75203FB4AD235825DFFF716C?nttId=26633\&amp;pageIndex=1\&amp;searchCnd=\&amp;searchWrd= }
+
+\subsection{ 量子抗性网络：原语、协议与最佳实践综述 }
+
+一项新研究系统梳理后量子抗性网络架构，将密钥分发定位为系统级设计问题。团队提出涵盖密码学基础、密钥分发架构、信任模型等的统一分类体系，分析多种架构在现实后量子敌手假设下的安全性，并指出未来研究方向。
+
+\noindent\textbf{报道链接：}\url{ https://arxiv.org/abs/2605.04129 }
+
+\subsection{ 沙特阿美与Pasqal合作启用沙特首台量子计算机 并推出中东首个QCaaS平台 }
+
+2026年05月19日消息，沙特阿美（Aramco）与中性原子量子计算先驱企业Pasqal联手，昨日正式在沙特阿拉伯启用了首台量子计算机。同时，双方还在中东地区推出首个商业化量子计算即服务（QCaaS）平台，为该地区量子技术发展提供新动力，并推动能源、材料及工业等领域的量子应用加速落地。据悉，该量子计算机位于沙特阿美达兰数据中心，通过安全云平台为客户提供低延迟、即时访问的量子硬件，来帮助其应对复杂工业挑战。
+
+\noindent\textbf{报道链接：}\url{ https://www.pasqal.com/newsroom/aramco-and-pasqal-launch-saudi-arabias-first-quantum-computer-and-middle-easts-first-commercial-quantum-computing-as-a-service-platform/ }
+
+\subsection{ Sitehop推出紧凑型后量子加密设备，守护工业与能源网络安全 }
+
+2026年05月19日消息，网络安全解决方案提供商Sitehop日前宣布推出SAFEcore Edge，这是一款专为运营技术和关键基础设施网络设计的紧凑型后量子加密设备。据了解，该设备适用于能源系统、SCADA网络、变电站、海上平台及各类工业设施。Sitehop公司表示，SAFEcore Edge可为远程基础设施提供低延迟后量子加密服务，可解决传统网络安全系统难以在实际环境中部署的挑战。
+
+\noindent\textbf{报道链接：}\url{ https://thequantuminsider.com/2026/05/18/sitehop-post-quantum-encryption-pqc-device/ }
+
+
+
+
+% ==================== 企业资讯 ====================
+\newpage
+\section{企业资讯}
+\vspace{-0.5em}
+\noindent\rule{\linewidth}{1.5pt}
+
+\subsection{ Eurofiber与Colt凭借量子密钥分发创新荣获LCL运营商社区奖 }
+
+Eurofiber与Colt凭借连接伦敦、阿姆斯特丹和布鲁塞尔的首次商业泛欧量子安全光纤走廊，获LCL运营商社区奖。该联合量子密钥分发（QKD）计划为关键数据提供抗量子威胁的安全连接，展现开放数字基础设施合作创新。
+
+\noindent\textbf{报道链接：}\url{ https://www.eurofiber.com/press/eurofiber-and-colt-win-lcl-carrier-community-award-for-innovation-in-quantum-key-distribution/ }
+
+\subsection{ Diraq将获美国商务部最高3800万美元资金支持，加速推进硅基量子芯片规模化 }
+
+2026年05月22日消息，Diraq昨日宣布已与美国商务部签署意向书，拟获得来自CHIPS研发办公室最高达3800万美元的美联邦资金支持。据悉，该资金将用于通过美国半导体产业推进容错硅基量子计算处理器的生产与规模化。Diraq总部位于澳大利亚悉尼，在美国帕洛阿尔托和芝加哥设有办公室与实验室，并计划在洛杉矶新设重要运营机构。Diraq表示，其正在扩大在美国的团队与业务，并与本土合作伙伴开展合作，以推动美国量子生态系统的发展。
+
+\noindent\textbf{报道链接：}\url{ https://www.globenewswire.com/news-release/2026/05/21/3299238/0/en/Diraq-Signs-38M-Letter-of-Intent-with-the-U-S-Department-of-Commerce-under-CHIPS-Act-to-Scale-Domestic-Quantum-Computing-Processors-Using-Silicon-Spin-Technology.html }
+
+\subsection{ 三井住友银行与东芝公司合作开发出基于先进量子驱动技术的新股票指数 }
+
+2026年05月21日消息，日本三井住友银行与东芝公司近日宣布，已联合开发出“SMBC/TOSHIBA量子驱动多元化日本股票指数”和“SMBC/TOSHIBA量子驱动多元化美国股票指数”。据悉，上述两项基于先进量子驱动技术实现的新股票指数，统称为“SMBC/TOSHIBA Quantum Diversified”。在该项目中，东芝基于其“模拟分岔机”提供定制化的量子驱动优化技术，并负责系统维护及季度再平衡计算的执行。
+
+\noindent\textbf{报道链接：}\url{ https://www.global.toshiba/ww/news/digitalsolution/2026/05/news-20260520-01.html }
+
+\subsection{ Quantum Bridge获得800万美元融资，用于加固全球网络以抵御量子威胁 }
+
+抗量子网络安全公司Quantum Bridge完成由Primo Capital领投的800万美元A轮融资，总融资达1600万美元。
+
+\noindent\textbf{报道链接：}\url{ https://qubridge.io/quantum-bridge-secures-8-million-to-fortify-global-networks-against-quantum-threats/ }
+
+\subsection{ Quantum eMotion与JMEM签署联盟协议，启动后量子安全芯片合作新阶段 }
+
+2026年05月20日消息，Quantum eMotion与JMEM TEK日前宣布签署国际项目联盟协议，以推动双方战略合作进入新阶段。据悉，该协议基于双方于去年9月签署的谅解备忘录，并在加拿大—中国台湾2024–25年协同研发计划（CIIP）框架下推进联合研发合作。JMEM TEK为一家总部位于中国台湾的安全半导体企业，专注于物理不可克隆函数（PUF）、后量子密码学（PQC）及硬件信任根架构。在此次合作中，QeM公司将提供其安全芯片设计能力，参与联合研发项目推进。
+
+\noindent\textbf{报道链接：}\url{ https://www.quantumemotion.com/press-release/129/quantum-emotion-and-jmem-tek-sign-consortium-agreement-to-accelerate-quantum-resilient-semiconducto }
+
+
+% ==================== 资本运作 ====================
+\newpage
+\section{资本运作}
+\vspace{-0.5em}
+\noindent\rule{\linewidth}{1.5pt}
+
+\subsection{ 美国商务部拟向Infleqtion资助最高1亿美元，以推动中性原子量子系统研发 }
+
+2026年05月22日消息，Infleqtion昨日宣布与美国商务部CHIPS研发办公室签署一份意向书，拟在满足特定研发里程碑条件的前提下获得最高1亿美元资金支持，以加速美国本土量子计算技术的发展。据悉，该计划资金将用于推动Infleqtion中性原子量子系统的研发进程。美国商务部的项目资助旨在加速量子计算技术发展，提升美国的计算能力。
+
+\noindent\textbf{报道链接：}\url{ https://infleqtion.com/infleqtion-signs-letter-of-intent-with-the-u-s-department-of-commerce-for-100-million-to-accelerate-u-s-leadership-in-quantum-computing/ }
+
+\subsection{ 光量子计算公司Xanadu与Yorkville达成3亿美元股权融资计划 }
+
+2026年05月22日消息，光量子计算领域领先企业Xanadu量子科技有限公司宣布，已与YA II PN有限公司（简称"Yorkville Advisors"）达成一项总额可达3亿美元的合成市价股权融资计划（简称"该计划"）。该公司计划将所获净收益（如有）用于营运资金及一般企业用途。
+该计划赋予Xanadu（但并非强制其）在三年期内，通过私募方式向Yorkville Advisors发行并出售最多3亿美元的B类次级投票权股份的权利，具体交易受双方于2026年5月20日签署的《备用股权购买协议》（简称"SEPA"）中的限制和条款约束。该公司预计将根据市场行情及其对股东价值有利的估值水平，伺机利用该计划进行融资。
+该计划下的任何净收益将直接由公司获得。该计划仅包含公司直接发行新股，不涉及现有股东的二级市场出售。为配合该计划的启动，公司计划向美国证券交易委员会提交F-1表格注册声明，以便Yorkville Advisors根据适用的美国证券法对依据该计划获得的股份进行再销售。
+Xanadu首席财务官Michael Trzupek表示："在我们持续推进并执行走向容错量子计算的长期路线图之际，该计划将为我们提供高效灵活的资本获取渠道。我们的目标是战略性地、审慎地利用股权市场，以保持我们在资金上的优势，支持增长战略的实施。"
+
+\noindent\textbf{报道链接：}\url{ https://www.prnewswire.com/news-releases/xanadu-announces-300-million-synthetic-at-the-market-program-302778522.html }
+
+\subsection{ 欧洲启动TransEuroOGS项目，将在欧盟成员国间建设光学地面站网络 }
+
+2026年05月21日消息，作为欧洲量子通信基础设施（EuroQCI）计划中的一项新研究与部署项目，TransEuroOGS将在德国、希腊、爱尔兰和卢森堡四个欧盟成员国间建设可互操作的光学地面站网络，以支持基于卫星的量子安全通信。据悉，该项目预算约1800万欧元（约1.5亿元人民币），由欧盟及各参与国政府共同资助，并已通过在柏林和耶拿举行的联盟会议正式启动。TransEuroOGS计划构建面向卫星通信的量子安全星地网络接口，并在这四国部署总计八座可互操作的光学地面站（OGS）。
+
+\noindent\textbf{报道链接：}\url{ https://www.iof.fraunhofer.de/en/pressrelease/2026/TransEuroOGS-KickOff.html }
+
+\subsection{ 量子计算公司Nord Quantique获3000万美元融资，估值约14亿美元 }
+
+2026年05月19日消息，加拿大量子计算公司Nord Quantique在由Fidelity Investments领投的一轮融资中获得3000万美元融资，估值约为14亿美元。完成本轮融资后，Nord Quantique成为又一家估值突破10亿美元的加拿大量子科技企业，与D-Wave Quantum、Xanadu及Photonic Inc.同列。据悉，该公司正在开发一种硬件层级的量子纠错方案，旨在降低量子计算系统的规模、复杂性与能耗。
+
+\noindent\textbf{报道链接：}\url{ https://thequantuminsider.com/2026/05/15/nord-quantique-reaches-1-4-billion-valuation-in-fidelity-backed-financing/ }
+
+
+\end{document}

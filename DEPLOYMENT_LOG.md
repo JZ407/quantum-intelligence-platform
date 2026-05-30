@@ -979,3 +979,24 @@ Quantinuum 有两个内容板块：Blog（/news/blog）和 Press Release（/news
 - 方案：jieba 中文分词 + 关键词加权重叠检测
 - 新文章入库前检查同日已有文章，重叠度 ≥60% 且共同词 ≥3 判定为重复跳过
 - 清理现有库：1 组真重复已删除（5月28日 Qubic/Quantum Machines）
+
+---
+
+## 20.25 知识图谱深度优化 (2026-05-29)
+
+**无向图重构**：
+- MultiDiGraph → MultiGraph，仅供应/收购/任职保留箭头
+- 可视化：合作边无箭头，减少视觉噪音
+
+**深度关系扫描升级**：
+- build_relations.py 从 top100 → top200 对，min_articles 2→1
+- LLM 调用从 ~48 次 → 143 次
+- 新增长 COMPETES_WITH（竞争）关系类型
+
+**效果**：
+- 机构间关系边：70 → **113**（+61%）
+- PARTNERS_WITH：51 → **86**
+- SUPPLIES_TO：16 → **21**
+- COMPETES_WITH：3（新增：Atom Computing↔IBM, Atom Computing↔IonQ, USTC↔Xanadu）
+
+**扩展覆盖**：机构新闻 2,871 + 量科历史 8,953 + 量科每日 171 共 ~12,000 篇文章入图。
