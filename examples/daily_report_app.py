@@ -1074,6 +1074,25 @@ def page_knowledge_graph():
                 and (not search or search.lower() in n['id'].lower())]
     entity_ids = {n['id'] for n in filtered}
 
+    # When searching and results are sparse, auto-expand to include neighbors
+    if search and 0 < len(filtered) <= 10:
+        neighbor_ids = set()
+        for e in data['edges']:
+            if e['source'] in entity_ids and e['target'] not in entity_ids:
+                # Only add neighbor if its type is in selected_types
+                tgt_node = next((n for n in data['nodes'] if n['id'] == e['target']), None)
+                if tgt_node and tgt_node['type'] in selected_types:
+                    neighbor_ids.add(e['target'])
+            elif e['target'] in entity_ids and e['source'] not in entity_ids:
+                src_node = next((n for n in data['nodes'] if n['id'] == e['source']), None)
+                if src_node and src_node['type'] in selected_types:
+                    neighbor_ids.add(e['source'])
+        # Add neighbor nodes
+        for n in data['nodes']:
+            if n['id'] in neighbor_ids:
+                filtered.append(n)
+        entity_ids.update(neighbor_ids)
+
     edges_filtered = [e for e in data['edges'] if e['source'] in entity_ids and e['target'] in entity_ids]
 
     # Relation type translations
