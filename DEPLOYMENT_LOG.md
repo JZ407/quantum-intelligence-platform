@@ -1000,3 +1000,36 @@ Quantinuum 有两个内容板块：Blog（/news/blog）和 Press Release（/news
 - COMPETES_WITH：3（新增：Atom Computing↔IBM, Atom Computing↔IonQ, USTC↔Xanadu）
 
 **扩展覆盖**：机构新闻 2,871 + 量科历史 8,953 + 量科每日 171 共 ~12,000 篇文章入图。
+
+---
+
+## 20.26 GitHub 仓库推送 (2026-05-31)
+
+5 个项目仓库推送到 GitHub (JZ407)：
+- [quantum-intelligence-platform](https://github.com/JZ407/quantum-intelligence-platform) — Streamlit 主应用
+- [quantum-institution-crawlers](https://github.com/JZ407/quantum-institution-crawlers) — 机构新闻抓取
+- [quantum-knowledge-graph](https://github.com/JZ407/quantum-knowledge-graph) — 知识图谱
+- [liangke-daily-scraper](https://github.com/JZ407/liangke-daily-scraper) — 量科每日抓取
+- [liangke-historical](https://github.com/JZ407/liangke-historical) — 量科历史库
+
+---
+
+## 20.27 项目分组标签重构 (2026-05-31)
+
+**标签体系从混乱到三分**：
+```
+tags = {
+    "weekly": ["资本运作"],              // 周报PDF专用
+    "knowledge_graph": {                 // 知识图谱专用
+        "institutions": [...], "technologies": [...],
+        "products": [...], "people": [...]
+    },
+    "search_tags": ["量子纠错", ...]     // 检索筛选专用
+}
+```
+
+**效果**：
+- 技术覆盖：31 → **54**（+74%，新增 QKD/量子中继/磁力计等子类）
+- 主题覆盖：45 → **106**
+- 日库和机构库标签统一，知识图谱直接读标签不再重复抽取
+- 周报、图谱、检索三个项目各读各的 key，互不污染
