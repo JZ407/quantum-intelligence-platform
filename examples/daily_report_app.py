@@ -331,7 +331,14 @@ def show_article_detail(art: dict):
     caption_parts = []
     if inst:
         caption_parts.append(f"机构：{inst}")
-    if isinstance(tags, list) and tags:
+    if isinstance(tags, dict):
+        weekly = tags.get('weekly', [])
+        search = tags.get('search_tags', [])
+        if weekly:
+            caption_parts.append(f"周报：{' | '.join(weekly)}")
+        if search:
+            caption_parts.append(f"检索：{' | '.join(search[:5])}")
+    elif isinstance(tags, list) and tags:
         caption_parts.append(f"标签：{' | '.join(tags)}")
     if caption_parts:
         st.caption(' · '.join(caption_parts))
@@ -448,7 +455,10 @@ def page_daily_news():
                 mask = exp_df['title'].str.contains(kw, case=False, na=False) | exp_df['content'].str.contains(kw, case=False, na=False)
                 exp_df = exp_df[mask]
             if exp_tags:
-                mask = exp_df['tags'].apply(lambda t: isinstance(t, list) and any(tag in t for tag in exp_tags))
+                mask = exp_df['tags'].apply(lambda t: False if not t else (
+                    isinstance(t, dict) and any(tag in t.get('weekly', []) + t.get('search_tags', []) for tag in exp_tags)
+                    or (isinstance(t, list) and any(tag in t for tag in exp_tags))
+                ))
                 exp_df = exp_df[mask]
             if exp_df.empty:
                 st.warning("未找到匹配的数据。")
@@ -540,7 +550,13 @@ def page_daily_news():
                 date_str = row.get('liangke_date', '')
                 if date_str and len(str(date_str)) > 10:
                     date_str = str(date_str)[:10]
-                tag_text = ' | '.join(tags[:3]) if isinstance(tags, list) and tags else ''
+                # Handle both new dict format and old list format
+                if isinstance(tags, dict):
+                    tag_text = ' | '.join(tags.get('weekly', []))
+                elif isinstance(tags, list) and tags:
+                    tag_text = ' | '.join(tags[:3])
+                else:
+                    tag_text = ''
                 inst = row.get('source', '') or row.get('source_tag', '')
                 if tag_text and date_str:
                     st.caption(f"{date_str} · {tag_text}{' · ' + inst if inst else ''}")
@@ -582,7 +598,14 @@ def page_daily_news():
                 with st.container():
                     st.markdown(f"**{idx}. {art['title']}**")
                     tags = art.get('tags', [])
-                    if isinstance(tags, list) and tags:
+                    if isinstance(tags, dict):
+                        weekly = tags.get('weekly', [])
+                        search = tags.get('search_tags', [])
+                        if weekly:
+                            st.caption(f"周报：{' | '.join(weekly)}")
+                        if search:
+                            st.caption(f"检索：{' | '.join(search[:5])}")
+                    elif isinstance(tags, list) and tags:
                         st.caption(f"标签：{' | '.join(tags)}")
                     st.markdown("---")
 
