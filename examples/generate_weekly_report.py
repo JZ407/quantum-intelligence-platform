@@ -173,15 +173,19 @@ def llm_clean_content(categories: dict) -> dict:
     except Exception as e:
         print(f'[WARN] LLM content cleaning failed: {e}')
 
-    # Trim long articles via LLM
-    long_articles = [(i, art) for i, art in enumerate(art_index) if len(art.get('content', '') or '') > 400]
+    # Trim articles to uniform 200-300 chars for weekly digest
+    TRIM_THRESHOLD = 300    # trim anything longer than this
+    TRIM_TARGET = 250       # target length in Chinese characters
+    TRIM_CONTEXT = 2000     # send this many chars to LLM for context
+    long_articles = [(i, art) for i, art in enumerate(art_index) if len(art.get('content', '') or '') > TRIM_THRESHOLD]
     if long_articles:
         trim_lines = [
-            f"将以下{len(long_articles)}篇长新闻精简到300字以内，保留核心事实。",
+            f"将以下{len(long_articles)}篇新闻精简到200-300字，保留关键数据、人名、机构名、百分比。不要缩成一句话。",
             "输出格式：序号|精简后全文\n"
         ]
         for idx, (gi, art) in enumerate(long_articles, 1):
-            trim_lines.append(f"{idx}|{art['content'][:600]}")
+            content = art.get('content', '') or ''
+            trim_lines.append(f"{idx}|{content[:TRIM_CONTEXT]}")
         trim_msg = [
             {"role": "system", "content": "你是新闻编辑，擅长精简。只输出要求的格式。"},
             {"role": "user", "content": "\n".join(trim_lines)},

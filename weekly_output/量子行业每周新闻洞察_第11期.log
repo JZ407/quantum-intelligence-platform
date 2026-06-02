@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.5.23)  2 JUN 2026 09:55
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.5.23)  2 JUN 2026 10:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1582,7 +1582,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[31] (D:\Claude_code\rag_system\weekly_output/量子行业每周新闻洞察_第11期.aux)
+[31]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[32] (D:\Claude_code\rag_system\weekly_output/量子行业每周新闻洞察_第11期.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2022/07/14>
@@ -1600,4 +1608,4 @@ Here is how much of TeX's memory you used:
  93i,13n,111p,1201b,624s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on D:\Claude_code\rag_system\weekly_output/量子行业每周新闻洞察_第11期.pdf (
-36 pages).
+37 pages).
