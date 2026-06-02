@@ -1,9 +1,9 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.5.23)  29 MAY 2026 18:22
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.5.23)  2 JUN 2026 09:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**量子行业每周新闻洞察_第181期(1).tex
-(./量子行业每周新闻洞察_第181期(1).tex
+**量子行业每周新闻洞察_第11期.tex
+(D:\Claude_code\rag_system\weekly_output/量子行业每周新闻洞察_第11期.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
 (d:/texlive/2026/texmf-dist/tex/latex/ctex/ctexart.cls
@@ -1134,8 +1134,8 @@ Package tocloft Info: The document has section divisions on input line 51.
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 38.
 
-(./量子行业每周新闻洞察_第181期(1).aux)
-\openout1 = `量子行业每周新闻洞察_第181期(1).aux'.
+(D:\Claude_code\rag_system\weekly_output/量子行业每周新闻洞察_第11期.aux)
+\openout1 = `量子行业每周新闻洞察_第11期.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 58.
 LaTeX Font Info:    ... okay on input line 58.
@@ -1251,26 +1251,26 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package hyperref Info: Link coloring ON on input line 58.
-(./量子行业每周新闻洞察_第181期(1).out) (./量子行业每周新闻洞察_第181期(1).out)
+(D:\Claude_code\rag_system\weekly_output/量子行业每周新闻洞察_第11期.out)
+(D:\Claude_code\rag_system\weekly_output/量子行业每周新闻洞察_第11期.out)
 \@outlinefile=\write4
-\openout4 = `量子行业每周新闻洞察_第181期(1).out'.
+\openout4 = `量子行业每周新闻洞察_第11期.out'.
 
 File: Cover_Suzhou.png Graphic file (type bmp)
 <Cover_Suzhou.png>
  [1
 
 ]
-(./量子行业每周新闻洞察_第181期(1).toc
+(D:\Claude_code\rag_system\weekly_output/量子行业每周新闻洞察_第11期.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 1.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 1.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 1.
-
+ [1]
 Missing character: There is no ℤ (U+2124) in font [lmroman12-regular]:mapping=t
 ex-text;!
-[1]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -1278,9 +1278,17 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[2])
+[2]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[3])
 \tf@toc=\write5
-\openout5 = `量子行业每周新闻洞察_第181期(1).toc'.
+\openout5 = `量子行业每周新闻洞察_第11期.toc'.
 
 
 
@@ -1290,7 +1298,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[3]
+[4]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -1343,6 +1351,10 @@ Package fontspec Info:
 (fontspec)             <->"FangSong/OT:script=hani;language=dflt;"
 
 
+Missing character: There is no ➔ (U+2794) in font [lmroman12-regular]:mapping=t
+ex-text;!
+Missing character: There is no ➔ (U+2794) in font [lmroman12-regular]:mapping=t
+ex-text;!
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -1383,8 +1395,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [8]
-Missing character: There is no ℤ (U+2124) in font [lmroman12-bold]:mapping=tex-
-text;!
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -1425,6 +1435,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [13]
+Missing character: There is no ℤ (U+2124) in font [lmroman12-bold]:mapping=tex-
+text;!
+Missing character: There is no ℤ (U+2124) in font [lmroman12-regular]:mapping=t
+ex-text;!
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -1536,21 +1550,54 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[27] (./量子行业每周新闻洞察_第181期(1).aux)
+[27]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[28]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[29]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[30]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[31] (D:\Claude_code\rag_system\weekly_output/量子行业每周新闻洞察_第11期.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2022/07/14>
  ***********
-Package rerunfilecheck Info: File `量子行业每周新闻洞察_第181期(1).out' has not changed.
-(rerunfilecheck)             Checksum: F1B555CEA264918F9CFBC336E8885B7C;20787.
+Package rerunfilecheck Info: File `量子行业每周新闻洞察_第11期.out' has not changed.
+(rerunfilecheck)             Checksum: 79090C5CFC6526E52E6E9768C2657F98;28234.
  ) 
 Here is how much of TeX's memory you used:
- 27129 strings out of 468168
- 604235 string characters out of 5436524
- 1055866 words of memory out of 5000000
- 55409 multiletter control sequences out of 15000+600000
+ 27156 strings out of 468168
+ 606695 string characters out of 5436524
+ 1063511 words of memory out of 5000000
+ 55435 multiletter control sequences out of 15000+600000
  632795 words of font info for 94 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 93i,13n,111p,1205b,624s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 93i,13n,111p,1201b,624s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on 量子行业每周新闻洞察_第181期(1).pdf (31 pages).
+Output written on D:\Claude_code\rag_system\weekly_output/量子行业每周新闻洞察_第11期.pdf (
+36 pages).

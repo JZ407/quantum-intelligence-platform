@@ -51,10 +51,23 @@ def fetch_news(start_date: str, end_date: str):
 
 
 def classify_news(df: pd.DataFrame):
-    """Classify articles into 5 categories based on tags."""
+    """Classify articles into 5 categories based on tags.
+
+    Supports both old flat-list format and new dict format with 'weekly' key.
+    """
     result = {cat: [] for cat in CATEGORIES}
     for _, row in df.iterrows():
         tags = row.get('tags', [])
+        # New format: dict with 'weekly' key containing category labels
+        if isinstance(tags, dict):
+            weekly_tags = tags.get('weekly', [])
+            if isinstance(weekly_tags, list):
+                for tag in weekly_tags:
+                    if tag in result:
+                        result[tag].append(row.to_dict())
+                        break
+            continue
+        # Old format: flat list of category labels
         if not isinstance(tags, list):
             continue
         for tag in tags:
