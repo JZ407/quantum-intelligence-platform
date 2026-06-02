@@ -1061,3 +1061,24 @@ tags = {
 **效果**：
 - 企业资讯 4→9，资本运作 18→27
 - 获资助/融资类文章不再误标为科技前沿
+
+---
+
+## 20.30 三类型独立抓取策略定稿 (2026-06-02)
+
+**问题**：四种页面类型（flash/reference/article/特殊页）共用一个 `fetch_article_detail`，选择器互相冲突，导致 flash 正文为空、reference 抓侧边栏、article 被登录墙截断。
+
+**方案**：拆为四个独立提取器，按 URL 类型路由：
+
+| 类型 | 标题 | 正文 | 裁剪 |
+|------|------|------|------|
+| flash | h2 | body 首段（跳过标题+日期） | Copyright/粤ICP |
+| reference | h2 | div.refer-txt | 第3个➔前 + 作者单位后 |
+| article | h1 | body（跳过导航+metadata） | 参考链接¹后 + Copyright |
+
+**效果**：
+- flash 正文从 0 字符 → 100-300 字符快讯正文
+- article 正文从 1,500 字符 → 10,000-19,000 字符完整文章
+- reference 正文去掉参考来源头部和作者单位尾部
+- 新增 `page_type` 字段，交互界面显示类型标签 [flash]/[reference]/[article]
+- 三种类型提取逻辑互不影响，各自独立维护

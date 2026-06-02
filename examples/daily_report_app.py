@@ -558,14 +558,16 @@ def page_daily_news():
                 else:
                     tag_text = ''
                 inst = row.get('source', '') or row.get('source_tag', '')
+                page_type = row.get('page_type', '')
+                type_badge = f'[{page_type}] ' if page_type else ''
                 if tag_text and date_str:
-                    st.caption(f"{date_str} · {tag_text}{' · ' + inst if inst else ''}")
+                    st.caption(f"{type_badge}{date_str} · {tag_text}{' · ' + inst if inst else ''}")
                 elif date_str:
-                    st.caption(f"{date_str}{' · ' + inst if inst else ''}")
+                    st.caption(f"{type_badge}{date_str}{' · ' + inst if inst else ''}")
                 elif tag_text:
-                    st.caption(f"{tag_text}{' · ' + inst if inst else ''}")
+                    st.caption(f"{type_badge}{tag_text}{' · ' + inst if inst else ''}")
                 elif inst:
-                    st.caption(inst)
+                    st.caption(f"{type_badge}{inst}")
             detail_col = cols[2] if show_checkbox else cols[1]
             with detail_col:
                 if st.button("查看详情", key=f"view_{source_key}_{row['id']}", type="secondary"):
