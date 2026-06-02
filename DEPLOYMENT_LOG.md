@@ -1,10 +1,63 @@
-# 部署日志：Claude Code + Kimi-k2.6 + 本地 RAG 知识库
+# 部署日志：量子科技情报平台
 
-> 记录从 0 到 1 搭建本地知识库 + 线上 LLM 的完整决策链与踩坑点，供复现参考。
+> 从 0 到 1 搭建本地 RAG + 多源新闻抓取 + 知识图谱 + 周报生成的全链路决策与踩坑记录。
 
 ---
 
-## 1. 需求确认阶段
+## 系统架构概览
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                    Streamlit 交互界面 (:8501)                  │
+│  每日资讯 │ 历史检索 │ 机构新闻 │ 知识图谱 │ 周报生成 │ 报告提醒  │
+└──────────┬──────────┬──────────┬──────────┬──────────────────┘
+           │          │          │          │
+    ┌──────▼──┐ ┌─────▼───┐ ┌───▼────┐ ┌──▼──────────┐
+    │ MySQL   │ │ SQLite  │ │ SQLite │ │ knowledge_   │
+    │ liangke │ │ liangke │ │ instit │ │ graph.json   │
+    │ _daily  │ │ _hist   │ │ _news  │ │              │
+    └────┬────┘ └────┬────┘ └───┬────┘ └──────┬───────┘
+         │ daily      │ hist     │ inst        │
+    ┌────▼────────────▼──────────▼─────────────▼──────┐
+    │              RAG 知识库 (FAISS + BM25)             │
+    │   Lite (MiniLM) │ Pro (bge-large-zh) │ EN (bge-en) │
+    └──────────────────────────────────────────────────┘
+                           │
+    ┌──────────────────────▼──────────────────────────┐
+    │              LLM (DeepSeek v4 Pro)                │
+    │   分类 │ 摘要 │ 翻译 │ 去重 │ 剪裁 │ 查询       │
+    └──────────────────────────────────────────────────┘
+```
+
+| 项目 | 仓库 | 职责 |
+|------|------|------|
+| `rag_system` | [quantum-intelligence-platform](https://github.com/JZ407/quantum-intelligence-platform) | RAG 核心 + Streamlit 主应用 + 周报 |
+| `liangke_daily` | [liangke-daily-scraper](https://github.com/JZ407/liangke-daily-scraper) | 量科网每日抓取 → MySQL |
+| `liangke_historical` | [liangke-historical](https://github.com/JZ407/liangke-historical) | 量科网历史库 (8,953 篇) |
+| `institution_news` | [quantum-institution-crawlers](https://github.com/JZ407/quantum-institution-crawlers) | 14 家机构官网抓取 (2,871 篇) |
+| `knowledge_graph` | [quantum-knowledge-graph](https://github.com/JZ407/quantum-knowledge-graph) | 跨库知识图谱 (~12,000 篇) |
+| `conference_db` | — | 量子会议数据库 (211 场) |
+
+**数据流**：抓取 → MySQL/SQLite → 同步到 RAG 知识库 → LLM 分类/打标 → Streamlit 检索/日报/周报/图谱
+
+---
+
+## 目录
+
+- [Part A: RAG 核心系统](#a-rag-核心系统) — 嵌入、检索、增量、三库并行
+- [Part B: 交互界面](#b-交互界面) — Streamlit 主应用、日报生成器
+- [Part C: 周报系统](#c-周报系统) — LaTeX 模板、LLM 内容审核、专利/招投标
+- [Part D: 每日抓取](#d-每日抓取) — liangke_daily、Cookie、LLM 分类、类型策略
+- [Part E: 机构新闻抓取](#e-机构新闻抓取) — 14 家机构、多策略、智能探测
+- [Part F: 知识图谱](#f-知识图谱) — NetworkX 跨库图谱、机构关系
+- [Part G: 历史库](#g-历史库) — 全量重抓、去重、标签修正
+- [Part H: 基础设施](#h-基础设施) — GitHub 推送、计划任务、标签体系
+
+---
+
+## A. RAG 核心系统
+
+### 1. 需求确认阶段
 
 **原始需求**：构建一个本地知识库。  
 **环境约束**：
@@ -227,7 +280,9 @@ llm:
 
 ---
 
-## 10. 第四阶段：Streamlit 日报生成器 + 内网穿透（2026-05-22）
+## B. 交互界面
+
+### 10. 第四阶段：Streamlit 日报生成器 + 内网穿透（2026-05-22）
 
 **触发条件**：用户需要每日筛选重要新闻生成 Word 日报，并让同事通过网页远程访问一键生成。
 
@@ -294,7 +349,9 @@ llm:
 
 ---
 
-## 11. 周报生成系统（已取消）
+## C. 周报系统
+
+### 11. 周报生成系统（已取消）
 
 **时间**：2026-05-24
 **状态**：项目取消，相关文件已清理，DEPLOYMENT_LOG 保留记录。
@@ -392,7 +449,10 @@ llm:
 
 ---
 
-## 14. 历史库全量重抓 + 情报资讯平台深化（2026-05-24）
+## G. 历史库 (liangke_historical)
+
+### 14. 历史库全量重抓 + 情报资讯平台深化（2026-05-24）
+> 📦 `rag_system: fd8b59f`
 
 ### 14.1 LLM 切换
 
@@ -536,7 +596,10 @@ llm:
 
 ---
 
-## 17. Cookie 过期 & 提取方式修复（2026-05-25）
+## D. 每日抓取 (liangke_daily)
+
+### 17. Cookie 过期 & 提取方式修复（2026-05-25）
+> 📦 `liangke_daily: b60451a` `rag_system: ad49ed9`
 
 ### 17.1 问题链
 
@@ -669,7 +732,10 @@ llm:
 
 Playwright 无头浏览器抓取 `quantumchina.com/bg`，提取 10 份年度量子产业报告（2023–2026），含发布日期、下载链接。交互页面「报告提醒」分两个标签：新闻中发现的报告 + 光子盒报告库。
 	
-## 20. 机构新闻抓取系统（`institution_news/`）
+## E. 机构新闻抓取 (institution_news)
+
+### 20. 机构新闻抓取系统（`institution_news/`）
+> 📦 `institution_news: 3699624` (初期) → `3587342` (第二梯队完成)
 
 ### 20.1 系统概览
 
@@ -940,7 +1006,10 @@ Quantinuum 有两个内容板块：Blog（/news/blog）和 Press Release（/news
 
 ---
 
-## 20.22 知识图谱系统 (2026-05-29)
+## F. 知识图谱 (knowledge_graph)
+
+### 20.22 知识图谱系统 (2026-05-29)
+> 📦 `knowledge_graph: 50ecdfa` → `3b33eb1` → `4f3ee85`
 
 **独立项目**：`D:/Claude_code/knowledge_graph/`
 **数据源**：institutions(2,871) + liangke_historical(8,953) + liangke_daily(172) = ~12,000 篇
@@ -1003,7 +1072,13 @@ Quantinuum 有两个内容板块：Blog（/news/blog）和 Press Release（/news
 
 ---
 
-## 20.26 GitHub 仓库推送 (2026-05-31)
+---
+
+## H. 基础设施
+
+### 20.26 GitHub 仓库推送 (2026-05-31)
+
+> 📦 `rag_system: 400bcea`
 
 5 个项目仓库推送到 GitHub (JZ407)：
 - [quantum-intelligence-platform](https://github.com/JZ407/quantum-intelligence-platform) — Streamlit 主应用
@@ -1015,6 +1090,8 @@ Quantinuum 有两个内容板块：Blog（/news/blog）和 Press Release（/news
 ---
 
 ## 20.27 项目分组标签重构 (2026-05-31)
+
+> 📦 `rag_system: 400bcea` `liangke_daily: 4812e5b` `knowledge_graph: 4f3ee85`
 
 **标签体系从混乱到三分**：
 ```
@@ -1038,6 +1115,8 @@ tags = {
 
 ## 20.28 Cookie 检测 + 参考链接修复 (2026-06-01)
 
+> 📦 `liangke_daily: 28f391b` `rag_system: 3d76d6b`
+
 **问题**：Cookie 过期后量科网退回未登录态，"参考来源"变成 `/user/login`，无法提取外部链接。Edge CDP 端口不稳定导致自动提取经常失败。
 
 **修复**：
@@ -1050,6 +1129,8 @@ tags = {
 ---
 
 ## 20.29 LLM 五标签分类 (2026-06-01)
+
+> 📦 `liangke_daily: dd33c29` `rag_system: 3fb730d`
 
 **问题**：关键词打分分类不准。企业资讯仅 4 篇，"获 90 万英镑资助" 被标为科技前沿，"大阪大学论文" 被标为宏观态势。
 
@@ -1065,6 +1146,8 @@ tags = {
 ---
 
 ## 20.30 三类型独立抓取策略定稿 (2026-06-02)
+
+> 📦 `liangke_daily: 839b703` `rag_system: 451647f`
 
 **问题**：四种页面类型（flash/reference/article/特殊页）共用一个 `fetch_article_detail`，选择器互相冲突，导致 flash 正文为空、reference 抓侧边栏、article 被登录墙截断。
 
@@ -1083,7 +1166,9 @@ tags = {
 - 新增 `page_type` 字段，交互界面显示类型标签 [flash]/[reference]/[article]
 - 三种类型提取逻辑互不影响，各自独立维护
 
-## 20.31 周报生成适配 dict 格式标签 (2026-06-02)
+## 20.31 周报生成适配 dict 格式标签 + LLM 剪裁至 200-300 字 (2026-06-02)
+
+> 📦 `rag_system: a4b63f6` (squashed: dict-format fix + trim threshold tuning)
 
 **问题**：日报标签从 flat list 改为 dict 格式（`{"weekly": ["资本运作"], "knowledge_graph": {...}, "search_tags": [...]}`）后，周报生成器的 `classify_news()` 只认 list 格式，导致第 11 期周报 87 篇文章全部分类失败，五大板块全部空白。
 
@@ -1098,22 +1183,12 @@ tags = {
 
 PDF 和 tex 均正常输出。
 
-## 20.32 周报 LLM 剪裁从一句话恢复到 200-300 字 (2026-06-02)
+**同时修复**：LLM 剪裁逻辑过于激进的问题。
+- `llm_clean_content()` 触发阈值 400 字 → 几乎所有文章被剪裁，只给 LLM 看前 600 字，目标 300 字却实际输出 28-50 字一句话
+- 87 篇中 85 篇被裁到 300 字以下，14 篇只剩一句话
+- 修复：触发阈值 400→300，上下文量 600→2000，剪裁目标 → 200-300 字 + 提示"不要缩成一句话"
 
-**问题**：`llm_clean_content()` 的剪裁逻辑过于激进：
-- 触发阈值 400 字 → 几乎所有文章都被剪裁
-- 只给 LLM 看前 600 字 → 看不到全文无法做合理摘要
-- 剪裁目标 300 字 → 实际输出 28-50 字一句话
-
-87 篇中 85 篇被裁到 300 字以下，14 篇只剩一句话（如"Rigetti签署1亿美元意向书，加速超导量子计算研发。"28 字）。
-
-**修复**：
-- 触发阈值 400 → 300（只剪超过 300 字的）
-- 上下文量 600 → 2000（LLM 能看到足够内容）
-- 剪裁目标 300 字 → 200-300 字 + 提示"不要缩成一句话"
-- 此前又调过一轮 400→2000→800，用户反馈后确定最终版
-
-**效果**：全部文章控制在一屏内，分布：
+**剪裁效果**：全部文章控制在一屏内，分布：
 | <150字 | 150-200 | 200-300 | >300 |
 |--------|---------|---------|------|
 | 6 | 23 | 58 | 0 |
