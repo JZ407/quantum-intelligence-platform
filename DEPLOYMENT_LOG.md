@@ -1194,3 +1194,38 @@ PDF 和 tex 均正常输出。
 | 6 | 23 | 58 | 0 |
 
 最短 122 字（2-3 句完整事实），67% 落在 200-300 字目标区间。
+
+---
+
+## 20.33 Alice & Bob 抓取 + scrape-workflow 技能实战验证 (2026-06-02)
+
+> 📦 `institution_news: b2c4334`
+
+**实战验证**：用 scrape-workflow 五步流程跑通第 15 家机构 Alice & Bob（猫量子比特公司）。
+
+**侦察发现**：
+- WordPress 站，但标准 `/wp/v2/posts` 返回 404
+- 枚举 `/wp-json/wp/v2/` 命名空间，发现两个自定义 CPT：
+  - `/wp/v2/blog` — 技术博客（33 篇）
+  - `/wp/v2/news` — 新闻稿（79 篇）
+- REST API 自带分页 header (`X-WP-TotalPages`)，比 HTML 解析可靠
+
+**效果**：
+| 源 | 文章数 | 日期覆盖 | 平均正文 |
+|----|--------|----------|----------|
+| Alice & Bob Blog | 33 | 100% | ~11,000 字 |
+| Alice & Bob Newsroom | 79 | 100% | ~4,200 字 |
+
+**经验沉淀**：WP REST API 加入 scrape-workflow 决策树优先级（Feed > WP API > Sitemap > HTML）。关键规则：`/posts` 404 不代表没有 API，要枚举 CPT 端点。
+
+**累计**：15 家机构、28 个源、2,983 篇机构新闻。
+
+## 20.34 scrap-workflow 技能创建 (2026-06-02)
+
+基于 15 个源的实战经验，创建了标准化的抓取工作流技能：
+
+- `C:\Users\zhouj\.claude\skills\scrape-workflow\SKILL.md` — 5 步流程（214 行）
+- `C:\Users\zhouj\.claude\skills\scrape-workflow\references\SCRAPING_PLAYBOOK.md` — 完整手册
+- 调用方式：重启 Claude Code 后输入 `/scrape-workflow` 或提及"抓取网站"
+
+**侦察决策树**：Feed → WP REST API → Sitemap → HTML 列表 → Playwright
