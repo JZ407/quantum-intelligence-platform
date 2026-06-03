@@ -1229,3 +1229,74 @@ PDF 和 tex 均正常输出。
 - 调用方式：重启 Claude Code 后输入 `/scrape-workflow` 或提及"抓取网站"
 
 **侦察决策树**：Feed → WP REST API → Sitemap → HTML 列表 → Playwright
+
+## 20.35 历史库 page=0 起始修复 (2026-06-03)
+
+> 📦 `rag_system: 8b92e4d`
+
+**问题**：QtC 首页 `/?page=0` 才是最新内容，`page=1` 是次新。历史抓取从 page=1 开始，漏掉了 15 篇最新文章。
+
+**修复**：`full_scrape_homepage.py` 起始页从 1 改为 0。补抓 15 篇入库，历史库总计 11,789。
+
+## 20.36 OneDrive 共享文件夹自动同步 (2026-06-03)
+
+> 📦 `liangke_daily: de59cf9` `institution_news: c3b9b1f`
+
+**需求**：同事通过 OneDrive 共享文件夹 `C:\Users\zhouj\OneDrive\liangke_database\` 实时获取最新数据库。
+
+**实现**：
+- `sync_to_onedrive.py`：MySQL 每日库 → SQLite 导出 + institutions.db + historical_final.db 三库同步
+- 每日抓取和机构抓取完毕后自动调用
+- 共享文件：`liangke_daily.db` (496KB) + `institutions.db` (18MB) + `historical_final.db` (27MB)
+
+## 20.37 v2+v3 历史库合并 (2026-06-03)
+
+**策略**：以 v3 为底本 → 重叠 8,330 篇从 v2 迁标签 → 导入 605 篇 v2 独有文章 → LLM 打标签 2,839 篇 v3 独有文章。
+
+**最终产物**：`historical_final.db`
+| 类型 | 数量 | 标签率 |
+|------|------|--------|
+| flash | 8,823 | 99.7% |
+| article | 2,830 | 87% |
+| reference | 136 | 93% |
+| **总计** | **11,789** | **96%** |
+
+**对比**
+| | v1 子栏目 | v3 首页 | final 合并 |
+|------|------|------|------|
+| flash | 8,670 | 8,417 | **8,823** |
+| article | 166 | 2,718 | **2,830** |
+| reference | 117 | 34 | **136** |
+| 总计 | 8,953 | 11,169 | **11,789** |
+
+## 20.38 报告提醒系统复活 + 醒目通知 (2026-06-03)
+
+> 📦 `rag_system: 8c59a2d`
+
+**问题**：报告提醒自 5 月 26 日后未更新，仅 1 条记录。
+
+**改进**：
+- 数据源从 v2 升级到 `historical_final.db`，增加机构库扫描
+- `scan_reports.py` 支持 `--full` 全量扫描和 `--days N` 增量
+- 扫描近 7 天三大库共 1,105 篇，发现 26 条新报告
+- 侧边栏导航红点：`报告提醒 🔴27`
+- 页面内醒目横幅：`🆕 近 7 天发现 27 份新报告/白皮书/路线图`
+- 修复来源文章链接显示
+
+**关键发现**：德国量子路线图、G7 央行量子金融报告、NIST IR 8610、QED-C 2026 产业报告、中国量子计算国标等。
+
+## 20.39 page_type ORM 模型修复 (2026-06-03)
+
+> 📦 `liangke_daily: d85faba`
+
+**问题**：交互界面新增文章不显示类型标签。根因：MySQL 有 `page_type` 列但 SQLAlchemy Article 模型未定义该字段，设置时静默失败。
+
+**修复**：Article 模型添加 `page_type` Column，`insert_or_update_article` 增加 `page_type` 参数，直接从 URL 推导。存量 26 篇已修复。
+
+## 20.40 每日抓取改为今天+昨天窗口 (2026-06-02)
+
+> 📦 `liangke_daily: 45ca9f3`
+
+**问题**：首页常出现大量昨天文章（前一天漏抓），仅抓今天会导致漏网。
+
+**修复**：日期过滤从 `== today` 改为 `in {today, yesterday}`，两天窗口兜底。
