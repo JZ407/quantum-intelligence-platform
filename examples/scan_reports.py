@@ -8,7 +8,8 @@ from llm_client import LLMClient
 import yaml
 
 DAILY_DB = 'mysql+pymysql://scraper:scraper123@127.0.0.1:3306/liangke_scraper?charset=utf8mb4'
-HISTORICAL_DB = 'D:/Claude_code/liangke_historical/historical_v2.db'
+HISTORICAL_DB = 'D:/Claude_code/liangke_historical/historical_final.db'
+INSTITUTION_DB = 'D:/Claude_code/institution_news/institutions.db'
 ALERT_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'report_alerts.json')
 
 
@@ -73,44 +74,85 @@ def scan_articles(articles: list, client: LLMClient) -> list:
         return []
 
 
-def main(days=1):
+def main(days=7, full=False):
     client = get_llm()
+    all_articles = []
 
-    # Fetch recent articles from daily DB
+    # 1. Daily DB
     from sqlalchemy import create_engine
     import pandas as pd
     engine = create_engine(DAILY_DB)
     df = pd.read_sql(f"SELECT * FROM articles WHERE liangke_date >= DATE_SUB(CURDATE(), INTERVAL {days} DAY) ORDER BY liangke_date DESC", engine)
-    articles = df.to_dict('records')
-    print(f'[INFO] Scanning {len(articles)} articles from daily DB (last {days} days)...')
+    daily_articles = df.to_dict('records')
+    all_articles.extend(daily_articles)
+    print(f'[INFO] Daily DB: {len(daily_articles)} articles (last {days} days)')
 
-    alerts = scan_articles(articles, client)
+    # 2. Institution DB
+    if os.path.exists(INSTITUTION_DB):
+        conn = sqlite3.connect(INSTITUTION_DB)
+        conn.row_factory = sqlite3.Row
+        from datetime import datetime, timedelta as td
+        cutoff = (datetime.now() - td(days=days)).strftime('%Y-%m-%d')
+        cur = conn.execute(
+            'SELECT title, content, publish_date as liangke_date, url as liangke_url FROM articles WHERE publish_date >= ? ORDER BY publish_date DESC',
+            (cutoff,)
+        )
+        inst_articles = [dict(r) for r in cur.fetchall()]
+        all_articles.extend(inst_articles)
+        conn.close()
+        print(f'[INFO] Institution DB: {len(inst_articles)} articles (last {days} days)')
+
+    # 3. Full historical scan
+    if full and os.path.exists(HISTORICAL_DB):
+        conn = sqlite3.connect(HISTORICAL_DB)
+        conn.row_factory = sqlite3.Row
+        cur = conn.execute(
+            "SELECT title, content, liangke_date, liangke_url FROM articles WHERE detail_fetched=1 AND article_type='article' ORDER BY liangke_date DESC LIMIT 1000"
+        )
+        hist_articles = [dict(r) for r in cur.fetchall()]
+        all_articles.extend(hist_articles)
+        conn.close()
+        print(f'[INFO] Historical DB: {len(hist_articles)} articles (full scan)')
+
+    # Batch scan
+    alerts = []
+    batch_size = 30
+    for i in range(0, len(all_articles), batch_size):
+        batch = all_articles[i:i + batch_size]
+        batch_alerts = scan_articles(batch, client)
+        alerts.extend(batch_alerts)
+        if batch_alerts:
+            print(f'  Batch {i//batch_size + 1}: {len(batch_alerts)} reports')
+        if i + batch_size < len(all_articles):
+            import time
+            time.sleep(2)
 
     if alerts:
-        # Load existing alerts
         existing = []
         if os.path.exists(ALERT_PATH):
             with open(ALERT_PATH, 'r', encoding='utf-8') as f:
                 existing = json.load(f)
 
-        # Merge: keep existing, add new ones (avoid duplicates by source URL)
         seen_urls = {a['source_article_url'] for a in existing}
         new_alerts = [a for a in alerts if a['source_article_url'] not in seen_urls]
-        existing = new_alerts + existing  # new first
+        existing = new_alerts + existing
 
         with open(ALERT_PATH, 'w', encoding='utf-8') as f:
             json.dump(existing, f, ensure_ascii=False, indent=2)
 
-        print(f'\n{"="*60}')
+        sep = '=' * 60
+        print(f'\n{sep}')
         print(f'[ALERTS] {len(new_alerts)} new reports found (total: {len(existing)})')
-        print(f'{"="*60}')
-        for a in new_alerts:
+        print(sep)
+        for a in new_alerts[:20]:
             print(f"  [{a['date']}] {a['report_name']}")
             print(f"    发布: {a['publisher']}")
-            if a['url']:
+            if a.get('url'):
                 print(f"    链接: {a['url']}")
-            print(f"    价值: {a['note']}")
+            print(f"    价值: {a.get('note', '')[:100]}")
             print()
+        if len(new_alerts) > 20:
+            print(f'  ... and {len(new_alerts) - 20} more')
     else:
         print('[INFO] No new reports detected.')
 
@@ -118,6 +160,7 @@ def main(days=1):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--days', type=int, default=1)
+    parser.add_argument('--days', type=int, default=7)
+    parser.add_argument('--full', action='store_true')
     args = parser.parse_args()
-    main(days=args.days)
+    main(days=args.days, full=args.full)
