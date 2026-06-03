@@ -989,9 +989,13 @@ def page_report_alerts():
                         st.markdown(f"### {a.get('report_name', '未知')}")
                         st.caption(f"📅 {a.get('date', '')}  |  🏛️ {a.get('publisher', '')}")
                         st.markdown(a.get('note', ''))
+                        col1, col2 = st.columns(2)
+                        src_url = a.get('source_article_url', '')
+                        if src_url:
+                            col1.link_button("📰 来源文章", src_url)
                         if a.get('url'):
-                            st.link_button("🔗 查看原文", a['url'])
-                        st.caption(f"来源：{a.get('title', '')[:80]}")
+                            col2.link_button("📄 报告下载", a['url'])
+                        st.caption(f"来源新闻：{a.get('title', '')[:80]}")
                         st.markdown("---")
 
     with tab2:
