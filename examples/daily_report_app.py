@@ -969,7 +969,19 @@ def page_weekly_report():
 # ------------------------------------------------------------------
 
 def page_report_alerts():
-    st.header("报告提醒")
+    st.header("📢 报告提醒")
+
+    # Prominent banner for recent reports
+    import json, os
+    from datetime import datetime, timedelta
+    alert_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'report_alerts.json')
+    if os.path.exists(alert_path):
+        with open(alert_path, 'r', encoding='utf-8') as f:
+            all_alerts = json.load(f)
+        cutoff = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d')
+        recent = [a for a in all_alerts if a.get('date', '') >= cutoff]
+        if recent:
+            st.success(f"🆕 近 7 天发现 **{len(recent)}** 份新报告/白皮书/路线图")
 
     tab1, tab2 = st.tabs(["📰 新闻中发现的报告", "📚 光子盒报告"])
 
@@ -1267,11 +1279,35 @@ def page_knowledge_graph():
     st.dataframe(rows, use_container_width=True, hide_index=True)
 
 
+def count_new_reports():
+    """Count reports added in the last 7 days."""
+    import json, os
+    from datetime import datetime, timedelta
+    alert_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'report_alerts.json')
+    if not os.path.exists(alert_path):
+        return 0
+    with open(alert_path, 'r', encoding='utf-8') as f:
+        alerts = json.load(f)
+    cutoff = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d')
+    return sum(1 for a in alerts if a.get('date', '') >= cutoff)
+
+
 def main():
     st.set_page_config(page_title="量子科技情报", page_icon="📰", layout="wide")
     st.title("📰 量子科技情报")
 
-    page = st.sidebar.radio("导航", ["每日资讯", "周报生成", "会议信息", "报告提醒", "知识图谱"])
+    # Report alert badge
+    new_reports = count_new_reports()
+    nav_items = ["每日资讯", "周报生成", "会议信息"]
+    if new_reports > 0:
+        nav_items.append(f"报告提醒 🔴{new_reports}")
+    else:
+        nav_items.append("报告提醒")
+    nav_items.append("知识图谱")
+
+    page_raw = st.sidebar.radio("导航", nav_items)
+    # Strip badge for page routing
+    page = page_raw.split(" 🔴")[0] if " 🔴" in page_raw else page_raw
 
     if page == "每日资讯":
         page_daily_news()

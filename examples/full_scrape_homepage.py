@@ -17,6 +17,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 BASE_URL = 'http://www.qtc.com.cn'
 COOKIE_PATH = 'D:/Claude_code/liangke_historical/qtc_cookies.pkl'
 DB_PATH = 'D:/Claude_code/liangke_historical/historical_v3.db'
+START_PAGE = 0  # page 0 = newest
 MAX_PAGES = 744
 DETAIL_DELAY = 2.0   # seconds between detail requests
 HEADERS = {
@@ -276,12 +277,12 @@ def _extract_reference_link(soup):
 
 # ── Discover articles from homepage feed ────────────────────────────
 
-def discover_all_articles(session, max_pages=MAX_PAGES):
-    """Scan homepage ?page=1..max_pages, extract all article links with metadata."""
+def discover_all_articles(session, start_page=0, max_pages=MAX_PAGES):
+    """Scan homepage ?page=start..max_pages, extract all article links with metadata."""
     all_articles = OrderedDict()  # liangke_id -> article dict
     seen_on_pages = {}            # liangke_id -> first page seen
 
-    for page in range(1, max_pages + 1):
+    for page in range(start_page, max_pages + 1):
         url = f'{BASE_URL}/?page={page}'
         try:
             resp = session.get(url, timeout=30)
