@@ -494,6 +494,8 @@ def main():
     parser.add_argument('--conf-month', type=int, default=None, help='Conference month to include')
     parser.add_argument('--tender-excel', default=None, help='Path to tender Excel file')
     parser.add_argument('--patent-excel', action='append', default=[], help='Path to patent Excel file (repeatable)')
+    parser.add_argument('--page-types', default='flash,article,reference',
+                        help='Comma-separated page types to include (default: flash,article,reference)')
     args = parser.parse_args()
 
     output_dir = args.output or os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'weekly_output')
@@ -503,6 +505,12 @@ def main():
     print(f'[INFO] Fetching news from {args.start} to {args.end}...')
     df = fetch_news(args.start, args.end)
     print(f'[INFO] Fetched {len(df)} articles')
+
+    # 1.5. Apply page_type filter
+    page_types = [t.strip() for t in args.page_types.split(',') if t.strip()]
+    if page_types and 'page_type' in df.columns:
+        df = df[df['page_type'].isin(page_types)]
+        print(f'[INFO] After page_type filter ({args.page_types}): {len(df)} articles')
 
     categories = classify_news(df)
     for cat, arts in categories.items():

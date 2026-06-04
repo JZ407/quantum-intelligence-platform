@@ -874,6 +874,13 @@ def page_weekly_report():
                                index=datetime.now().month - 1, key="wr_conf")
 
     st.markdown("---")
+    wr_page_types = st.multiselect(
+        "新闻类型筛选（默认全选，叉掉不想要的）",
+        options=["flash", "article", "reference"],
+        default=["flash", "article", "reference"], key="wr_page_types"
+    )
+
+    st.markdown("---")
     st.markdown("### 招投标数据")
     tender_file = st.file_uploader("上传招投标 Excel", type=['xlsx', 'xls'], key="wr_tender")
 
@@ -930,6 +937,7 @@ def page_weekly_report():
                 '--end', end_date.strftime('%Y-%m-%d'),
                 '--issue', issue_no,
                 '--conf-month', str(conf_month),
+                '--page-types', ','.join(wr_page_types),
             ]
 
             if tender_file:
