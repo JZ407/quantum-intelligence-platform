@@ -1366,12 +1366,11 @@ PDF 和 tex 均正常输出。
 
 ## 20.44 内容类型筛选器 (2026-06-04)
 
-> 📦 `rag_system: 5119935`
+> 📦 `rag_system: 56940cf`
 
 **需求**：三子页策略后 reference 从 2 条暴增到 78 条/天，交互页面需支持按类型筛选。
 
-**实现**：`daily_report_app.py` 中 `page_daily_news()` 新增 `st.radio` 横向按钮组：
-- `全部 | flash | article | reference`
+**实现**：`daily_report_app.py` 中 `page_daily_news()` 新增 `st.multiselect` 多选标签：
+- 默认全部勾选 `[flash] [article] [reference]`，叉掉哪个就隐藏哪个
 - 仅对量科每日库和历史库生效（机构新闻库无此字段）
-- 筛选后标题栏显示 `[类型: flash]` 等当前筛选状态
-- 数据导出也受筛选影响
+- 勾选不全时标题栏显示 `[类型: flash, article]` 状态提示
