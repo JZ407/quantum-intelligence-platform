@@ -393,11 +393,11 @@ def page_daily_news():
     # Page type filter (only for 量科 sources)
     if source != "机构新闻库":
         page_types = st.multiselect(
-            "内容类型（留空=全部）", options=["flash", "article", "reference"],
-            default=[], key="page_type_filter"
+            "内容类型", options=["flash", "article", "reference"],
+            default=["flash", "article", "reference"], key="page_type_filter"
         )
     else:
-        page_types = []
+        page_types = ["flash", "article", "reference"]
 
     keyword = st.text_input("🔍 关键词检索（搜索全库，不限日期）", placeholder="输入关键词搜索全库...")
 
@@ -425,8 +425,9 @@ def page_daily_news():
             else:
                 df = fetch_articles(target_str)
 
-    # Apply page type filter
-    if page_types and not df.empty and 'page_type' in df.columns:
+    # Apply page type filter (skip if all types selected = no filter)
+    ALL_TYPES = {"flash", "article", "reference"}
+    if set(page_types) != ALL_TYPES and not df.empty and 'page_type' in df.columns:
         df = df[df['page_type'].isin(page_types)]
 
     if df.empty:
@@ -434,7 +435,7 @@ def page_daily_news():
         return
 
     # News list section (with manual selection)
-    filter_note = f" [类型: {', '.join(page_types)}]" if page_types else ""
+    filter_note = "" if set(page_types) == ALL_TYPES else f" [类型: {', '.join(page_types)}]"
     if keyword:
         st.markdown(f"### 📋 搜索结果（共 {len(df)} 条）{filter_note}")
         st.caption(f"全文检索 \"{keyword}\" ，跨全库")
