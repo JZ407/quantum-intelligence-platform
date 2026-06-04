@@ -1303,7 +1303,7 @@ PDF 和 tex 均正常输出。
 
 ## 20.41 Streamlit 历史库路径切换 + 端口清理 (2026-06-03)
 
-> 📦 `rag_system: <commit>`
+> 📦 `rag_system: 0334788`
 
 **问题**：Streamlit 交互界面的历史库路径仍指向 `historical_v2.db`（8,953 篇），而非合并后的 `historical_final.db`（11,789 篇）。这意味着报告提醒、历史检索等功能少了 2,836 篇 article 类型文章。
 
@@ -1315,3 +1315,32 @@ PDF 和 tex 均正常输出。
 - 历史检索：8,953 → **11,789**（+32%）
 - 报告提醒：可扫描全部 v3 article 长文（2,830 篇，含更多引用报告/白皮书）
 - 知识图谱 Tab：历史侧节点和边更完整
+
+## 20.42 每日抓取策略重构：首页 → 三子页 (2026-06-04)
+
+> 📦 `liangke_daily: 9c1b743`
+
+**问题**：首页 `/?page=0` 每页仅 ~15 条混合类型，覆盖不足。`/reference` 子页一天更新 8 页（80 条），`/news` 一页 37 条 article，`/flash` 一页 20 条 flash。同时 `/article/` 详情页的 `_extract_liangke_date` 只用 `soup.find()` 取第一个 `<span class='time'>`（常为机构名而非日期），导致 article 类型全部漏抓。
+
+**方案**：三路子页替代首页单路。
+
+**新增函数**（`scrape_daily.py`）：
+- `fetch_flash_list()` — 从 `/flash?page=N` 抓取，`<span class='date'>` 含完整 YYYY-MM-DD，翻至超出日期窗口
+- `fetch_news_list()` — 从 `/news?page=N` 抓取 article 链接，解析相对时间（"X小时前"/"X天前"/"昨天"）
+- `fetch_reference_list()` — 从 `/reference?page=N` 抓取，同上相对时间解析
+- `parse_relative_time()` — "X小时前"→today, "昨天"→yesterday, "X天前"→today-X
+
+**`_extract_liangke_date` 修复**：
+- `soup.find()` → `soup.find_all()` 遍历所有 `<span class='time'>`
+- 新增回退：`<span class='date'>` 拼接 year+MM-DD、中文日期 `X月X日` 推断今年
+
+**效果对比**（2026-06-04 实测）：
+| 指标 | 旧（首页） | 新（三子页） |
+|------|-----------|-------------|
+| 候选文章 | ~15 | 156 |
+| 今日入库 | ~10 | 84 |
+| article 类型 | 0 | 9（昨天）+ 更多 |
+| flash 类型 | ~6 | 6 |
+| reference 类型 | ~2 | **78** |
+
+**数据**：flash 翻 2 页（24 候选），news 翻 2 页（22 候选），reference 翻 11 页（110 候选），总计 156 去重后处理，63 新增 + 53 更新 + 40 过期跳过。DB 总文章数：332。
