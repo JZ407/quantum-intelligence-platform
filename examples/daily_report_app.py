@@ -390,6 +390,15 @@ def page_daily_news():
         st.caption(caption)
     target_str = target_date.strftime('%Y-%m-%d')
 
+    # Page type filter (only for 量科 sources)
+    if source != "机构新闻库":
+        page_type_filter = st.radio(
+            "内容类型", options=["全部", "flash", "article", "reference"],
+            horizontal=True, key="page_type_filter"
+        )
+    else:
+        page_type_filter = "全部"
+
     keyword = st.text_input("🔍 关键词检索（搜索全库，不限日期）", placeholder="输入关键词搜索全库...")
 
     with st.spinner("正在读取数据库..."):
@@ -416,16 +425,21 @@ def page_daily_news():
             else:
                 df = fetch_articles(target_str)
 
+    # Apply page type filter
+    if page_type_filter != "全部" and not df.empty and 'page_type' in df.columns:
+        df = df[df['page_type'] == page_type_filter]
+
     if df.empty:
         st.warning(f"📭 暂无匹配数据。")
         return
 
     # News list section (with manual selection)
+    filter_note = f" [类型: {page_type_filter}]" if page_type_filter != "全部" else ""
     if keyword:
-        st.markdown(f"### 📋 搜索结果（共 {len(df)} 条）")
+        st.markdown(f"### 📋 搜索结果（共 {len(df)} 条）{filter_note}")
         st.caption(f"全文检索 \"{keyword}\" ，跨全库")
     else:
-        st.markdown(f"### 📋 新闻列表（{target_str}，共 {len(df)} 条）")
+        st.markdown(f"### 📋 新闻列表（{target_str}，共 {len(df)} 条）{filter_note}")
         if source == "量科每日库":
             st.caption("请勾选您认为最重要的 3 条新闻，下方将据此生成日报。")
 
