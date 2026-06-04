@@ -1374,3 +1374,25 @@ PDF 和 tex 均正常输出。
 - 默认全部勾选 `[flash] [article] [reference]`，叉掉哪个就隐藏哪个
 - 仅对量科每日库和历史库生效（机构新闻库无此字段）
 - 勾选不全时标题栏显示 `[类型: flash, article]` 状态提示
+
+## 20.45 第三梯队启动：D-Wave 抓取 (2026-06-04)
+
+> 📦 `institution_news: bf8def1`
+
+**侦察**：
+- 域名 `dwavequantum.com`（旧 `dwavesys.com` 301 跳转）
+- Umbraco .NET CMS（非 WordPress），无 RSS Feed
+- Sitemap 1035 URL，其中 `/company/newsroom/press-release/` 246 篇
+
+**实现**（`sources/dwave.py`）：
+- Sitemap 解析 → 提取 press release URL + lastmod
+- 标题：h1（og:title 为空）
+- 日期：div.t-news-section-text-item 中 `Month DD, YYYY` 格式
+- 正文：body 全文本，停止于 Investor/Media Contact 等页脚标记
+
+**结果**：
+- 246 sitemap URL → 233 入库（94.7%），13 篇空内容跳过
+- 日期范围：2018-06-06 ~ 2026-06-03
+- DB 总量：2,992 → **3,225**（+233）
+
+**机构新闻累计**：16 家机构、29 个源、3,225 篇
