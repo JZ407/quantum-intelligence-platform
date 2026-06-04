@@ -496,6 +496,8 @@ def main():
     parser.add_argument('--patent-excel', action='append', default=[], help='Path to patent Excel file (repeatable)')
     parser.add_argument('--page-types', default='flash,article,reference',
                         help='Comma-separated page types to include (default: flash,article,reference)')
+    parser.add_argument('--selected-ids', default='',
+                        help='Comma-separated article IDs to include (overrides other filters)')
     args = parser.parse_args()
 
     output_dir = args.output or os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'weekly_output')
@@ -511,6 +513,12 @@ def main():
     if page_types and 'page_type' in df.columns:
         df = df[df['page_type'].isin(page_types)]
         print(f'[INFO] After page_type filter ({args.page_types}): {len(df)} articles')
+
+    # 1.6. Apply selected-ids filter (from UI checkboxes)
+    if args.selected_ids:
+        selected = set(int(x) for x in args.selected_ids.split(',') if x.strip())
+        df = df[df['id'].astype(int).isin(selected)]
+        print(f'[INFO] After selected-ids filter: {len(df)} articles')
 
     categories = classify_news(df)
     for cat, arts in categories.items():

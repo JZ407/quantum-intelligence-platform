@@ -880,6 +880,99 @@ def page_weekly_report():
         default=["flash", "article", "reference"], key="wr_page_types"
     )
 
+    # --- Article preview & selection ---
+    st.markdown("---")
+    st.markdown("### 新闻勾选")
+    preview_col1, preview_col2 = st.columns([2, 5])
+    with preview_col1:
+        load_clicked = st.button("📋 加载文章预览", type="secondary", key="wr_load")
+
+    if 'wr_selections' not in st.session_state:
+        st.session_state.wr_selections = {}
+    if 'wr_loaded' not in st.session_state:
+        st.session_state.wr_loaded = False
+
+    if load_clicked:
+        with st.spinner("正在加载文章..."):
+            engine = create_engine(DB_URL)
+            start_str = start_date.strftime('%Y-%m-%d')
+            end_str = end_date.strftime('%Y-%m-%d')
+            query = f"SELECT id, title, liangke_date, page_type FROM articles WHERE liangke_date BETWEEN '{start_str}' AND '{end_str}' ORDER BY id DESC"
+            df_raw = pd.read_sql(query, engine)
+            if wr_page_types and 'page_type' in df_raw.columns:
+                df_raw = df_raw[df_raw['page_type'].isin(wr_page_types)]
+            st.session_state.wr_articles = df_raw
+            st.session_state.wr_loaded = True
+            # Initialize all as selected
+            st.session_state.wr_selections = {str(row['id']): True for _, row in df_raw.iterrows()}
+            # Also load tags for classification
+            tag_query = f"SELECT id, tags FROM articles WHERE liangke_date BETWEEN '{start_str}' AND '{end_str}'"
+            df_tags = pd.read_sql(tag_query, engine)
+            df_tags['tags'] = df_tags['tags'].apply(_parse_tags)
+            st.session_state.wr_tags = dict(zip(df_tags['id'].astype(str), df_tags['tags']))
+        st.rerun()
+
+    if st.session_state.wr_loaded and 'wr_articles' in st.session_state:
+        df = st.session_state.wr_articles
+
+        # Classify into 5 categories using tags
+        CATS = ['资本运作', '产品动态', '企业资讯', '科技前沿', '宏观态势']
+        categories = {cat: [] for cat in CATS}
+        uncategorized = []
+        for _, row in df.iterrows():
+            aid = str(row['id'])
+            tags = st.session_state.wr_tags.get(aid, [])
+            matched = False
+            if isinstance(tags, dict):
+                for tag in tags.get('weekly', []):
+                    if tag in categories:
+                        categories[tag].append(row)
+                        matched = True
+                        break
+            elif isinstance(tags, list):
+                for tag in tags:
+                    if tag in categories:
+                        categories[tag].append(row)
+                        matched = True
+                        break
+            if not matched:
+                uncategorized.append(row)
+        if uncategorized:
+            categories['宏观态势'].extend(uncategorized)
+
+        total_sel = 0
+        total_all = 0
+        for cat in CATS:
+            arts = categories[cat]
+            if not arts:
+                continue
+            total_all += len(arts)
+            sel = sum(1 for _, r in enumerate(arts) if st.session_state.wr_selections.get(str(r['id']), True))
+            total_sel += sel
+
+            with st.expander(f"{cat}  ({sel}/{len(arts)} 已选)", expanded=True):
+                c1, c2 = st.columns([1, 10])
+                with c1:
+                    if st.button("全选", key=f"wr_sa_{cat}"):
+                        for _, r in enumerate(arts):
+                            st.session_state.wr_selections[str(r['id'])] = True
+                        st.rerun()
+                    if st.button("清空", key=f"wr_clr_{cat}"):
+                        for _, r in enumerate(arts):
+                            st.session_state.wr_selections[str(r['id'])] = False
+                        st.rerun()
+
+                for _, row in enumerate(arts):
+                    aid = str(row['id'])
+                    ptype = row.get('page_type', '')
+                    badge = f"[{ptype}] " if ptype else ""
+                    date_str = str(row.get('liangke_date', ''))[:10]
+                    label = f"{badge}{date_str} | {str(row['title'])[:120]}"
+                    checked = st.checkbox(label, value=st.session_state.wr_selections.get(aid, True), key=f"wr_cb_{aid}")
+                    st.session_state.wr_selections[aid] = checked
+
+        st.markdown(f"**总计已选：{total_sel} / {total_all}**")
+
     st.markdown("---")
     st.markdown("### 招投标数据")
     tender_file = st.file_uploader("上传招投标 Excel", type=['xlsx', 'xls'], key="wr_tender")
@@ -897,11 +990,11 @@ def page_weekly_report():
             for cat in PATENT_CATS:
                 if cat in name:
                     patent_files[cat] = pf
-                    st.caption(f"  ✓ {name} → {cat}")
+                    st.caption(f"  + {name} -> {cat}")
                     matched = True
                     break
             if not matched:
-                st.warning(f"  ⚠ {name} 未匹配到板块，已跳过")
+                st.warning(f"  ! {name} not matched")
 
     if 'wr_result' not in st.session_state:
         st.session_state.wr_result = None
@@ -910,77 +1003,85 @@ def page_weekly_report():
 
     btn_col1, btn_col2 = st.columns([2, 5])
     with btn_col1:
-        gen_clicked = st.button("🚀 生成周报 PDF", type="primary", key="wr_gen")
+        gen_clicked = st.button("Generate PDF", type="primary", key="wr_gen")
     with btn_col2:
         if st.session_state.wr_result == 'success' and st.session_state.wr_pdf_path:
             with open(st.session_state.wr_pdf_path, 'rb') as f:
                 st.download_button(
-                    label="📥 下载周报 PDF", data=f,
+                    label="Download PDF", data=f,
                     file_name=os.path.basename(st.session_state.wr_pdf_path),
                     mime="application/pdf",
                 )
-            st.success("周报生成成功！")
+            st.success("Success!")
         elif st.session_state.wr_result == 'error':
-            st.error("PDF 未找到，编译可能失败。")
+            st.error("PDF not found.")
 
     if gen_clicked:
-        with st.spinner("正在生成周报..."):
-            import subprocess
+        if not st.session_state.wr_loaded:
+            st.error("Click 'Load Preview' first")
+        else:
+            with st.spinner("Generating..."):
+                import subprocess
+                temp_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'weekly_temp')
+                os.makedirs(temp_dir, exist_ok=True)
 
-            temp_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'weekly_temp')
-            os.makedirs(temp_dir, exist_ok=True)
+                selected_ids = [aid for aid, v in st.session_state.wr_selections.items() if v]
+                if not selected_ids:
+                    st.error("No articles selected!")
+                    return
 
-            cmd = [
-                sys.executable,
-                os.path.join(os.path.dirname(os.path.abspath(__file__)), 'generate_weekly_report.py'),
-                '--start', start_date.strftime('%Y-%m-%d'),
-                '--end', end_date.strftime('%Y-%m-%d'),
-                '--issue', issue_no,
-                '--conf-month', str(conf_month),
-                '--page-types', ','.join(wr_page_types),
-            ]
+                cmd = [
+                    sys.executable,
+                    os.path.join(os.path.dirname(os.path.abspath(__file__)), 'generate_weekly_report.py'),
+                    '--start', start_date.strftime('%Y-%m-%d'),
+                    '--end', end_date.strftime('%Y-%m-%d'),
+                    '--issue', issue_no,
+                    '--conf-month', str(conf_month),
+                    '--page-types', ','.join(wr_page_types),
+                    '--selected-ids', ','.join(selected_ids),
+                ]
 
-            if tender_file:
-                tender_path = os.path.join(temp_dir, 'tenders.xlsx')
-                with open(tender_path, 'wb') as f:
-                    f.write(tender_file.getvalue())
-                cmd.extend(['--tender-excel', tender_path])
+                if tender_file:
+                    tender_path = os.path.join(temp_dir, 'tenders.xlsx')
+                    with open(tender_path, 'wb') as f:
+                        f.write(tender_file.getvalue())
+                    cmd.extend(['--tender-excel', tender_path])
 
-            for cat in PATENT_CATS:
-                pf = patent_files.get(cat)
-                if pf:
-                    df = pd.read_excel(pf)
-                    patents = parse_patent_excel(df, file_bytes=pf.getvalue())
-                    if patents:
-                        patents = filter_patents_by_date(patents, start_date, end_date)
-                        filtered = filter_patents_llm(patents, cat) if len(patents) > 8 else patents
-                        st.caption(f"{cat} 原始 → 本周{len(patents)}条 → 精选{len(filtered)}条")
-                        pd.DataFrame(filtered).to_excel(
-                            os.path.join(temp_dir, f'patents_{cat}.xlsx'), index=False, engine='openpyxl')
-                        cmd.extend(['--patent-excel', os.path.join(temp_dir, f'patents_{cat}.xlsx')])
+                for cat in PATENT_CATS:
+                    pf = patent_files.get(cat)
+                    if pf:
+                        df = pd.read_excel(pf)
+                        patents = parse_patent_excel(df, file_bytes=pf.getvalue())
+                        if patents:
+                            patents = filter_patents_by_date(patents, start_date, end_date)
+                            filtered = filter_patents_llm(patents, cat) if len(patents) > 8 else patents
+                            st.caption(f"{cat}: {len(patents)} raw -> {len(filtered)} selected")
+                            pd.DataFrame(filtered).to_excel(
+                                os.path.join(temp_dir, f'patents_{cat}.xlsx'), index=False, engine='openpyxl')
+                            cmd.extend(['--patent-excel', os.path.join(temp_dir, f'patents_{cat}.xlsx')])
 
-            result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace')
-            st.code(result.stdout)
+                result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace')
+                st.code(result.stdout)
 
-            if result.returncode != 0:
-                st.error("生成失败")
-                st.code(result.stderr)
-                st.session_state.wr_result = 'error'
-                st.session_state.wr_pdf_path = None
-            else:
-                pdf_path = os.path.join(
-                    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                    'weekly_output',
-                    f'量子行业每周新闻洞察_第{issue_no}期.pdf'
-                )
-                if os.path.exists(pdf_path):
-                    st.session_state.wr_result = 'success'
-                    st.session_state.wr_pdf_path = pdf_path
-                    st.rerun()
-                else:
-                    st.error("PDF 未找到，编译可能失败。")
+                if result.returncode != 0:
+                    st.error("Failed")
+                    st.code(result.stderr)
                     st.session_state.wr_result = 'error'
                     st.session_state.wr_pdf_path = None
+                else:
+                    pdf_path = os.path.join(
+                        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                        'weekly_output',
+                        f'量子行业每周新闻洞察_第{issue_no}期.pdf'
+                    )
+                    if os.path.exists(pdf_path):
+                        st.session_state.wr_result = 'success'
+                        st.session_state.wr_pdf_path = pdf_path
+                        st.rerun()
+                    else:
+                        st.error("PDF not found")
+                        st.session_state.wr_result = 'error'
+                        st.session_state.wr_pdf_path = None
 
 
 # ------------------------------------------------------------------
