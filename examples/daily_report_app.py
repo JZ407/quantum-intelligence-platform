@@ -864,12 +864,14 @@ def page_weekly_report():
     # Default: this week's Saturday → today (current week in progress)
     today = datetime.now().date()
     # Week runs Saturday→Friday. Find the Saturday that starts this week.
-    if today.weekday() == 6:      # Sunday → last week
-        days_back = 8
-    elif today.weekday() == 5:    # Saturday → today IS the start
+    # Mon(0)→1, Tue(1)→2, Wed(2)→3, Thu(3)→4, Fri(4)→5, Sat(5)→0, Sun(6)→1
+    wd = today.weekday()
+    if wd == 5:       # Saturday → today IS the start
         days_back = 0
-    else:                         # Mon-Fri
-        days_back = today.weekday() + 2
+    elif wd == 6:     # Sunday → yesterday was the start
+        days_back = 1
+    else:             # Mon-Fri
+        days_back = wd + 1
     last_saturday = today - timedelta(days=days_back)
 
     # Auto-calculate issue number: issue 182 = week starting 2026-05-31 (Sat)
