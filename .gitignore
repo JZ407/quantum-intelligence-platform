@@ -7,3 +7,7 @@ data/
 data_*/
 index/
 index_*/
+weekly_output/*.aux
+weekly_output/*.log
+weekly_output/*.out
+weekly_output/*.toc
