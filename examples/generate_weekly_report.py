@@ -334,7 +334,7 @@ def compile_pdf(tex_path: str, output_dir: str) -> str:
         if result.returncode != 0:
             print(f'[WARN] xelatex returned {result.returncode}')
             if '!' in out:
-                print(out[-2000:])
+                print(out[-2000:].encode('gbk', errors='replace').decode('gbk', errors='replace'))
     pdf_path = tex_path.replace('.tex', '.pdf')
     return pdf_path
 
@@ -477,6 +477,10 @@ def _parse_patent_df(df: pd.DataFrame, excel_path: str = None) -> list:
             'url': url,
         }
         p = {k: (v if v not in ('nan', 'None', 'null') else '') for k, v in p.items()}
+        # Remove Japanese kana and Korean hangul that break xelatex CJK fonts
+        for key in ('title', 'applicant', 'inventor', 'abstract'):
+            p[key] = re.sub(r'[぀-ヿ가-힯ᄀ-ᇿ]+', ' ', p[key])
+            p[key] = re.sub(r'\s+', ' ', p[key]).strip()
         results.append(p)
     return results
 
