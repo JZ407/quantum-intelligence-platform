@@ -1,0 +1,843 @@
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{fontspec}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{multicol}
+\usepackage{xurl}
+\usepackage{tocloft}
+
+\renewcommand{\cfttoctitlefont}{\hfill\bfseries\Large}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\definecolor{black}{RGB}{0,0,0}
+\definecolor{mainblue}{RGB}{0,82,147}
+\definecolor{accentgold}{RGB}{180,140,60}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{80,80,80}
+\definecolor{mainred}{RGB}{230,1,45}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=mainblue,
+    citecolor=mainblue,
+    pdfborder={0 0 0}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{darkgray}\textbf{量子行业每周新闻洞察}}
+\fancyhead[R]{\small\color{darkgray}\textbf{总第182期}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\titleformat{\section}
+    {\Large\bfseries\color{mainred}}
+    {\thesection、}{0em}{}
+\titleformat{\subsection}
+    {\large\bfseries\color{mainred}}
+    {\thesubsection、}{0em}{}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\begin{document}
+
+% ==================== 封面 ====================
+\begin{titlepage}
+\begin{tikzpicture}[remember picture,overlay]
+    \fill[mainred] ([yshift=-0.5cm]current page.north west) rectangle ([yshift=-1.2cm]current page.north east);
+    \fill[mainred] ([yshift=1.2cm]current page.south west) rectangle ([yshift=0.5cm]current page.south east);
+\end{tikzpicture}
+
+\vspace*{4cm}
+
+\begin{center}
+    {\fontsize{44}{52}\selectfont\bfseries\color{black} \textbf{量子行业每周新闻洞察}}
+
+    \vspace{0.8cm}
+
+    {\fontsize{16}{22}\selectfont\color{darkgray} 2026.05.31 — 2026.06.05 }
+    {\fontsize{16}{22}\selectfont\color{darkgray} \textbf{WEEKLY NEWS}}
+
+    \vspace{1.5cm}
+
+    {\fontsize{20}{26}\selectfont\color{mainred}\textbf{（总第\textbf{ 182 }期）}}
+
+    \vspace{4cm}
+
+    \includegraphics[width=\textwidth]{Cover_Suzhou.png}
+
+    \vfill
+
+    {\fontsize{12}{16}\selectfont\color{darkgray} 量子科技长三角产业创新中心\\编制：战略情报与成果专利室、产业发展部（理事会办公室）}
+\end{center}
+\end{titlepage}
+
+% ==================== 目录 ====================
+\pagenumbering{roman}
+\newpage
+\tableofcontents
+
+\newpage
+
+% ==================== 摘要 ====================
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\begin{center}
+{\Large\bfseries\color{mainred} 摘\hspace{2em}要}
+\end{center}
+\addcontentsline{toc}{section}{摘要}
+
+
+\textbf{ 宏观态势：}
+
+全球量子科技发展正从基础研究走向体系化布局。学术与产业深度融合成为趋势，如国内高校设立交叉研究院，欧盟则通过量子旗舰计划研讨会和公开咨询，系统性推进五大技术路线及量子通信基础设施EuroQCI建设。同时，产业赋能路径愈发清晰，量子计算与能源管理的结合已有路线图指引。然而，AISA的警告表明，量子计算对现有网络安全的威胁正被严重低估，提升关键领域的抗量子风险意识已刻不容缓。
+
+
+\textbf{ 科技前沿：}
+
+量子计算正朝实用化方向并进，路线规划与基础突破齐头并进。D-Wave和富士康分别明确了门模型与商业化的落地时间表，标志着行业对实现可用的量子系统信心增强。在应用探索上，Quantinuum与三菱电机聚焦先进工程，显示出强强联合的行业渗透趋势。基础科学层面，我国在超快激光和超冷原子领域取得重大进展，成功制备大规模薛定谔猫态，这些突破为构建更强大的量子系统提供了全新的物态和调控手段。
+
+
+\textbf{ 产品动态：}
+
+量子计算产品与解决方案正加速走出实验室，迈向行业应用和教育普及。硬件层面，微软Majorana 2芯片和Xanadu光量子计算机分别在量子比特可靠性和计算优越性上实现里程碑式跨越，而EuroQCS-Spain的落地则强化了欧洲的算力基础设施。软件与应用生态同步繁荣，针对量子测量瓶颈的技术开发和面向汽车工业的空气动力学分析软件，表明量子计算正在垂直领域寻找真实价值。IBM将设备使用权引入课堂，则为未来人才生态播下种子。
+
+
+\textbf{ 企业资讯：}
+
+量子网络产业化进程正在加速，商业化落地呼唤成熟的管理经验。Aliro公司引入电信行业资深人士担任董事会执行主席，这一关键人事布局，清晰地反映出量子网络操作系统正从技术研发迈向规模化市场推广的阶段。此举旨在借助电信领域成熟的市场化、标准化和商业化运营思维，加速其技术从产品到产业化的跨越，预示着量子网络领域对商业模式的思考已进入更深层次。
+
+
+\textbf{ 资本运作：}
+
+资本力量正精准注入量子科技的关键环节，从核心技术到系统设施均有布局。一方面，知名养老金机构对IQM的投资，显示出长期资本对容错量子计算商业化前景的坚定看好，旨在加速其产品开发。另一方面，投资方向也覆盖了光子学等解决工程化难题的底层技术，如FreeForm Photonics的无校准技术。MIT联手政府打造的量子系统实验室，则体现了国家力量对建立共享型、前沿性研发设施的战略性投入。
+
+
+
+
+\textbf{ 专利动态：}
+
+本周专利动态涵盖低温环境系统、超导量子测控技术、量子软件与算法、量子算力网共4个板块、26条专利。
+
+
+
+
+% ==================== 会议列表 ====================
+{
+    \newpage
+    \section*{ 6月量子科技行业国内、国际会议}
+    \addcontentsline{toc}{section}{ 6月量子科技行业国内、国际会议}
+    \scriptsize
+    \begin{longtable}{C{0.8cm}L{2.5cm}L{3cm}L{7cm}}
+        \toprule[1.5pt]
+        \textbf{序号} & \textbf{日期} & \textbf{地点} & \textbf{会议名称} \\
+        \midrule
+        \endfirsthead
+        \toprule
+        \textbf{序号} & \textbf{日期} & \textbf{地点} & \textbf{会议名称} \\
+        \midrule
+        \endhead
+        \bottomrule
+        \endfoot
+        
+        1 & 6月1日-3日 & 拉勒米, 美国 & 第四届怀俄明大学量子暑期学校 \\
+        \midrule[0.05pt]
+        
+        2 & 6月1日-5日 & 罗利, 美国 & 2026量子机器学习暑期研讨会 \\
+        \midrule[0.05pt]
+        
+        3 & 6月1日-5日 & 普罗维登斯, 美国 & 第57届APS原子、分子与光物理年会 \\
+        \midrule[0.05pt]
+        
+        4 & 6月2日-4日 & 特隆赫姆, 挪威 & 量子自旋电子学 \\
+        \midrule[0.05pt]
+        
+        5 & 6月3日-4日 & 罗切斯特, 美国 & 量子热力学与退相干 \\
+        \midrule[0.05pt]
+        
+        6 & 6月4日-5日 & 东京, 日本 & Q2B：量子价值路线图 \\
+        \midrule[0.05pt]
+        
+        7 & 6月5日 & 格拉斯哥, 英国 & 量子与社会研究研讨沙盒 \\
+        \midrule[0.05pt]
+        
+        8 & 6月7日-12日 & 圣巴巴拉, 美国 & 第八届国际量子纠错会议 \\
+        \midrule[0.05pt]
+        
+        9 & 6月7日-13日 & 克里特岛, 希腊 & 青年原子光学会议 \\
+        \midrule[0.05pt]
+        
+        10 & 6月8日-11日 & 滑铁卢, 加拿大 & 量子光子学 \\
+        \midrule[0.05pt]
+        
+        11 & 6月8日-20日 & 卡尔热斯, 法国 & 量子技术计算与通信暑期学校 \\
+        \midrule[0.05pt]
+        
+        12 & 6月8日-8月14日 & 洛斯阿拉莫斯, 美国 & 2026洛斯阿拉莫斯量子计算暑期学校 \\
+        \midrule[0.05pt]
+        
+        13 & 6月9日 & 巴黎, 法国 & Q-Day量子风险峰会：后量子密码学与量子密钥分发 \\
+        \midrule[0.05pt]
+        
+        14 & 6月10日-12日 & 华沙, 波兰 & Perspektywy科技女性峰会 \\
+        \midrule[0.05pt]
+        
+        15 & 6月10日-12日 & 多恩比恩, 奥地利 & 第四届砷化镓量子点国际研讨会 \\
+        \midrule[0.05pt]
+        
+        16 & 6月10日-12日 & 埃朗根, 德国 & 神经形态计算前沿 \\
+        \midrule[0.05pt]
+        
+        17 & 6月11日 & 杰克逊维尔, 美国 & 量子当下，医疗未来 \\
+        \midrule[0.05pt]
+        
+        18 & 6月15日-17日 & 苏黎世, 瑞士 & 欧洲集成光学会议（ECIO） \\
+        \midrule[0.05pt]
+        
+        19 & 6月15日-18日 & 格拉斯哥, 英国 & Optica Quantum 2.0会议 \\
+        \midrule[0.05pt]
+        
+        20 & 6月15日-18日 & 赫尔辛基, 芬兰 & 仲夏开放量子系统、退相干及量子-经典交叉会议 \\
+        \midrule[0.05pt]
+        
+        21 & 6月15日-18日 & 洛杉矶, 美国 & 量子器件设计研讨会 \\
+        \midrule[0.05pt]
+        
+        22 & 6月16日 & 巴黎, 法国 & 第5届France Quantum \\
+        \midrule[0.05pt]
+        
+        23 & 6月16日-17日 & 伦敦, 英国 & 第5届年度量子商业化全球大会2026 \\
+        \midrule[0.05pt]
+        
+        24 & 6月16日-17日 & 格拉斯哥, 英国 & Optica 2026量子产业峰会——第5届 \\
+        \midrule[0.05pt]
+        
+        25 & 6月21日-25日 & 塞费尔德, 奥地利 & 第57届欧洲原子系统组年度会议（EGAS 57） \\
+        \midrule[0.05pt]
+        
+        26 & 6月21日-26日 & 塞费尔德, 奥地利 & 第7届塞费尔德量子信息研讨会 \\
+        \midrule[0.05pt]
+        
+        27 & 6月21日-7月4日 & 贝纳斯克, 西班牙 & 量子科学：实现 \\
+        \midrule[0.05pt]
+        
+        28 & 6月22日-24日 & 奥斯陆, 挪威 & IQT北欧：变化世界中的量子技术 \\
+        \midrule[0.05pt]
+        
+        29 & 6月26日 & 汉堡, 德国 & 第7届ISC HPC国际研讨会——监控、可观测性与运营数据分析 \\
+        \midrule[0.05pt]
+        
+        30 & 6月26日 & 汉堡, 德国 & 第2届统一计算中心量子资源研讨会（QRUCH） \\
+        \midrule[0.05pt]
+        
+        31 & 6月26日 & 汉堡, 德国 & 第5届量子及混合量子/经典计算方法研讨会 \\
+        \midrule[0.05pt]
+        
+        32 & 6月26日 & 汉堡, 德国 & 科学与工业数字孪生研讨会——从数据科学家到数据中心 \\
+        \midrule[0.05pt]
+        
+        33 & 6月22日-7月3日 & 雷苏什, 法国 & 2026光子与原子暑期学校：量子气体、光-物质相互作用、量子技术 \\
+        \midrule[0.05pt]
+        
+        34 & 6月23日-24日 & 罗马(纽约州), 美国 & 量子国际年度研讨会（Q4I） \\
+        \midrule[0.05pt]
+        
+        35 & 6月23日-26日 & 阿尔加维, 葡萄牙 & 第3届量子安全网络与系统研讨会（QSNS 2026） \\
+        \midrule[0.05pt]
+        
+        36 & 6月25日-26日 & 波士顿, 美国 & Quantum.Tech World \\
+        \midrule[0.05pt]
+        
+        37 & 6月29日-7月1日 & 汉堡, 德国 & 国际计算科学大会量子计算专题 \\
+        \midrule[0.05pt]
+        
+        38 & 6月29日-7月3日 & 贝桑松, 法国 & 第14届欧洲频率与时间研讨会（EFTS） \\
+        \midrule[0.05pt]
+        
+        39 & 6月29日-7月10日 & 阿斯巴雷拉斯, 西班牙 & La Ricotta暑期学校：干草堆中的量子 \\
+        \midrule[0.05pt]
+        
+        40 & 6月30日-7月1日 & 柏林, 德国 & GITEX欧洲 \\
+        \midrule[0.05pt]
+        
+    \end{longtable}
+}
+
+
+
+
+% ==================== 宏观态势 ====================
+\newpage
+\section{宏观态势}
+\vspace{-0.5em}
+\noindent\rule{\linewidth}{1.5pt}
+
+\subsection{ 西安电子科技大学量子科技交叉研究院于日前成立 }
+
+2026年06月02日消息，5月31日，西安电子科技大学举行了量子科技交叉研究院成立仪式。西电是我国电子信息领域科技创新的重要策源地，也是全国第四所获批量子信息科学本科专业的高校，在量子计算、量子芯片等方向有较长时间的研究沉淀。据悉，量子科技交叉研究院将发挥西电电子信息领域的优势，把握量子科技发展这一重大战略机遇，构筑集科研攻关与人才培养于一体的西部量子创新平台和人才高地。
+
+\noindent\textbf{报道链接：}\url{https://phy.xidian.edu.cn/info/1011/11253.htm}
+
+\subsection{ 欧盟量子旗舰计划将于6月启动系列研讨会，聚焦五大路线图 }
+
+2026年06月02日消息，欧盟量子旗舰计划昨日宣布将启动第二轮公开在线研讨会，以支持其《战略研究与产业议程》（SRIA）及相关路线图的更新工作。作为“量子欧洲战略”路线图更新进程的一部分，该研讨会将聚焦于量子通信、量子标准化、量子供应链与赋能技术、量子传感与计量与量子芯片产业化五大路线图，分别于6月12日至29日举行。每场研讨将围绕技术发展、产业视角、战略重点及关键挑战展开深入讨论，为欧洲量子研究、创新与产业化的下一步方向提供参考。
+
+\noindent\textbf{报道链接：}\url{https://qt.eu/news/2026/2026-06-01\_second-round-Community-Workshops-Quantum-Flagship-SRIA-Roadmaps}
+
+\subsection{ 欧盟启动公开咨询以规划欧洲量子通信基础设施EuroQCI的未来 }
+
+2026年06月02日消息，欧盟委员会近日发布了将于未来举办的欧洲量子通信基础设施（EuroQCI）活动的公开咨询，包含六项引导性问题。这项调研为研究人员及专家提供了贡献知识与见解的机会，旨在共同塑造EuroQCI的后续发展方向。收集到的反馈意见将用于指导预计从2027年起由欧盟委员会支持的新一轮EuroQCI活动。公众参与截止日期为2026年6月24日。
+
+\noindent\textbf{报道链接：}\url{https://www.squad-germany.de/en/open-consultation-on-future-euroqci-activities/}
+
+\subsection{ CSIRO与合作者联合发布量子计算赋能能源系统管理路线图 }
+
+2026年06月01日消息，澳大利亚联邦科学与工业研究组织（CSIRO）量子系统团队与国际研究人员合作，在《自然综述·电气工程》上发表了一份路线图，探讨了将前沿量子计算技术与能源系统管理相结合的潜在机遇与挑战。该路线图强调，量子计算有助于解决关键瓶颈，在设备级转换器和系统级电网运控中解锁新的可能性，并识别出可能最早产生价值的领域，包括特定优化问题、高数据量的电网计算、小规模机器学习任务以及系统安全增强等。
+
+\noindent\textbf{报道链接：}\url{https://www.csiro.au/en/news/All/Articles/2026/May/Quantum-computing-could-supercharge-the-energy-transition}
+
+\subsection{ AISA警告：政府和关键基础设施组织严重低估量子计算带来的网络安全风险 }
+
+2026年05月31日消息，澳大利亚信息安全协会（AISA）近日警告称，政府及关键基础设施组织正低估量子计算技术发展带来的网络安全风险。该协会指出，许多机构需从现在起着手规划向后量子安全的过渡。AISA表示，尽管量子计算带来的威胁看似遥远，但许多组织忽视了确保系统长期安全所需的准备工作，必须识别当前使用中的脆弱加密技术，并规划系统升级路径。该机构称，资产与数据可见性不足仍是主要障碍，从近期多起网络事件看，许多机构对其IT资产和数据缺乏清晰了解，识别需要升级为抗量子加密的部分、制定并执行计划，所需时间可能远超预期。
+
+\noindent\textbf{报道链接：}\url{https://itbrief.com.au/story/australia-warned-over-quantum-cyber-security-risks}
+
+\subsection{ 印度科学研究所成立创新与创业中心，助力量子及深科技初创企业成长 }
+
+2026年05月31日消息，印度科学研究所（IISc）近日在班加罗尔成立了Wadhwani创新与创业中心，旨在助力量子及深科技初创企业成长。该中心同步举办了“2026量子创投节”，为年轻创业者提供了展示量子技术创意的舞台。IISc还推出名为“InQubate”的初创加速器，专注于推动深科技企业发展，目标是通过整合人才、研究与资源，建立强大的生态系统，并连接学术界与产业界。
+
+\noindent\textbf{报道链接：}\url{https://www.newsbytesapp.com/news/science/iisc-opens-wadhwani-centre-to-support-quantum-and-deep-tech-startups/tldr}
+
+
+% ==================== 科技前沿 ====================
+\newpage
+\section{科技前沿}
+\vspace{-0.5em}
+\noindent\rule{\linewidth}{1.5pt}
+
+\subsection{ Quantinuum与三菱电机将联手探索量子计算在先进工程领域的应用前景 }
+
+2026年06月03日消息，量子计算公司Quantinuum昨日与三菱电机签署了一份不具法律约束力的谅解备忘录，双方将建立战略合作框架，共同推动量子计算在先进工业工程与设计领域的应用开发。该合作将聚焦于识别高影响力的工业应用场景，探索量子及量子-经典混合方法，以支持下一代工程工作流程。初步关注领域包括计算机辅助工程（如计算流体动力学），以及利用Quantinuum量子平台上的逻辑量子比特操作进行更广泛的仿真与设计应用。
+
+\noindent\textbf{报道链接：}\url{https://www.quantinuum.com/press-releases/quantinuum-signs-mou-with-mitsubishi-electric-to-launch-strategic-quantum-computing-partnership}
+
+\subsection{ D-Wave发布门模型量子计算路线图，2032年实现100逻辑量子比特系统 }
+
+2026年06月03日消息，D-Wave Quantum近日发布了全新的门模型路线图，以加速开发商用级容错量子计算。该公司表示，它将利用其在高相干双轨量子比特和量子纠错方面的专长，并结合其在超导量子系统工程化、规模化及商业化方面的成熟能力来推进这一计划。路线图列出了具体的里程碑节点：2026年交付一个17物理量子比特的系统，使逻辑错误率低于物理错误率2倍；2027年完成49个物理量子比特系统，能实现错误率降低20倍；2028年完成181物理量子比特系统，实现错误率降低2000倍；2030年完成10逻辑量子比特系统，能支持首批容错算法；2032年完成100逻辑量子比特系统，可支持超过100万次操作。
+
+\noindent\textbf{报道链接：}\url{https://www.dwavequantum.com/company/newsroom/press-release/d-wave-charts-a-new-course-to-fault-tolerant-quantum-computing-with-gate-model-roadmap/}
+
+\subsection{ 我国科学家利用量子光将超快激光性能实现二十倍突破 }
+
+2026年06月01日消息，上海华东师范大学的一个研究团队在《自然》杂志上发表一项新研究，提出一种利用光的量子本性解决一个非线性光学难题的方法。该团队采用一种被称为“明亮压缩真空态”（BSV）的量子光，其光子到达速率波动极大，即使在较低平均功率下，也能产生足以驱动通常需要更强激光才能实现的非线性过程的超大光子脉冲。实验结果显示，平均能量仅300纳焦耳的BSV脉冲，就能产生与传统激光脉冲相同的非线性效应，且平均功率无需增加——这相当于增强了20倍以上。此外，该团队还能在不改变脉冲能量的前提下，随意调节脉冲强度。这些结果开辟了一种通过微调光源量子特性来控制强场过程的新途径。
+
+\noindent\textbf{报道链接：}\url{https://phys.org/news/2026-05-quantum-boost-ultrafast-laser.html}
+
+\subsection{ 我国研究人员利用超冷原子成功实验生成大规模薛定谔猫态 }
+
+2026年05月31日消息，南方科技大学与粤港澳大湾区量子科学中心的研究人员近日利用超冷原子成功实验生成了大规模薛定谔猫态。他们并非直接构建大质量粒子，而是通过构建结合相互作用相对较弱的原子团簇，使物质波包在粒子数增加时不会急剧收缩，进而利用相互作用控制的高阶隧穿过程——实验中实现了高达七阶的隧穿——并将其调谐至与单原子相媲美的隧穿强度。这项研究生成的猫态理论上可实现海森堡极限灵敏度。相关研究成果已发表在《自然物理学》上，它为在大尺度量子系统中实现量子隧穿以及开发高精度量子传感器或测量工具开辟了新可能。
+
+\noindent\textbf{报道链接：}\url{https://phys.org/news/2026-05-generation-massive-schrdinger-cat-states.html}
+
+\subsection{ 富士康计划在2027年推出5至10比特量子计算原型机，2030年实现商业化 }
+
+2026年05月31日消息，鸿海集团旗下富士康近日表示，其量子计算研究正日益获得国际认可，但该公司预计商业化仍需数年时间，更广泛的商业机会有望在2030年左右出现。该公司旗下的鸿海研究院正推进一条基于离子阱技术的量子计算路线图：计划于2026年实现双比特逻辑操作，至2027年推出面向政府、学术及工业用户的5至10比特可编程原型机。此外，富士康还通过合作取得不少研究进展，包括与东京大学共同推进容错量子计算，以及与QunaSys合作开展机器学习增强的量子化学模拟。
+
+\noindent\textbf{报道链接：}\url{https://thequantuminsider.com/2026/05/29/foxconn-expects-quantum-commercialization-in-2030/}
+
+
+% ==================== 产品动态 ====================
+\newpage
+\section{产品动态}
+\vspace{-0.5em}
+\noindent\rule{\linewidth}{1.5pt}
+
+\subsection{ Quemix与SCSK携手开发POD Readout技术以突破量子计算测量瓶颈 }
+
+2026年06月04日消息，日本量子软件算法公司Quemix与SCSK公司近日联合开发出一项名为“POD Readout”的新技术（专利申请中），旨在解决阻碍量子计算实用化的“读出（测量）”瓶颈。该技术不逐一读取量子计算机生成的所有输出，而是基于高效直接提取对获取解至关重要的信息这一理念。Quemix表示，通过将测量次数减少最多1000倍，POD方法在保留量子计算速度优势的同时，为制造、材料科学、金融等工业领域的实用模拟与分析铺平道路。
+
+\noindent\textbf{报道链接：}\url{https://www.quemix.com/en/post/en-20260602-scsk}
+
+\subsection{ Quemix与日产汽车合作利用量子计算开发下一代空气动力学分析软件 }
+
+2026年06月04日消息，日本量子计算算法与软件研发企业Quemix近日与日产汽车启动一项联合研究项目，旨在利用量子计算机开发新一代空气动力学分析软件。双方针对早期容错量子计算机开发了一种新型混合量子-经典算法，可处理车辆车身的复杂几何形状。通过在模拟器上执行，他们确认该新方法能够以高精度复现传统计算机进行空气动力学分析的结果。
+
+\noindent\textbf{报道链接：}\url{http://quemix.com/en/post/en-20260601-nissan}
+
+\subsection{ Xanadu的Borealis光量子计算机实现量子优势，36微秒完成超算需9000年的任务 }
+
+2026年06月04日消息，Xanadu近日宣布，其最新光子量子计算机Borealis已展示量子计算优越性，标志着加拿大首次实现了量子计算优势。这是首台所有门均可完全编程的光子量子计算机，也是首次将具备量子优势能力的机器通过云端向公众开放。Borealis可根据用户指定程序，合成由216个压缩态量子比特构成的三维纠缠量子态，并从中生成样本，其速度超越了现有任何经典超级计算机。直接模拟显示，全球最快的超级计算机生成一个这样的样本约需9000年，而Borealis仅需36微秒。相关成果已发表在《自然》杂志上。据悉，Borealis现已对任何通过Xanadu云服务连接的人开放，也将在AWS的全托管量子计算服务Amazon Braket上线。
+
+\noindent\textbf{报道链接：}\url{https://www.prnewswire.com/news-releases/xanadu-launches-first-public-cloud-deployed-computer-with-quantum-computational-advantage-301559097.html}
+
+\subsection{ 微软发布Majorana 2拓扑量子芯片，量子比特可靠性提升1000倍 }
+
+2026年06月04日消息，微软日前发布了其最新拓扑量子芯片Majorana 2，该芯片采用新一代材料栈，量子比特可靠性较前代提升1000倍。凭借这一进展，微软量子团队将实现可扩展量子计算机的时间表缩短至2029年，仅为原计划的一半。据介绍，Majorana 2的量子比特可维持量子态长达20秒（平均），部分实例甚至可达一分钟，而其他常见方案仅能持续微秒级别。结合该量子比特具有的1微秒运算速度与0.01毫米极小比特尺寸，微软预计于2029年前造出具备商业价值的可扩展量子计算机，有望解决全球健康、粮食供应、可持续能源等领域的棘手难题。
+
+\noindent\textbf{报道链接：}\url{https://news.microsoft.com/source/features/innovation/majorana-2-microsoft-discovery-agentic-ai/}
+
+\subsection{ EPFL联手Quantinuum：将利用后者顶尖量子计算机助力科研突破 }
+
+2026年06月02日消息，瑞士洛桑联邦理工学院（EPFL）近日宣布，它已与量子计算行业领军企业Quantinuum达成合作协议，将通过其SCITAS高性能计算平台，为研究人员提供对Quantinuum量子计算机的云访问权限。此次合作旨在让研究人员能够直接在最先进的量子硬件上测试和优化理论。EPFL研究人员表示，Quantinuum的量子计算机是目前世界上性能最强、最纯净且退相干水平最低的设备之一，因此最接近理想的量子计算行为。此举措预计将极大推动该校的量子理论验证与应用探索。
+
+\noindent\textbf{报道链接：}\url{https://actu.epfl.ch/news/epfl-launches-cloud-access-to-real-quantum-compute/}
+
+\subsection{ 850万欧元打造！EuroQCS-Spain量子计算机落地巴塞罗那超算中心 }
+
+2026年06月01日消息，欧洲高性能计算联合体（EuroHPC JU）近日在西班牙巴塞罗那正式启用了一台新的量子计算机EuroQCS-Spain，该系统由巴塞罗那超级计算中心（BSC）托管和运营，由Qilimanjaro与Do IT Now两家公司合作供应，是一台模拟量子计算机，可执行量子退火程序。第一代系统提供10个物理量子比特，未来计划通过升级显著延长相干时间并增加数据量子比特数量。据悉，该系统由EuroHPC JU所有，总采购成本为850万欧元，其中欧方出资50\%，另外50\%由西班牙数字化转型与公务员部及葡萄牙共同资助，预计运行期限为三年。
+
+\noindent\textbf{报道链接：}\url{https://www.eurohpc-ju.europa.eu/eurohpc-ju-inaugurates-euroqcs-spain-barcelona-2026-05-28\_en}
+
+\subsection{ IBM将量子计算机“送进”课堂，一年期学生账号每月可白嫖10分钟 }
+
+2026年05月31日消息，IBM近日在首届量子教育日上宣布推出Classroom Account（课堂账户）功能，为教育工作者提供向大规模学生群体免费开放真实量子计算机使用权限的新途径。该账户支持教师为5至100名学生统一注册并管理平台资源，无需绑定信用卡，即可获得IBM量子资源的访问权限。每位学生每月享有10分钟的真实量子设备使用时长，账户有效期为365天，可帮助学生获得超越模拟器的迭代学习与实践体验。
+
+\noindent\textbf{报道链接：}\url{https://www.ibm.com/quantum/blog/classroom-accounts}
+
+
+
+% ==================== 专利动态 ====================
+\newpage
+\section{专利动态}
+\vspace{-0.5em}
+\noindent\rule{\linewidth}{1.5pt}
+
+\subsection{ 低温环境系统 }
+
+\subsubsection{ 接收方小型化量子密钥生成终端 }
+
+申请人：科大国盾量子技术股份有限公司
+
+发明人：杜先常 | 唐世彪 | 陈国靖 | 董军
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本发明提供一种接收方小型化量子密钥生成终端，包括机箱(1)、主控板(2)、探测器模块(3)、解码光路(4)、电源(5)和风扇(6)，主控板(2)和解码光路(4)左右并排设置，并且主控板(2)和解码光路(4)的前端抵在机箱(1)的前面板的内部，探测器模块(3)与解码光路(4)前后并排设置，且探测器模块(3)与解码光路(4)的左端部均紧挨主控板(2)的右端部；电源(5)设置在机箱(1)的后部，吹风风扇(6)设置在靠近探测器模块(3)的一侧。本发明的优点在于：在保证通信可靠性的前提下实现了接收方量子密钥生成终端的小型化，经热仿真和力仿真测试，热设计和力设计满足设备使用要求。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=f4921438-27c2-41b2-a5af-afb2aa2b757f&shareId=9822D43G-CCG6-9909-3EB1-2F5994384B2D&from=EXPORT&signature=IekkCgLKSsSp53YhWWg8X8KWGbrIraDcr9lDYUnXcIY%3D&expire=94608000&date=20260605T003852Z&version=1.0}
+
+\subsubsection{ 采用量子处理单元(QPU)的图形处理单元(GPU)叠加计算系统 }
+
+申请人：芯科量子公司
+
+发明人：ハッチングス, マシュー | ムカノフ, オレグ | レヴィ, ジョン
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本专利文件提供了一种高效的量子-经典混合计算系统的设计方案,该系统能够基于量子计算(利用量子比特的不同量子态)和经典数字计算(利用包含一个或多个图形处理单元(GPU)处理器的数字处理器)进行信息处理。本发明提供了一种采用量子处理单元(QPU)的图形处理单元(GPU)叠加计算系统。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=790c2d97-855b-4e0a-9871-d310eb385917&shareId=9822D43G-CCG6-9909-3EB1-2F5994384B2D&from=EXPORT&signature=hpf9T4zP2CQGVclG38u8YABrx6n70ujlX9k7YrglEcI%3D&expire=94608000&date=20260605T003852Z&version=1.0}
+
+
+\subsection{ 超导量子测控技术 }
+
+\subsubsection{ 用于量子位读出器的补偿脉冲 }
+
+申请人：谷歌有限责任公司
+
+发明人：KELLY, JULIAN SHAW | SANK, DANIEL THOMAS
+
+公开日/授权日：2026-06-03
+
+摘要：
+
+用于执行量子比特读出的装置和方法。在一个方面,该装置包括:一个以量子比特频率运行的量子比特;一个频率控制器,该频率控制器被配置为控制量子比特频率,并且在量子比特测量操作期间被配置为:确定一个补偿脉冲,该补偿脉冲施加到量子比特时,可以抵消量子比特测量操作期间的量子比特频率变化;以及在量子比特测量操作期间将所确定的补偿脉冲施加到量子比特,以维持量子比特频率。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=f523a155-4124-4cb1-869d-65ee92a90464&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=Qf10HAnxMoxjgeigLmmNQknQXHN%2FOyApPqsPEsFwyr8%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 用于读取和解码量子信息的设备 }
+
+申请人：原子能和替代能源委员会
+
+发明人：SCHMIDT, QUENTIN | BADETS, FRANCK | THONNART, YVAIN | JADOT, BAPTISTE
+
+公开日/授权日：2026-06-03
+
+摘要：
+
+本发明涉及一种量子器件,其包括多个量子比特(11、12、…、1M、21…)、一个解复用电路、一条用于将来自所述量子比特的读取信号传输至所述解复用电路的公共传输线,以及针对每个量子比特的量子静电计(S11、S12、…、S1M、S21…),用于在所述公共传输线上传输一个信号,该信号是所述量子比特当前状态和施加于所述量子静电计的周期性激励的函数。该量子器件的独特之处在于,传输至器件中一组量子比特的周期性激励以相同的频率传输。该器件包括用于引入不同相移(Φ1、Φ2、…、ΦM)的移相装置,以及可选的用于在施加于各个量子静电计的激励中引入幅度差异的幅度衰减装置。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=dde063dd-d9a6-4ba7-ba5b-e50fd97c313c&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=FmV3cEjTPWu%2BS3YzV%2F6OtaXvVUwRIAfWSPJiE2n1nwQ%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 一种在超导量子系统中实现混合维度量子相位门的方法 }
+
+申请人：南京大学
+
+发明人：张钰 | 于扬
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本发明属于超导量子计算技术领域，涉及一种在超导量子系统中实现混合维度量子相位门的方法，系统包括：微波腔作为用于承载光子并编码目标量子比特的量子谐振器；超导磁通三能级量子比特作为用作控制位的三能级量子系统，通过电容与微波腔耦合；经典微波脉冲源用于将产生的可控微波驱动场施加于超导磁通三能级量子比特；实现方法是利用超导量子系统中的超导磁通三能级量子比特与微波腔之间的色散耦合作用，并结合施加于超导磁通三能级量子比特的可控微波驱动场，通过一步演化过程，确定性地实现超导磁通三能级量子比特量子态对腔场相位的条件控制；本发明成功率100%，操作可靠性远优于概率性的光学方案。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=7858d0b7-432f-4508-88e8-e2c3c79fa3f8&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=d0zbxvENPo7C5oj%2FExdIlONDaC7ftusA8TqhfIF5LDQ%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 用于调谐量子计算机的至少两个量子比特之间的相互作用强度的方法和量子计算机 }
+
+申请人：伊莱克特伦有限公司
+
+发明人：帕特里克·胡贝尔 | 克里斯托夫·文德利希
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本文中具体说明了用于调谐量子计算机（10）的至少两个量子比特（qb1，qb2）之间的相互作用强度（J）的方法，该方法包括以下步骤：‑ 将第一周期性脉冲序列（1）施加至第一量子比特（qb1），‑ 将第二周期性脉冲序列（2）施加至第二量子比特（qb2），其中，‑ 第一周期性脉冲序列（1）的周期（T）等于第二周期性脉冲序列（2）的周期（T），‑ 使第二周期性脉冲序列（2）的脉冲（21）相对于第一周期性脉冲序列（1）的脉冲（11）时间延迟，以及‑ 通过控制所述时间延迟（Δt）来调谐相互作用强度（J）。此外，本文中具体说明了量子计算机（10）。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=07a01fc7-1d61-4183-8bd9-b8979bafff6a&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=i9Y4JWZuYTtlsPTUZs84Pd3SQr4qxO3lvUqa%2FIwd2A0%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 用于超导量子比特的非绝热单磁通量子(SFQ)读出的量子计算系统 }
+
+申请人：芯科量子公司
+
+发明人：アレッサンドロ ミアノ | オレグ ムカノフ
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本发明提供一种计算或信息处理系统,该系统包括量子计算模块,该量子计算模块利用量子力学器件或电路的量子态执行信息处理或计算。 
+ 【解决方案】该计算或信息处理系统采用基于超导的量子计算模块(例如,超导约瑟夫森结),并构建量子计算模块或器件以及经典数字计算模块或器件,用于各种基于量子计算的应用。此类量子系统包含基于超导约瑟夫森结的量子比特集合,并基于量子比特量子态的叠加和关联/纠缠执行复杂的计算。量子比特器件由量子比特控制电路控制,量子比特读出电路在量子比特控制电路的控制下测量量子比特器件的量子态,并根据测量结果提供量子比特读出。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=88ad0e44-80d4-439c-b505-c7a5d8291a92&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=G9LfKTB8JnqoRI2Dn8R4dRfNs%2F2jOb1qytdxeOVTk6c%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 超导量子处理电路中的可调谐量子比特器件 }
+
+申请人：RIGETTI & CO INC
+
+发明人：SETE, EYOB A. | CHEN, ANGELA Q. | POLETTO, STEFANO | KULSHRESHTHA, SHOBHAN | MANENTI, RICCARDO
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+一般而言,超导量子处理电路包含一个可调谐量子比特器件。该可调谐量子比特器件包含一个电路环路,该电路环路配置成在可调谐量子比特器件工作期间接收磁通量,该磁通量控制该可调谐量子比特器件的量子比特频率。在一些实施例中,该电路环路由以下部分组成:一个非线性电路元件和一个或多个线性电路元件。该单个非线性电路元件是连接在第一电路节点和第二电路节点之间的约瑟夫森结。该一个或多个线性电路元件包括一个与连接在第一电路节点和第二电路节点之间的约瑟夫森结并联的线性电感器。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=7ee4ebb7-bf1f-4709-9bd8-e2c11c904371&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=113QyBsuqSB7ew5nF5t9X7v8ckZq86qN%2FYBOiHEoKcY%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 带有嵌入式读出的紧凑型硅量子比特单元 }
+
+申请人：量子运动科技有限公司
+
+发明人：GONZALEZ-ZALBA, MIGUEL FERNANDO
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本发明公开了一种量子器件,该器件具有用于执行量子比特测量或读出的LC谐振器电路。该器件包括硅层( 601 ),介电层( 603 ) 布置在硅层上并与硅层形成功能界面( 601 ),第一金属区( 614 )布置在介电层上603以及第二个金属区域( 624 )布置在介电层上603并与第一金属区域横向分离( 614第一和第二金属区( 614, 624 )被布置成电连接,使得可以在第一和第二金属区域下方感应出一个双量子点,形成一个具有第一态和第二态的量子比特( 614, 624在功能界面处。双量子点提供了一个电容 C 1在LC谐振器电路中,双量子点的电容取决于量子比特的状态。第一个金属区域( 614 ) 提供一个电感器 L 1在 LC 谐振器电路中,LC 谐振器电路的谐振频率取决于量子比特的状态,因此可以测量或推断量子比特的状态。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=c4572404-b8ad-47b4-9a02-11d0d900b01a&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=hfKywHVMw%2BVdoUO9gdOfjExUoagn07uL2GPrjy0yOIY%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 用于量子计算误差抑制的分层噪声自适应控制系统及方法 }
+
+申请人：IEN ARCHITECT OFFICE CO LTD
+
+发明人：정찬희
+
+公开日/授权日：2026-06-01
+
+摘要：
+
+本发明涉及一种用于减少量子计算环境中物理误差的分层控制系统和方法。本发明利用包含室温控制代理(RTAA)和近端硬件控制器(NHC)的双层控制结构,实现了实时脉冲控制和自适应噪声参数更新的并行执行。 
+具体而言,本发明包括:(1) 噪声不对称反向镜像 (NAEM),用于反转超导量子比特 T1 弛豫方向的不对称性;(2) 节律频谱指纹识别 (RSF),通过对门脉冲施加周期性调制,为解码器输入提供结构特征量;(3) 经典顺序引导序列化 (CGS),用作辅助元数据通道,用于检测经典控制通道的顺序计数器异常;以及 (4) 分层自适应控制 (HAC),用于分离室温控制代理和近端硬件控制器的角色。 
+本发明涉及一种在保持现有电路功能结构的同时自适应地优化执行控制参数的技术,而对电路结构本身的改变,例如逻辑量子比特和物理量子比特之间的重新映射、重新排列门执行顺序或重新配置电路深度,并非本发明的直接主题。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=4e488ee2-feac-4374-af22-02ceaaf24a98&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=n1OpBWABvcgiGtIaeCREOf1jZGqGWQc8e7CdYxtG6Mg%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+
+\subsection{ 量子软件与算法 }
+
+\subsubsection{ 基于量子干涉采样的组合优化 }
+
+申请人：谷歌有限责任公司
+
+发明人：JORDAN, STEPHEN, PAUL
+
+公开日/授权日：2026-06-03
+
+摘要：
+
+本发明公开了一种用于优化包含一组自由度 (DOF) 和一组针对该 DOF 的约束的系统的方法。每个约束与该 DOF 集的一个子集相关联。该方法包括确定第一个多项式函数。量子计算系统 (QCS) 的一组量子比特在第一量子态下准备。在第一量子态下准备该组量子比特后,QCS 对该组量子比特执行一组幺正运算。在该组量子比特执行该组幺正运算后,QCS 通过对该组量子比特中的每个量子比特执行第一次测量操作来生成第一组可观测量。基于第一组可观测量确定一组值。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=beb237b0-424b-4221-a72c-bd637552d779&shareId=1B475C3G-7GDG-8976-149D-791913G50906&from=EXPORT&signature=Fc9PUiPsEY%2BdIF3wHPUrxnJZNZBVa%2BvhLOLvvonDkE8%3D&expire=94608000&date=20260605T004519Z&version=1.0}
+
+\subsubsection{ 通过量子计算和量子通信的分布式机器学习 }
+
+申请人：谷歌有限责任公司
+
+发明人：GILBOA, DAR | MCCLEAN, JARROD RYAN
+
+公开日/授权日：2026-06-03
+
+摘要：
+
+一个实施例包括一种方法,该方法包括在具有多个量子节点和量子通信网络的分布式量子计算系统 (DQCS) 上接收第一输入。基于第一输入和一个模型,在多个节点中的第一个量子节点上执行第一量子计算。第一量子计算的输出通过量子通信网络传输到多个量子节点中的第二个量子节点。基于第一量子计算的输出和在第二量子节点上实施的量子断层扫描算法,计算出分布式计算的结果。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=41983739-7b03-4a29-8a94-d42bd288f1c3&shareId=1B475C3G-7GDG-8976-149D-791913G50906&from=EXPORT&signature=x2zwu5O68qAiOi1FfzjLIcHII840OPb%2BA%2BBRigla0v4%3D&expire=94608000&date=20260605T004519Z&version=1.0}
+
+\subsubsection{ 光纤型激光功率量子控制装置、方法、激光发射设备 }
+
+申请人：北京无线电计量测试研究所
+
+发明人：纪仟仟 | 薛潇博 | 韩蕾 | 申彤 | 苏亚北 | 张升康 | 葛军
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本说明书公开了一种光纤型激光功率量子控制装置、方法、激光发射设备，以提高激光功率的抗干扰能力和稳定度。本发明装置包括：第一支路，配置为对激光器输出的激光，经过声光调制器输出0级衍射光，经光纤隔离器后输出待稳功率激光；第二支路为反馈调节支路，将第一支路中的待稳功率激光作为监测信号，导入原子钟使原子钟的输出频率随之改变，基于该输出频率与给定输出频率之间的偏差，通过反馈控制方法对第一支路中激光偏振态进行调整，以稳定输出激光的功率。本发明中，使用全光纤结构的量子控制装置具有结构简单、体积小巧、成本低、重量轻、实验装置难度低、免于调试空间光路、不易受外界杂散光影响的优势，并且提高了激光功率稳定度。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=819b526b-053e-44fe-abb9-bc58efecb2c1&shareId=1B475C3G-7GDG-8976-149D-791913G50906&from=EXPORT&signature=eDjSYHnwujwUnfnLRX7a6lcTR7W36aTMxSFLUA%2BMZtU%3D&expire=94608000&date=20260605T004519Z&version=1.0}
+
+\subsubsection{ 偏振控制的激光功率量子稳定装置、方法、激光发射设备 }
+
+申请人：北京无线电计量测试研究所
+
+发明人：纪仟仟 | 薛潇博 | 韩蕾 | 申彤 | 苏亚北 | 张升康 | 葛军
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本说明书公开了一种偏振控制的激光功率量子稳定装置、方法、激光发射设备，以提高激光功率的稳定性。本发明装置包括：激光功率调整单元，配置为对激光器输出的线偏振光，采用偏振控制器进行激光偏振态的调整，并经保偏传输后输出待稳功率激光；反馈控制单元，配置为以待稳功率激光作为监测对象，将其导入原子钟，使原子钟输出频率随之改变，基于该输出频率与给定输出频率之间的偏差，通过反馈控制方法对激光功率调整单元中激光偏振态进行调整，以稳定输出激光的功率。本发明抗环境干扰能力强、减小了传统方法里激光偏振变化对功率稳定的影响，提高了系统稳定功率微小变化的灵敏度和响应能力，更加精准的进行稳定激光功率的控制。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=676a11df-8175-4c2e-a0bf-56f414fb96a8&shareId=1B475C3G-7GDG-8976-149D-791913G50906&from=EXPORT&signature=VSiYnCmNha%2BQaeQPLSGbuT%2FMEBPmMphs47whZ4h3atw%3D&expire=94608000&date=20260605T004519Z&version=1.0}
+
+\subsubsection{ 太赫兹光谱量子弱测量方法、系统及应用 }
+
+申请人：中国科学院深圳先进技术研究院
+
+发明人：常天英 | 崔洪亮 | 路星星 | 魏东山 | 汪岳峰
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本发明提供了太赫兹光谱量子弱测量方法、系统及应用，属于太赫兹技术领域，该太赫兹光谱量子弱测量方法应用于太赫兹光谱量子弱测量系统，所述系统包括第一偏振片、第二偏振片、太赫兹时域光谱单元、发射端、探测端及样品载体，本发明提出的基于量子弱值放大效应的太赫兹量子弱测量方法及系统，能够突破目前太赫兹技术的痕量检测极限。本发明通过选定一个太赫兹偏振状态(前选态)，被测量的微小变化对其产生一种“微”扰动，再用强测量将被扰动系统态投影到后选态上，进而建立太赫兹量子弱测量体系；大多手性药物在太赫兹波段具有共振吸收性，有益于利用手性分子的旋光度微变化作为弱耦合作用，实现手性药物的高灵敏构象识别。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=c9746448-bedc-4316-b621-fe01a87980db&shareId=1B475C3G-7GDG-8976-149D-791913G50906&from=EXPORT&signature=wi1MMHbFVv7qi%2BmluFU5HXTRO59DnQ5Cn1nbNzzY1ak%3D&expire=94608000&date=20260605T004519Z&version=1.0}
+
+\subsubsection{ 蛋白质DDG预测模型优化方法、蛋白质DDG预测方法及相关装置 }
+
+申请人：上海图灵智算量子科技有限公司 | 图灵智算量子科技(无锡)有限公司
+
+发明人：丁灏 | 陆遥遥 | 唐可馨
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本发明的实施例提供了一种蛋白质DDG预测模型优化方法、蛋白质DDG预测方法及相关装置，涉及生物信息数据处理技术领域。该方法包括：获取野生型蛋白质三维结构数据、突变体蛋白质三维结构数据以及第一DDG值。分别将野生型蛋白质三维结构数据与突变体蛋白质三维结构数据输入蛋白质DDG初始预测模型中优化后的编码器，得到野生型蛋白质三维结构数据对应的第一特征向量以及突变体蛋白质三维结构数据对应的第二特征向量。基于变分量子线路，根据第一特征向量以及第二特征向量得到第二DDG值。根据第一DDG值与第二DDG值对蛋白质DDG初始预测模型进行迭代优化，得到蛋白质DDG预测模型。本发明可以有效提高蛋白质DDG的预测准确率。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=672fd6cf-6f0e-41fc-8e84-33a2e4bdaf83&shareId=1B475C3G-7GDG-8976-149D-791913G50906&from=EXPORT&signature=d02VwQytTfhj8BUFbVzJ6%2BlEuDDqhl88coYfbn6GIkc%3D&expire=94608000&date=20260605T004519Z&version=1.0}
+
+\subsubsection{ 一种混合量子集成学习与MedMamba协同的医学图像分类方法 }
+
+申请人：重庆师范大学
+
+发明人：董玉民 | 吴高杰
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本发明涉及医学图像分类技术领域，具体涉及一种混合量子集成学习与MedMamba协同的医学图像分类方法，包括将医学原始图像输入到预设的U‑Net特征提取器中，从医学原始图像中提取与特定疾病相关的可解释特征，输出对应的特征向量；将输出的特征向量输入到预先训练完成的混合量子集成学习模型中，输出对应的第一预测分类概率；将医学原始图像输入到预设的MedMamba模型，输出对应的第二预测分类概率；根据输出的第一预测分类概率和第二预测分类概率，基于预设的医学图像分类概率融合计算公式，计算出该医学原始图像所对应的最终分类概率。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=d4645b8f-948b-4f7c-94eb-d26e01cf645c&shareId=1B475C3G-7GDG-8976-149D-791913G50906&from=EXPORT&signature=2IQKwh78EKfMwPKLHW8QbOFFwRyLz%2BgowZdt0cqiglI%3D&expire=94608000&date=20260605T004519Z&version=1.0}
+
+\subsubsection{ 面向mRNA编码蛋白结构预测的智能算力调度系统和方法 }
+
+申请人：微观纪元(合肥)量子科技有限公司
+
+发明人：郑跃强 | 夏坚 | 管佳明 | 董景祥
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本发明公开了一种面向mRNA编码蛋白结构预测的智能算力调度系统、方法和电子设备，面向mRNA编码蛋白结构预测的智能算力调度系统包括：输入与任务管理层，用于获取并翻译mRNA序列，得到原子性子任务；智能感知与调度核心层，与输入与任务管理层连接，用于根据原子性子任务，生成对应的优化调度决策；异构算力资源层，与智能感知与调度核心层，用于根据优化调度决策，进行经典计算和/或量子计算，得到对应的经典计算结果和/或量子计算结果；输出与优化层，与异构算力资源层连接，用于根据经典计算结果和/或量子计算结果，生成蛋白质3D结构模型。本发明的系统能够提高蛋白结构预测结果的准确性、效率，还能够提高算力资源利用率。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=4d22a8d3-adf5-47dc-9aed-5c7d59d46b35&shareId=1B475C3G-7GDG-8976-149D-791913G50906&from=EXPORT&signature=axXXCq5IhvK07YTz55KsVaL1hHumCPG6xLS3XnMhQoc%3D&expire=94608000&date=20260605T004519Z&version=1.0}
+
+
+\subsection{ 量子算力网 }
+
+\subsubsection{ 用于量子位读出器的补偿脉冲 }
+
+申请人：谷歌有限责任公司
+
+发明人：KELLY, JULIAN SHAW | SANK, DANIEL THOMAS
+
+公开日/授权日：2026-06-03
+
+摘要：
+
+用于执行量子比特读出的装置和方法。在一个方面,该装置包括:一个以量子比特频率运行的量子比特;一个频率控制器,该频率控制器被配置为控制量子比特频率,并且在量子比特测量操作期间被配置为:确定一个补偿脉冲,该补偿脉冲施加到量子比特时,可以抵消量子比特测量操作期间的量子比特频率变化;以及在量子比特测量操作期间将所确定的补偿脉冲施加到量子比特,以维持量子比特频率。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=f523a155-4124-4cb1-869d-65ee92a90464&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=Qf10HAnxMoxjgeigLmmNQknQXHN%2FOyApPqsPEsFwyr8%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 用于读取和解码量子信息的设备 }
+
+申请人：原子能和替代能源委员会
+
+发明人：SCHMIDT, QUENTIN | BADETS, FRANCK | THONNART, YVAIN | JADOT, BAPTISTE
+
+公开日/授权日：2026-06-03
+
+摘要：
+
+本发明涉及一种量子器件,其包括多个量子比特(11、12、…、1M、21…)、一个解复用电路、一条用于将来自所述量子比特的读取信号传输至所述解复用电路的公共传输线,以及针对每个量子比特的量子静电计(S11、S12、…、S1M、S21…),用于在所述公共传输线上传输一个信号,该信号是所述量子比特当前状态和施加于所述量子静电计的周期性激励的函数。该量子器件的独特之处在于,传输至器件中一组量子比特的周期性激励以相同的频率传输。该器件包括用于引入不同相移(Φ1、Φ2、…、ΦM)的移相装置,以及可选的用于在施加于各个量子静电计的激励中引入幅度差异的幅度衰减装置。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=dde063dd-d9a6-4ba7-ba5b-e50fd97c313c&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=FmV3cEjTPWu%2BS3YzV%2F6OtaXvVUwRIAfWSPJiE2n1nwQ%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 一种在超导量子系统中实现混合维度量子相位门的方法 }
+
+申请人：南京大学
+
+发明人：张钰 | 于扬
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本发明属于超导量子计算技术领域，涉及一种在超导量子系统中实现混合维度量子相位门的方法，系统包括：微波腔作为用于承载光子并编码目标量子比特的量子谐振器；超导磁通三能级量子比特作为用作控制位的三能级量子系统，通过电容与微波腔耦合；经典微波脉冲源用于将产生的可控微波驱动场施加于超导磁通三能级量子比特；实现方法是利用超导量子系统中的超导磁通三能级量子比特与微波腔之间的色散耦合作用，并结合施加于超导磁通三能级量子比特的可控微波驱动场，通过一步演化过程，确定性地实现超导磁通三能级量子比特量子态对腔场相位的条件控制；本发明成功率100%，操作可靠性远优于概率性的光学方案。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=7858d0b7-432f-4508-88e8-e2c3c79fa3f8&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=d0zbxvENPo7C5oj%2FExdIlONDaC7ftusA8TqhfIF5LDQ%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 用于调谐量子计算机的至少两个量子比特之间的相互作用强度的方法和量子计算机 }
+
+申请人：伊莱克特伦有限公司
+
+发明人：帕特里克·胡贝尔 | 克里斯托夫·文德利希
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本文中具体说明了用于调谐量子计算机（10）的至少两个量子比特（qb1，qb2）之间的相互作用强度（J）的方法，该方法包括以下步骤：‑ 将第一周期性脉冲序列（1）施加至第一量子比特（qb1），‑ 将第二周期性脉冲序列（2）施加至第二量子比特（qb2），其中，‑ 第一周期性脉冲序列（1）的周期（T）等于第二周期性脉冲序列（2）的周期（T），‑ 使第二周期性脉冲序列（2）的脉冲（21）相对于第一周期性脉冲序列（1）的脉冲（11）时间延迟，以及‑ 通过控制所述时间延迟（Δt）来调谐相互作用强度（J）。此外，本文中具体说明了量子计算机（10）。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=07a01fc7-1d61-4183-8bd9-b8979bafff6a&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=i9Y4JWZuYTtlsPTUZs84Pd3SQr4qxO3lvUqa%2FIwd2A0%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 用于超导量子比特的非绝热单磁通量子(SFQ)读出的量子计算系统 }
+
+申请人：芯科量子公司
+
+发明人：アレッサンドロ ミアノ | オレグ ムカノフ
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本发明提供一种计算或信息处理系统,该系统包括量子计算模块,该量子计算模块利用量子力学器件或电路的量子态执行信息处理或计算。 
+ 【解决方案】该计算或信息处理系统采用基于超导的量子计算模块(例如,超导约瑟夫森结),并构建量子计算模块或器件以及经典数字计算模块或器件,用于各种基于量子计算的应用。此类量子系统包含基于超导约瑟夫森结的量子比特集合,并基于量子比特量子态的叠加和关联/纠缠执行复杂的计算。量子比特器件由量子比特控制电路控制,量子比特读出电路在量子比特控制电路的控制下测量量子比特器件的量子态,并根据测量结果提供量子比特读出。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=88ad0e44-80d4-439c-b505-c7a5d8291a92&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=G9LfKTB8JnqoRI2Dn8R4dRfNs%2F2jOb1qytdxeOVTk6c%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 超导量子处理电路中的可调谐量子比特器件 }
+
+申请人：RIGETTI & CO INC
+
+发明人：SETE, EYOB A. | CHEN, ANGELA Q. | POLETTO, STEFANO | KULSHRESHTHA, SHOBHAN | MANENTI, RICCARDO
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+一般而言,超导量子处理电路包含一个可调谐量子比特器件。该可调谐量子比特器件包含一个电路环路,该电路环路配置成在可调谐量子比特器件工作期间接收磁通量,该磁通量控制该可调谐量子比特器件的量子比特频率。在一些实施例中,该电路环路由以下部分组成:一个非线性电路元件和一个或多个线性电路元件。该单个非线性电路元件是连接在第一电路节点和第二电路节点之间的约瑟夫森结。该一个或多个线性电路元件包括一个与连接在第一电路节点和第二电路节点之间的约瑟夫森结并联的线性电感器。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=7ee4ebb7-bf1f-4709-9bd8-e2c11c904371&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=113QyBsuqSB7ew5nF5t9X7v8ckZq86qN%2FYBOiHEoKcY%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 带有嵌入式读出的紧凑型硅量子比特单元 }
+
+申请人：量子运动科技有限公司
+
+发明人：GONZALEZ-ZALBA, MIGUEL FERNANDO
+
+公开日/授权日：2026-06-02
+
+摘要：
+
+本发明公开了一种量子器件,该器件具有用于执行量子比特测量或读出的LC谐振器电路。该器件包括硅层( 601 ),介电层( 603 ) 布置在硅层上并与硅层形成功能界面( 601 ),第一金属区( 614 )布置在介电层上603以及第二个金属区域( 624 )布置在介电层上603并与第一金属区域横向分离( 614第一和第二金属区( 614, 624 )被布置成电连接,使得可以在第一和第二金属区域下方感应出一个双量子点,形成一个具有第一态和第二态的量子比特( 614, 624在功能界面处。双量子点提供了一个电容 C 1在LC谐振器电路中,双量子点的电容取决于量子比特的状态。第一个金属区域( 614 ) 提供一个电感器 L 1在 LC 谐振器电路中,LC 谐振器电路的谐振频率取决于量子比特的状态,因此可以测量或推断量子比特的状态。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=c4572404-b8ad-47b4-9a02-11d0d900b01a&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=hfKywHVMw%2BVdoUO9gdOfjExUoagn07uL2GPrjy0yOIY%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+\subsubsection{ 用于量子计算误差抑制的分层噪声自适应控制系统及方法 }
+
+申请人：IEN ARCHITECT OFFICE CO LTD
+
+发明人：정찬희
+
+公开日/授权日：2026-06-01
+
+摘要：
+
+本发明涉及一种用于减少量子计算环境中物理误差的分层控制系统和方法。本发明利用包含室温控制代理(RTAA)和近端硬件控制器(NHC)的双层控制结构,实现了实时脉冲控制和自适应噪声参数更新的并行执行。 
+具体而言,本发明包括:(1) 噪声不对称反向镜像 (NAEM),用于反转超导量子比特 T1 弛豫方向的不对称性;(2) 节律频谱指纹识别 (RSF),通过对门脉冲施加周期性调制,为解码器输入提供结构特征量;(3) 经典顺序引导序列化 (CGS),用作辅助元数据通道,用于检测经典控制通道的顺序计数器异常;以及 (4) 分层自适应控制 (HAC),用于分离室温控制代理和近端硬件控制器的角色。 
+本发明涉及一种在保持现有电路功能结构的同时自适应地优化执行控制参数的技术,而对电路结构本身的改变,例如逻辑量子比特和物理量子比特之间的重新映射、重新排列门执行顺序或重新配置电路深度,并非本发明的直接主题。
+
+\noindent\textbf{专利链接：}\url{https://analytics.zhihuiya.com/patent-view/abst?patentId=4e488ee2-feac-4374-af22-02ceaaf24a98&shareId=E1E34EE7-6FBC-6554-BE23-3246B7EF1023&from=EXPORT&signature=n1OpBWABvcgiGtIaeCREOf1jZGqGWQc8e7CdYxtG6Mg%3D&expire=94608000&date=20260605T004024Z&version=1.0}
+
+
+
+
+% ==================== 企业资讯 ====================
+\newpage
+\section{企业资讯}
+\vspace{-0.5em}
+\noindent\rule{\linewidth}{1.5pt}
+
+\subsection{ Aliro任命电信资深人士为董事会执行主席，加速量子网络操作系统产业化 }
+
+2026年06月04日消息，量子网络公司Aliro近日宣布，任命风险投资家、电信行业资深人士Fahri Diner为董事会执行主席。该公司表示，Fahri在基础设施转型方面拥有罕见深刻见解，曾作为Qtera创始人兼CEO开发了超长距离光学传输技术，并在科技投资公司Sigma Partners担任董事总经理超过十年。
+
+\noindent\textbf{报道链接：}\url{https://www.businesswire.com/news/home/20260602028226/en/Aliro-Appoints-Telecom-Pioneer-Fahri-Diner-as-Executive-Chairman-of-the-Board-of-Directors}
+
+
+% ==================== 资本运作 ====================
+\newpage
+\section{资本运作}
+\vspace{-0.5em}
+\noindent\rule{\linewidth}{1.5pt}
+
+\subsection{ IQM获芬兰养老金巨头Ilmarinen投资，将加速容错量子计算开发与商业化 }
+
+2026年06月04日消息，芬兰超导量子计算公司IQM与特殊目的收购公司Real Asset Acquisition（RAAQ）日前宣布，芬兰养老基金公司Ilmarinen已加入此前双方宣布的业务合并交易中的PIPE投资。Ilmarinen的新增投资是在此前已公布的1.34亿美元PIPE融资基础上追加的，该融资已获得多家领先机构投资者的支持。这笔增量PIPE资金将用于加速IQM在容错量子计算领域的技术与商业开发，进一步巩固其作为量子计算机领先供应商的地位。
+
+\noindent\textbf{报道链接：}\url{https://www.hpcwire.com/off-the-wire/iqm-secures-additional-pipe-investment-to-advance-fault-tolerant-quantum-roadmap/}
+
+\subsection{ FreeForm Photonics将商业化一种无需手动校准的光子学技术 }
+
+2026年06月02日消息，英国赫瑞瓦特大学开发的一项新技术有望打破光子学制造领域的瓶颈之一。该校衍生企业FreeForm Photonics近日宣布，它将把一种基于激光的工艺商业化，该工艺可直接在光学玻璃元件中内置校准结构，从而省去目前占光子学生产成本一半以上的繁琐手动校准步骤。据悉，FreeForm Photonics现已通过苏格兰企业局高增长衍生企业计划获得资金，将致力于打造成一家高成长、可扩展的未来企业，并为后续种子轮投资做好准备。
+
+\noindent\textbf{报道链接：}\url{https://www.hw.ac.uk/news/2026/laser-breakthrough-rewrites-the-rules-of-photonics-manufacturing}
+
+\subsection{ MIT联手马萨诸塞州政府，斥资2500万美元打造量子系统实验室 }
+
+2026年06月01日消息，美国麻省理工学院（MIT）近日与马萨诸塞州州政府共同宣布，计划建设一座新实验室，以加速下一代量子技术研发。该实验室名为量子系统实验室（QSL），将成为一个共享设施，推动区域量子技术发展，并助力美国在量子技术领域保持领先地位。据悉，该实验室将配备先进的量子计算机，马萨诸塞州州政府将为此投资2500万美元，而MIT计划最早于今年夏天启动QSL设施建设。
+
+\noindent\textbf{报道链接：}\url{https://news.mit.edu/2026/new-laboratory-aims-to-advance-quantum-research-nation-0528}
+
+
+\end{document}

@@ -477,12 +477,30 @@ def _parse_patent_df(df: pd.DataFrame, excel_path: str = None) -> list:
             'url': url,
         }
         p = {k: (v if v not in ('nan', 'None', 'null') else '') for k, v in p.items()}
-        # Remove Japanese kana and Korean hangul that break xelatex CJK fonts
+        # Escape LaTeX special chars in text fields
         for key in ('title', 'applicant', 'inventor', 'abstract'):
-            p[key] = re.sub(r'[぀-ヿ가-힯ᄀ-ᇿ]+', ' ', p[key])
-            p[key] = re.sub(r'\s+', ' ', p[key]).strip()
+            p[key] = _escape_latex(p[key])
         results.append(p)
     return results
+
+
+def _escape_latex(text: str) -> str:
+    """Escape LaTeX special characters that break compilation."""
+    if not text:
+        return text
+    # Use placeholder to prevent double-escaping of backslash in replacements
+    text = text.replace('\\', '\x00')
+    text = text.replace('{', r'\{')
+    text = text.replace('}', r'\}')
+    text = text.replace('&', r'\&')
+    text = text.replace('%', r'\%')
+    text = text.replace('$', r'\$')
+    text = text.replace('#', r'\#')
+    text = text.replace('_', r'\_')
+    text = text.replace('~', r'\textasciitilde{}')
+    text = text.replace('^', r'\textasciicircum{}')
+    text = text.replace('\x00', r'\textbackslash{}')
+    return text
 
 
 # ------------------------------------------------------------------
