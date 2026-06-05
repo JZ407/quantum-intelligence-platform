@@ -861,13 +861,25 @@ def _get_weekly_llm():
 def page_weekly_report():
     st.header("周报生成")
 
+    # Default: last Saturday → today (current week in progress)
+    today = datetime.now().date()
+    # Last Saturday: the most recent Saturday (including today if Saturday)
+    days_since_sat = (today.weekday() - 5) % 7
+    last_saturday = today - timedelta(days=days_since_sat if days_since_sat else 0)
+
+    # Auto-calculate issue number: issue 182 = week starting 2026-05-31 (Sat)
+    REF_ISSUE = 182
+    REF_SATURDAY = datetime(2026, 5, 31).date()
+    weeks_diff = (last_saturday - REF_SATURDAY).days // 7
+    default_issue = str(REF_ISSUE + weeks_diff)
+
     col1, col2, col3 = st.columns(3)
     with col1:
-        start_date = st.date_input("开始日期", value=datetime.now().date() - timedelta(days=7), key="wr_start")
+        start_date = st.date_input("开始日期", value=last_saturday, key="wr_start")
     with col2:
-        end_date = st.date_input("结束日期", value=datetime.now().date(), key="wr_end")
+        end_date = st.date_input("结束日期", value=today, key="wr_end")
     with col3:
-        issue_no = st.text_input("期数", value="42", key="wr_issue")
+        issue_no = st.text_input("期数", value=default_issue, key="wr_issue")
 
     conf_month = st.selectbox("会议月份", options=list(range(1, 13)),
                                format_func=lambda x: f"{x}月",
