@@ -861,16 +861,22 @@ def _get_weekly_llm():
 def page_weekly_report():
     st.header("周报生成")
 
-    # Default: last Saturday → today (current week in progress)
+    # Default: this week's Saturday → today (current week in progress)
     today = datetime.now().date()
-    # Last Saturday: the most recent Saturday (including today if Saturday)
-    days_since_sat = (today.weekday() - 5) % 7
-    last_saturday = today - timedelta(days=days_since_sat if days_since_sat else 0)
+    # Week runs Saturday→Friday. Find the Saturday that starts this week.
+    if today.weekday() == 6:      # Sunday → last week
+        days_back = 8
+    elif today.weekday() == 5:    # Saturday → today IS the start
+        days_back = 0
+    else:                         # Mon-Fri
+        days_back = today.weekday() + 2
+    last_saturday = today - timedelta(days=days_back)
 
     # Auto-calculate issue number: issue 182 = week starting 2026-05-31 (Sat)
     REF_ISSUE = 182
     REF_SATURDAY = datetime(2026, 5, 31).date()
-    weeks_diff = (last_saturday - REF_SATURDAY).days // 7
+    days_diff = (last_saturday - REF_SATURDAY).days
+    weeks_diff = (days_diff + 6) // 7 if days_diff >= 0 else -((-days_diff + 6) // 7)
     default_issue = str(REF_ISSUE + weeks_diff)
 
     col1, col2, col3 = st.columns(3)
