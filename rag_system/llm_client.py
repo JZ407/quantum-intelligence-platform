@@ -68,7 +68,10 @@ class LLMClient:
         with urllib.request.urlopen(req, timeout=self.timeout) as resp:
             body = resp.read().decode('utf-8')
             result = json.loads(body)
-            return result["choices"][0]["message"]["content"]
+            msg = result["choices"][0]["message"]
+            # DeepSeek reasoning models (v4-pro, r1) put output in reasoning_content
+            content = msg.get("content") or msg.get("reasoning_content") or ""
+            return content
 
     def _chat_claude(self, messages: List[Dict[str, str]], stream: bool,
                       max_tokens: int = None) -> str:
