@@ -400,6 +400,84 @@ def page_daily_news():
     else:
         page_types = ["flash", "article", "reference"]
 
+    # ── 微信公众号内容补录（常驻）──
+    unedited_count = 0
+    try:
+        from sqlalchemy import create_engine as sa_eng
+        wx_engine = sa_eng(DB_URL, pool_pre_ping=True)
+        cnt_df = pd.read_sql("SELECT COUNT(*) AS n FROM articles WHERE page_type = 'wechat' AND (content_edited = 0 OR content_edited IS NULL)", wx_engine)
+        unedited_count = int(cnt_df.iloc[0]['n']) if not cnt_df.empty else 0
+        wx_engine.dispose()
+    except Exception:
+        pass
+
+    if unedited_count > 0:
+        with st.expander(f"✏️ 微信公众号内容补录（{unedited_count} 篇待补录）", expanded=False):
+            show_edited = st.checkbox("显示已补录", value=False, key="show_edited_wechat")
+            try:
+                wx_engine2 = sa_eng(DB_URL, pool_pre_ping=True)
+                edited_filter = "" if show_edited else "AND (content_edited = 0 OR content_edited IS NULL)"
+                query = f"SELECT id, title, content, liangke_date, source_domain, content_edited, liangke_url FROM articles WHERE page_type = 'wechat' {edited_filter} ORDER BY liangke_date DESC"
+                df_wx = pd.read_sql(query, wx_engine2)
+                wx_engine2.dispose()
+            except Exception as e:
+                st.error(f"加载失败：{e}")
+                df_wx = pd.DataFrame()
+
+            if not df_wx.empty:
+                for _, row in df_wx.iterrows():
+                    is_edited = bool(row.get('content_edited', 0))
+                    current_content = row.get('content', '') or ''
+                    title = row['title'] or ''
+                    date_str = str(row.get('liangke_date', ''))[:10]
+                    source = row.get('source_domain', '') or ''
+                    status = "✅" if is_edited else "📝"
+                    link_url = row.get('liangke_url', '') or ''
+                    with st.expander(f"{status} [{date_str}] {source} | {title[:80]}", expanded=not is_edited):
+                        co_l, co_i = st.columns([1, 4])
+                        with co_l:
+                            if link_url:
+                                st.link_button("🔗 打开原文", link_url)
+                        with co_i:
+                            st.caption(f"来源：{source} | {date_str} | {len(current_content)} 字")
+                        st.text(current_content[:500] + ('...' if len(current_content) > 500 else ''))
+                        new_content = st.text_area(
+                            "粘贴完整文章内容", value=current_content if is_edited else '',
+                            height=200, key=f"wx_edit_{row['id']}",
+                            placeholder="在此粘贴微信公众号文章的完整正文...")
+                        c1, c2 = st.columns([1, 4])
+                        with c1:
+                            if st.button("💾 保存", key=f"wx_save_{row['id']}"):
+                                if new_content and new_content != current_content:
+                                    try:
+                                        eng = sa_eng(DB_URL, pool_pre_ping=True)
+                                        with eng.connect() as conn:
+                                            from sqlalchemy import text as sa_text
+                                            conn.execute(sa_text("UPDATE articles SET content = :c, content_edited = 1 WHERE id = :i"), {'c': new_content, 'i': int(row['id'])})
+                                            conn.commit()
+                                        st.success(f"已保存！{len(new_content)} 字")
+                                        time.sleep(0.5)
+                                        st.rerun()
+                                    except Exception as e:
+                                        st.error(f"保存失败：{e}")
+                                else:
+                                    st.info("内容未变更")
+                        with c2:
+                            if is_edited and st.button("🔄 重新编辑", key=f"wx_reedit_{row['id']}"):
+                                try:
+                                    eng = sa_eng(DB_URL, pool_pre_ping=True)
+                                    with eng.connect() as conn:
+                                        from sqlalchemy import text as sa_text
+                                        conn.execute(sa_text("UPDATE articles SET content_edited = 0 WHERE id = :i"), {'i': int(row['id'])})
+                                        conn.commit()
+                                    st.rerun()
+                                except Exception as e:
+                                    st.error(f"失败：{e}")
+            else:
+                st.success("🎉 所有微信文章已补录完成！")
+    elif unedited_count == 0:
+        pass  # All done, don't show
+
     keyword = st.text_input("🔍 关键词检索（搜索全库，不限日期）", placeholder="输入关键词搜索全库...")
 
     with st.spinner("正在读取数据库..."):
@@ -640,83 +718,6 @@ def page_daily_news():
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             )
 
-    # ── 微信公众号内容补录 ──
-    st.markdown("---")
-    co1, co2 = st.columns([3, 1])
-    with co1:
-        st.subheader("✏️ 微信公众号内容补录")
-    with co2:
-        show_edited = st.checkbox("显示已补录", value=False, key="show_edited_wechat")
-
-    # Fetch wechat articles from daily DB
-    try:
-        from sqlalchemy import text as sa_text
-        edited_filter = "" if show_edited else "AND (content_edited = 0 OR content_edited IS NULL)"
-        query = f"SELECT id, title, content, liangke_date, source_domain, content_edited FROM articles WHERE page_type = 'wechat' {edited_filter} ORDER BY liangke_date DESC"
-        df_wx = pd.read_sql(query, engine)
-    except Exception:
-        st.info("暂无微信公众号文章")
-        df_wx = pd.DataFrame()
-
-    if not df_wx.empty:
-        for _, row in df_wx.iterrows():
-            is_edited = bool(row.get('content_edited', 0))
-            current_content = row.get('content', '') or ''
-            title = row['title'] or ''
-            date_str = str(row.get('liangke_date', ''))[:10]
-            source = row.get('source_domain', '') or ''
-
-            status = "✅" if is_edited else "📝"
-            with st.expander(f"{status} [{date_str}] {source} | {title[:80]}", expanded=not is_edited):
-                st.caption(f"来源公众号：{source} | 日期：{date_str}")
-                st.caption(f"当前内容：{len(current_content)} 字")
-
-                # Show current summary
-                with st.container(height=100):
-                    st.text(current_content[:500] + ('...' if len(current_content) > 500 else ''))
-
-                # Edit area
-                new_content = st.text_area(
-                    "粘贴完整文章内容",
-                    value=current_content if is_edited else '',
-                    height=200,
-                    key=f"wx_edit_{row['id']}",
-                    placeholder="在此粘贴微信公众号文章的完整正文..."
-                )
-
-                col_save, col_clear = st.columns([1, 4])
-                with col_save:
-                    if st.button("💾 保存", key=f"wx_save_{row['id']}"):
-                        if new_content and new_content != current_content:
-                            try:
-                                from sqlalchemy import create_engine as sa_eng, text as sa_text
-                                eng = sa_eng(DB_URL, pool_pre_ping=True)
-                                with eng.connect() as conn:
-                                    conn.execute(sa_text(
-                                        "UPDATE articles SET content = :c, content_edited = 1 WHERE id = :i"
-                                    ), {'c': new_content, 'i': int(row['id'])})
-                                    conn.commit()
-                                st.success(f"已保存！{len(new_content)} 字")
-                                time.sleep(0.5)
-                                st.rerun()
-                            except Exception as e:
-                                st.error(f"保存失败：{e}")
-                        else:
-                            st.info("内容未变更")
-                with col_clear:
-                    if is_edited and st.button("🔄 重新编辑", key=f"wx_reedit_{row['id']}"):
-                        try:
-                            eng = sa_eng(DB_URL, pool_pre_ping=True)
-                            with eng.connect() as conn:
-                                conn.execute(sa_text(
-                                    "UPDATE articles SET content_edited = 0 WHERE id = :i"
-                                ), {'i': int(row['id'])})
-                                conn.commit()
-                            st.rerun()
-                        except Exception as e:
-                            st.error(f"失败：{e}")
-    else:
-        st.success("🎉 所有微信公众号文章已补录完成！")
 
 
 def _fetch_daily_articles_range(start_date: str, end_date: str) -> pd.DataFrame:
