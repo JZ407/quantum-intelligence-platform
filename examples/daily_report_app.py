@@ -393,8 +393,8 @@ def page_daily_news():
     # Page type filter (only for 量科 sources)
     if source != "机构新闻库":
         page_types = st.multiselect(
-            "内容类型", options=["flash", "article", "reference"],
-            default=["flash", "article", "reference"], key="page_type_filter"
+            "内容类型", options=["flash", "article", "reference", "wechat"],
+            default=["flash", "article", "reference", "wechat"], key="page_type_filter"
         )
     else:
         page_types = ["flash", "article", "reference"]
@@ -426,7 +426,7 @@ def page_daily_news():
                 df = fetch_articles(target_str)
 
     # Apply page type filter (skip if all types selected = no filter)
-    ALL_TYPES = {"flash", "article", "reference"}
+    ALL_TYPES = {"flash", "article", "reference", "wechat"}
     if set(page_types) != ALL_TYPES and not df.empty and 'page_type' in df.columns:
         df = df[df['page_type'].isin(page_types)]
 
@@ -555,7 +555,10 @@ def page_daily_news():
             with cols[col_idx]:
                 art_url = row.get('url', '') or row.get('reference_url', '') or row.get('liangke_url', '')
                 title_cn = row.get('title_cn', '') or ''
-                if art_url:
+                if page_type == 'wechat':
+                    # WeChat articles: title only (sogou redirect URLs are too long)
+                    st.markdown(f"**{row['title']}**")
+                elif art_url:
                     st.markdown(f"[**{row['title']}**]({art_url})")
                 else:
                     st.markdown(f"**{row['title']}**")
@@ -896,8 +899,8 @@ def page_weekly_report():
     st.markdown("---")
     wr_page_types = st.multiselect(
         "新闻类型筛选（默认全选，叉掉不想要的）",
-        options=["flash", "article", "reference"],
-        default=["flash", "article", "reference"], key="wr_page_types"
+        options=["flash", "article", "reference", "wechat"],
+        default=["flash", "article", "reference", "wechat"], key="wr_page_types"
     )
 
     # --- Article preview & selection ---
