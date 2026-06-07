@@ -555,6 +555,7 @@ def page_daily_news():
             with cols[col_idx]:
                 art_url = row.get('url', '') or row.get('reference_url', '') or row.get('liangke_url', '')
                 title_cn = row.get('title_cn', '') or ''
+                page_type = row.get('page_type', '')
                 if page_type == 'wechat':
                     # WeChat articles: title only (sogou redirect URLs are too long)
                     st.markdown(f"**{row['title']}**")
@@ -576,7 +577,6 @@ def page_daily_news():
                 else:
                     tag_text = ''
                 inst = row.get('source', '') or row.get('source_tag', '')
-                page_type = row.get('page_type', '')
                 type_badge = f'[{page_type}] ' if page_type else ''
                 if tag_text and date_str:
                     st.caption(f"{type_badge}{date_str} · {tag_text}{' · ' + inst if inst else ''}")
