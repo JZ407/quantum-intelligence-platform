@@ -373,8 +373,8 @@ def page_daily_news():
         source = st.selectbox("数据源", options=["量科每日库", "量科历史库", "机构新闻库"], index=0)
     with col2:
         if source == "量科每日库":
-            min_date = datetime(2026, 4, 11).date()
-            caption = "📌 每日库记录始于 2026-04-11"
+            min_date = datetime(2026, 1, 1).date()
+            caption = "📌 每日库记录始于 2026-01-01"
         elif source == "量科历史库":
             min_date = datetime(2021, 11, 18).date()
             caption = "📌 历史库记录始于 2021-11-18"
@@ -394,30 +394,30 @@ def page_daily_news():
     # Page type filter (only for 量科 sources)
     if source != "机构新闻库":
         page_types = st.multiselect(
-            "内容类型", options=["flash", "article", "reference", "wechat"],
-            default=["flash", "article", "reference", "wechat"], key="page_type_filter"
+            "内容类型", options=["flash", "article", "reference", "websearch"],
+            default=["flash", "article", "reference", "websearch"], key="page_type_filter"
         )
     else:
         page_types = ["flash", "article", "reference"]
 
-    # ── 微信公众号内容补录（常驻）──
+    # ── WebSearch 内容补录面板 ──
     unedited_count = 0
     try:
         from sqlalchemy import create_engine as sa_eng
         wx_engine = sa_eng(DB_URL, pool_pre_ping=True)
-        cnt_df = pd.read_sql("SELECT COUNT(*) AS n FROM articles WHERE page_type = 'wechat' AND (content_edited = 0 OR content_edited IS NULL)", wx_engine)
+        cnt_df = pd.read_sql("SELECT COUNT(*) AS n FROM articles WHERE page_type = 'websearch' AND (content_edited = 0 OR content_edited IS NULL)", wx_engine)
         unedited_count = int(cnt_df.iloc[0]['n']) if not cnt_df.empty else 0
         wx_engine.dispose()
     except Exception:
         pass
 
     if unedited_count > 0:
-        with st.expander(f"✏️ 微信公众号内容补录（{unedited_count} 篇待补录）", expanded=False):
-            show_edited = st.checkbox("显示已补录", value=False, key="show_edited_wechat")
+        with st.expander(f"✏️ WebSearch 内容补录（{unedited_count} 篇待补录）", expanded=True):
+            show_edited = st.checkbox("显示已补录", value=False, key="show_edited_websearch")
             try:
                 wx_engine2 = sa_eng(DB_URL, pool_pre_ping=True)
                 edited_filter = "" if show_edited else "AND (content_edited = 0 OR content_edited IS NULL)"
-                query = f"SELECT id, title, content, liangke_date, source_domain, content_edited, liangke_url FROM articles WHERE page_type = 'wechat' {edited_filter} ORDER BY liangke_date DESC"
+                query = f"SELECT id, title, content, liangke_date, source_domain, content_edited, liangke_url FROM articles WHERE page_type = 'websearch' {edited_filter} ORDER BY liangke_date DESC"
                 df_wx = pd.read_sql(query, wx_engine2)
                 wx_engine2.dispose()
             except Exception as e:
@@ -440,14 +440,14 @@ def page_daily_news():
                                 st.link_button("🔗 打开原文", link_url)
                         with co_i:
                             st.caption(f"来源：{source} | {date_str} | {len(current_content)} 字")
-                        st.text(current_content[:500] + ('...' if len(current_content) > 500 else ''))
+                        st.text(current_content[:800] + ('...' if len(current_content) > 800 else ''))
                         new_content = st.text_area(
                             "粘贴完整文章内容", value=current_content if is_edited else '',
-                            height=200, key=f"wx_edit_{row['id']}",
-                            placeholder="在此粘贴微信公众号文章的完整正文...")
+                            height=200, key=f"ws_edit_{row['id']}",
+                            placeholder="在此粘贴文章的完整正文...")
                         c1, c2 = st.columns([1, 4])
                         with c1:
-                            if st.button("💾 保存", key=f"wx_save_{row['id']}"):
+                            if st.button("💾 保存", key=f"ws_save_{row['id']}"):
                                 if new_content and new_content != current_content:
                                     try:
                                         eng = sa_eng(DB_URL, pool_pre_ping=True)
@@ -463,7 +463,7 @@ def page_daily_news():
                                 else:
                                     st.info("内容未变更")
                         with c2:
-                            if is_edited and st.button("🔄 重新编辑", key=f"wx_reedit_{row['id']}"):
+                            if is_edited and st.button("🔄 重新编辑", key=f"ws_reedit_{row['id']}"):
                                 try:
                                     eng = sa_eng(DB_URL, pool_pre_ping=True)
                                     with eng.connect() as conn:
@@ -474,9 +474,7 @@ def page_daily_news():
                                 except Exception as e:
                                     st.error(f"失败：{e}")
             else:
-                st.success("🎉 所有微信文章已补录完成！")
-    elif unedited_count == 0:
-        pass  # All done, don't show
+                st.success("🎉 所有 WebSearch 文章已补录完成！")
 
     keyword = st.text_input("🔍 关键词检索（搜索全库，不限日期）", placeholder="输入关键词搜索全库...")
 
@@ -505,7 +503,7 @@ def page_daily_news():
                 df = fetch_articles(target_str)
 
     # Apply page type filter (skip if all types selected = no filter)
-    ALL_TYPES = {"flash", "article", "reference", "wechat"}
+    ALL_TYPES = {"flash", "article", "reference", "websearch"}
     if set(page_types) != ALL_TYPES and not df.empty and 'page_type' in df.columns:
         df = df[df['page_type'].isin(page_types)]
 
@@ -635,10 +633,7 @@ def page_daily_news():
                 art_url = row.get('url', '') or row.get('reference_url', '') or row.get('liangke_url', '')
                 title_cn = row.get('title_cn', '') or ''
                 page_type = row.get('page_type', '')
-                if page_type == 'wechat':
-                    # WeChat articles: title only (sogou redirect URLs are too long)
-                    st.markdown(f"**{row['title']}**")
-                elif art_url:
+                if art_url:
                     st.markdown(f"[**{row['title']}**]({art_url})")
                 else:
                     st.markdown(f"**{row['title']}**")
@@ -978,8 +973,8 @@ def page_weekly_report():
     st.markdown("---")
     wr_page_types = st.multiselect(
         "新闻类型筛选（默认全选，叉掉不想要的）",
-        options=["flash", "article", "reference", "wechat"],
-        default=["flash", "article", "reference", "wechat"], key="wr_page_types"
+        options=["flash", "article", "reference", "websearch"],
+        default=["flash", "article", "reference", "websearch"], key="wr_page_types"
     )
 
     # --- Article preview & selection ---
