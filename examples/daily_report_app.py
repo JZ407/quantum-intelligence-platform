@@ -15,6 +15,8 @@ from datetime import datetime, timedelta
 
 import pandas as pd
 import yaml
+import plotly.express as px
+import plotly.graph_objects as go
 from sqlalchemy import create_engine
 import streamlit as st
 from docx import Document
@@ -1097,8 +1099,10 @@ def page_weekly_report():
         st.session_state.wr_result = None
     if 'wr_pdf_path' not in st.session_state:
         st.session_state.wr_pdf_path = None
+    if 'wr_tex_path' not in st.session_state:
+        st.session_state.wr_tex_path = None
 
-    btn_col1, btn_col2 = st.columns([2, 5])
+    btn_col1, btn_col2, btn_col3 = st.columns([2, 3, 3])
     with btn_col1:
         gen_clicked = st.button("Generate PDF", type="primary", key="wr_gen")
     with btn_col2:
@@ -1109,6 +1113,16 @@ def page_weekly_report():
                     file_name=os.path.basename(st.session_state.wr_pdf_path),
                     mime="application/pdf",
                 )
+    with btn_col3:
+        if st.session_state.wr_result == 'success' and st.session_state.wr_tex_path:
+            with open(st.session_state.wr_tex_path, 'r', encoding='utf-8') as f:
+                st.download_button(
+                    label="Download TEX", data=f.read(),
+                    file_name=os.path.basename(st.session_state.wr_tex_path),
+                    mime="text/plain",
+                )
+    with btn_col2:
+        if st.session_state.wr_result == 'success':
             st.success("Success!")
         elif st.session_state.wr_result == 'error':
             st.error("PDF not found.")
@@ -1174,6 +1188,7 @@ def page_weekly_report():
                     if os.path.exists(pdf_path):
                         st.session_state.wr_result = 'success'
                         st.session_state.wr_pdf_path = pdf_path
+                        st.session_state.wr_tex_path = pdf_path.replace('.pdf', '.tex')
                         st.rerun()
                     else:
                         st.error("PDF not found")
@@ -1513,13 +1528,179 @@ def count_new_reports():
     return sum(1 for a in alerts if a.get('date', '') >= cutoff)
 
 
+# ── Investment Dashboard (reads MySQL tags.funding) ─────────────────
+
+ROUND_COLORS = {
+    '天使轮': '#98FB98', 'Pre-A': '#3CB371', 'A轮': '#2E8B57', 'A+轮': '#228B22',
+    'B轮': '#4169E1', 'C轮': '#0000CD', 'D轮': '#8B008B', 'Pre-IPO': '#FF6347',
+    'IPO': '#FF0000', 'IPO-过会': '#FF4500', 'IPO-注册': '#DC143C', 'IPO-辅导': '#CD5C5C',
+    'SPAC': '#FF8C00', '收购': '#FFD700', '基金': '#20B2AA', '战略融资': '#9370DB',
+}
+
+@st.cache_data(ttl=600)
+def _load_funding_from_db():
+    """Load funding data from MySQL tags.funding (cached 10 min)."""
+    try:
+        engine = create_engine(DB_URL, pool_pre_ping=True)
+        with engine.connect() as conn:
+            from sqlalchemy import text
+            rows = conn.execute(text("""
+                SELECT
+                    id, title, original_date, liangke_date, source_domain,
+                    JSON_EXTRACT(tags, '$.funding.company') AS company,
+                    JSON_EXTRACT(tags, '$.funding.investors') AS investors,
+                    JSON_EXTRACT(tags, '$.funding.round') AS round,
+                    JSON_EXTRACT(tags, '$.funding.amount') AS amount,
+                    JSON_EXTRACT(tags, '$.funding.amount_text') AS amount_text,
+                    JSON_EXTRACT(tags, '$.funding.is_funding') AS is_funding,
+                    page_type
+                FROM articles
+                WHERE JSON_EXTRACT(tags, '$.funding.is_funding') = true
+                ORDER BY COALESCE(original_date, liangke_date) DESC
+            """)).fetchall()
+        engine.dispose()
+
+        data = []
+        for r in rows:
+            try: company = r.company.strip('"') if r.company else None
+            except: company = None
+            try: round_ = r.round.strip('"') if r.round else None
+            except: round_ = None
+            try: amt_text = r.amount_text.strip('"') if r.amount_text else None
+            except: amt_text = None
+            try:
+                inv_raw = r.investors
+                if inv_raw:
+                    investors = json.loads(inv_raw) if isinstance(inv_raw, str) else inv_raw
+                else:
+                    investors = []
+            except:
+                investors = []
+
+            data.append({
+                'id': f'mysql:{r.id}',
+                'title': r.title,
+                'date': r.original_date or r.liangke_date,
+                'source': r.source_domain or '',
+                'company': company,
+                'investors': investors,
+                'round': round_,
+                'amount': float(r.amount) if r.amount and r.amount not in ('null', 'NULL', None) else None,
+                'amount_text': amt_text,
+                'page_type': r.page_type or '',
+            })
+
+        df = pd.DataFrame(data)
+        if not df.empty and df['date'].notna().any():
+            df['date'] = pd.to_datetime(df['date'], errors='coerce')
+            df['year'] = df['date'].dt.year.fillna(0).astype(int)
+            df['month'] = df['date'].dt.strftime('%Y-%m')
+        return df
+    except Exception as e:
+        st.error(f"数据库读取失败: {e}")
+        return pd.DataFrame()
+
+
+def page_investment():
+    st.title("📊 投融资看板")
+    df = _load_funding_from_db()
+    if df is None or df.empty:
+        st.info("暂无投融资数据。每日抓取或 websearch 入库后自动填充。")
+        return
+
+    # ── KPI Row ──
+    companies = df['company'].dropna().unique()
+    all_investors = set()
+    for invs in df['investors']:
+        for inv in (invs or []):
+            all_investors.add(inv)
+
+    k1, k2, k3, k4 = st.columns(4)
+    with k1: st.metric("📋 融资事件", len(df))
+    with k2: st.metric("🏢 被投企业", len(companies))
+    with k3: st.metric("💼 投资机构", len(all_investors))
+    with k4:
+        rounds = df['round'].dropna().nunique()
+        st.metric("🔄 覆盖轮次", rounds)
+
+    st.markdown("---")
+
+    # ── Charts Row ──
+    c1, c2 = st.columns(2)
+
+    with c1:
+        st.subheader("轮次分布")
+        round_counts = df['round'].value_counts()
+        round_order = ['天使轮', 'Pre-A', 'A轮', 'A+轮', 'B轮', 'C轮', 'D轮',
+                       'Pre-IPO', '战略融资', '收购', '基金',
+                       'IPO-辅导', 'IPO-过会', 'IPO-注册', 'IPO']
+        round_counts = round_counts.reindex([r for r in round_order if r in round_counts.index])
+        fig_bar = px.bar(x=round_counts.values, y=round_counts.index, orientation='h',
+                         color=round_counts.index, color_discrete_map=ROUND_COLORS,
+                         labels={'x': '事件数', 'y': ''})
+        fig_bar.update_layout(height=350, showlegend=False, margin=dict(t=0, b=0, l=0, r=0),
+                              paper_bgcolor='rgba(0,0,0,0)', font=dict(color='#ccc'))
+        st.plotly_chart(fig_bar, use_container_width=True)
+
+    with c2:
+        st.subheader("月度趋势")
+        monthly = df.groupby('month').size().reset_index(name='count')
+        monthly['month'] = pd.to_datetime(monthly['month'])
+        monthly = monthly.sort_values('month')
+        fig_line = px.line(monthly, x='month', y='count', markers=True,
+                           color_discrete_sequence=['#e94560'])
+        fig_line.update_traces(line=dict(width=2.5), marker=dict(size=6))
+        fig_line.update_layout(height=350, margin=dict(t=0, b=0, l=0, r=0),
+                               paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+                               font=dict(color='#ccc'),
+                               xaxis=dict(showgrid=True, gridcolor='#333', tickformat='%Y-%m'))
+        st.plotly_chart(fig_line, use_container_width=True)
+
+    st.markdown("---")
+
+    # ── Investor Leaderboard ──
+    st.subheader("🏆 投资机构活跃度")
+    inv_data = []
+    for _, row in df.iterrows():
+        for inv in (row.get('investors') or []):
+            inv_data.append({'机构': inv, '轮次': row.get('round', ''), '企业': row.get('company', '')})
+    if inv_data:
+        inv_df = pd.DataFrame(inv_data)
+        inv_agg = inv_df.groupby('机构').size().reset_index(name='投资次数').sort_values('投资次数', ascending=False)
+        st.dataframe(inv_agg.head(20), use_container_width=True, hide_index=True)
+
+    st.markdown("---")
+
+    # ── Detailed Table ──
+    st.subheader("📋 融资事件明细")
+    table_data = []
+    for _, row in df.iterrows():
+        table_data.append({
+            '日期': str(row['date'])[:10] if pd.notna(row['date']) else '',
+            '企业': row.get('company', ''),
+            '轮次': row.get('round', ''),
+            '金额': row.get('amount_text', ''),
+            '投资方': '、'.join((row.get('investors') or [])[:5]),
+            '标题': (row.get('title') or '')[:60],
+        })
+    st.dataframe(pd.DataFrame(table_data), use_container_width=True, hide_index=True,
+                 column_config={
+                     '日期': st.column_config.TextColumn(width='small'),
+                     '企业': st.column_config.TextColumn(width='small'),
+                     '轮次': st.column_config.TextColumn(width='small'),
+                     '金额': st.column_config.TextColumn(width='small'),
+                     '投资方': st.column_config.TextColumn(width='medium'),
+                     '标题': st.column_config.TextColumn(width='large'),
+                 })
+
+
 def main():
     st.set_page_config(page_title="量子科技情报", page_icon="📰", layout="wide")
     st.title("📰 量子科技情报")
 
     # Report alert badge
     new_reports = count_new_reports()
-    nav_items = ["每日资讯", "周报生成", "会议信息"]
+    nav_items = ["每日资讯", "投融资看板", "周报生成", "会议信息"]
     if new_reports > 0:
         nav_items.append(f"报告提醒 🔴{new_reports}")
     else:
@@ -1532,6 +1713,8 @@ def main():
 
     if page == "每日资讯":
         page_daily_news()
+    elif page == "投融资看板":
+        page_investment()
     elif page == "周报生成":
         page_weekly_report()
     elif page == "会议信息":
