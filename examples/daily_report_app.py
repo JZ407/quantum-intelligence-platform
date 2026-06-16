@@ -1590,6 +1590,35 @@ def _load_funding_from_db():
                 'page_type': r.page_type or '',
             })
 
+        # ── Also load from historical SQLite ──
+        try:
+            import sqlite3
+            hist_conn = sqlite3.connect(HISTORICAL_DB_PATH)
+            hist_conn.row_factory = sqlite3.Row
+            hist_rows = hist_conn.cursor().execute(
+                "SELECT id, title, liangke_date, tags FROM articles WHERE tags LIKE '%funding%'"
+            ).fetchall()
+            hist_conn.close()
+            for r in hist_rows:
+                try: tags_data = json.loads(r["tags"])
+                except: continue
+                f = tags_data.get("funding", {})
+                if not f.get("is_funding"): continue
+                data.append({
+                    "id": f"hist:{r["id"]}",
+                    "title": r["title"],
+                    "date": (r["liangke_date"] or "")[:10] or None,
+                    "source": "historical",
+                    "company": f.get("company"),
+                    "investors": f.get("investors", []),
+                    "round": f.get("round"),
+                    "amount": float(f["amount"]) if f.get("amount") and str(f["amount"]) not in ("null","NULL","","None") else None,
+                    "amount_text": f.get("amount_text"),
+                    "page_type": "historical",
+                })
+        except Exception:
+            pass
+
         df = pd.DataFrame(data)
         if not df.empty and df['date'].notna().any():
             df['date'] = pd.to_datetime(df['date'], errors='coerce')
