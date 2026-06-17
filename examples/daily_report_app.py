@@ -24,6 +24,12 @@ from docx.shared import Pt, RGBColor, Cm
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.oxml.ns import qn
 
+# Competitor profiles
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'competitor_profiles'))
+from schema import init_profile_db, list_profiles, get_profile, get_profile_sources
+from render import render_profile_list, render_detailed_profile, render_research_output, render_publication_list, render_team_section, render_cross_analysis
+from generator import synthesize_news_summary, load_news_for_company
+
 # ------------------------------------------------------------------
 # Config
 # ------------------------------------------------------------------
@@ -1498,7 +1504,7 @@ def page_knowledge_graph():
     """
     html = html.replace('network = new vis.Network(container, data, options);',
                         'network = new vis.Network(container, data, options);\n' + edge_handler)
-    st.components.v1.html(html, height=750, scrolling=True)
+    st.components.v1.html(html, height=750)
 
     # Entity table
     st.markdown('---')
@@ -1723,13 +1729,145 @@ def page_investment():
                  })
 
 
+def page_competitor_profiles():
+    """竞争对手档案 — 结构化情报卡片"""
+    st.title("🏢 竞争对手档案")
+
+    conn = init_profile_db()
+    profiles = list_profiles(conn)
+
+    # ── Top-level: profile list + quick stats ──
+    if not profiles:
+        st.info("暂无竞争对手档案。点击下方按钮通过 WebSearch 研究生成档案。")
+        st.markdown("""
+        ### 如何使用
+        1. 在 Claude Code 对话中说：**"研究 [公司名] 并生成竞争对手档案"**
+        2. Claude 会通过 WebSearch 搜集公司信息，提取结构化数据
+        3. 档案自动存入数据库，在此页面查看
+        """)
+        conn.close()
+        return
+
+    # Stats bar
+    c1, c2, c3, c4 = st.columns(4)
+    with c1: st.metric("📋 档案数", len(profiles))
+    with c2: st.metric("✅ 完整档案", sum(1 for p in profiles if p['profile_status'] == 'complete'))
+    with c3:
+        modalities = set(p.get('qubit_modality') for p in profiles if p.get('qubit_modality'))
+        st.metric("🔬 技术路线", len(modalities))
+    with c4:
+        total_funding = sum(p.get('total_funding_usd') or 0 for p in profiles)
+        if total_funding > 0:
+            if total_funding >= 1e9:
+                st.metric("💰 总融资", f"${total_funding/1e9:.1f}B")
+            else:
+                st.metric("💰 总融资", f"${total_funding/1e6:.0f}M")
+        else:
+            st.metric("💰 总融资", "-")
+
+    st.markdown("---")
+
+    # ── Profile table ──
+    st.subheader("档案列表")
+    st.components.v1.html(render_profile_list(profiles), height=40 + 45 * len(profiles))
+
+    st.markdown("---")
+
+    # ── Detail view ──
+    profile_names = [f"{p.get('company_name','?')} ({p.get('name_cn','')})" for p in profiles]
+    selected = st.selectbox("选择公司查看详细档案", profile_names)
+
+    if selected:
+        company_name = selected.split(' (')[0]
+        profile = get_profile(conn, company_name)
+        if profile:
+            st.markdown(render_detailed_profile(profile))
+
+            # Team L3 section
+            key_people = profile.get('key_people', [])
+            if isinstance(key_people, str):
+                import json as _json
+                try:
+                    key_people = _json.loads(key_people)
+                except:
+                    key_people = []
+            team_analytics_raw = profile.get('team_analytics', {})
+            if isinstance(team_analytics_raw, str):
+                try:
+                    team_analytics_raw = _json.loads(team_analytics_raw)
+                except:
+                    team_analytics_raw = {}
+            if key_people:
+                with st.expander("👥 团队深度分析 (L3)", expanded=False):
+                    team_html = render_team_section(key_people, team_analytics_raw)
+                    team_count = len(key_people) if isinstance(key_people, list) else 10
+                    st.components.v1.html(team_html, height=max(600, team_count * 50), scrolling=True)
+
+            # Cross-analysis
+            with st.expander("📊 交叉分析：融资 × 产品 × 论文", expanded=False):
+                st.components.v1.html(render_cross_analysis(profile), height=680, scrolling=True)
+
+            # Research output
+            st.markdown(render_research_output(profile))
+
+            # Publications list
+            with st.expander("📄 完整论文列表 (可搜索)", expanded=False):
+                theme_filter = st.multiselect(
+                    "按研究方向筛选",
+                    ['quantum_algorithms', 'quantum_chemistry', 'quantum_simulation',
+                     'quantum_information', 'error_mitigation', 'tensor_networks',
+                     'machine_learning', 'quantum_biology'],
+                    default=[],
+                    format_func=lambda x: {
+                        'quantum_algorithms': '量子算法', 'quantum_chemistry': '量子化学',
+                        'quantum_simulation': '量子模拟', 'error_mitigation': '误差缓解',
+                        'tensor_networks': '张量网络', 'quantum_information': '量子信息',
+                        'machine_learning': '机器学习', 'quantum_biology': '量子生物学'
+                    }.get(x, x),
+                    key='pub_theme_filter'
+                )
+                search_term = st.text_input('搜索标题/作者', key='pub_search')
+                st.components.v1.html(
+                    render_publication_list(profile['id'], search_term, limit=100),
+                    height=600, scrolling=True)
+
+            # Sources
+            with st.expander("📚 信息来源"):
+                sources = get_profile_sources(conn, profile['id'])
+                if sources:
+                    for s in sources:
+                        url = s.get('source_url', '')
+                        title = s.get('source_title', '') or url
+                        st.markdown(f"- [{title}]({url}) — `{s.get('field_name', '')}`")
+                else:
+                    st.caption("暂无来源记录")
+
+            # News timeline from DB
+            with st.expander("📰 相关新闻 (来自机构新闻库)"):
+                articles = load_news_for_company(company_name, limit=100)
+                if articles:
+                    for art in articles:
+                        date = art.get('publish_date', '') or '?'
+                        title = art.get('title_cn') or art.get('title', '')
+                        url = art.get('url', '')
+                        src = art.get('source', '')
+                        if url:
+                            st.markdown(f"- **{date}** [{title[:100]}]({url}) `{src}`")
+                        else:
+                            st.markdown(f"- **{date}** {title[:100]} `{src}`")
+                else:
+                    st.caption("暂无相关新闻")
+
+    conn.close()
+
+
 def main():
     st.set_page_config(page_title="量子科技情报", page_icon="📰", layout="wide")
     st.title("📰 量子科技情报")
 
     # Report alert badge
     new_reports = count_new_reports()
-    nav_items = ["每日资讯", "投融资看板", "周报生成", "会议信息"]
+    nav_items = ["每日资讯", "投融资看板", "周报生成", "会议信息", "竞争对手档案"]
     if new_reports > 0:
         nav_items.append(f"报告提醒 🔴{new_reports}")
     else:
@@ -1748,6 +1886,8 @@ def main():
         page_weekly_report()
     elif page == "会议信息":
         page_conferences()
+    elif page == "竞争对手档案":
+        page_competitor_profiles()
     elif page == "报告提醒":
         page_report_alerts()
     elif page == "知识图谱":
