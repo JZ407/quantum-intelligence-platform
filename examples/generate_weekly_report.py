@@ -99,7 +99,14 @@ def preprocess_content(content: str, article_date) -> str:
     # 3. Strip leading year-based date (e.g. "2026年5月11日，")
     content = re.sub(r'^\s*\d{4}年\d{1,2}月(\d{1,2}日|中旬|下旬|上旬)?[，,]\s*', '', content)
 
-    # 4. Strip leading stray punctuation
+    # 4. Strip AI disclaimer prefixes (translation/summary notices)
+    content = re.sub(r'(?:🤖\s*)?(?:本文|本)?(?:内容)?(?:全)?由\s*AI\s*(?:翻译|摘要生成)[，,，\s]*仅供参考[。\s]*', '', content)
+    content = re.sub(r'\(本文内容由AI翻译[，,]*仅供参考\)', '', content)
+    content = re.sub(r'（本文内容由AI翻译[，,]*仅供参考）', '', content)
+    # Also strip trailing AI disclaimers
+    content = re.sub(r'(?:🤖\s*)?本文由\s*AI\s*摘要生成[，,，\s]*原文见链接[。\s]*$', '', content)
+
+    # 5. Strip leading stray punctuation
     content = content.lstrip(' \t\n\r，,。．；;')
 
     # 5. Add new prefix

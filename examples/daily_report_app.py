@@ -17,6 +17,7 @@ import pandas as pd
 import yaml
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from sqlalchemy import create_engine
 import streamlit as st
 from docx import Document
@@ -408,82 +409,6 @@ def page_daily_news():
     else:
         page_types = ["flash", "article", "reference"]
 
-    # ── WebSearch 内容补录面板 ──
-    unedited_count = 0
-    try:
-        from sqlalchemy import create_engine as sa_eng
-        wx_engine = sa_eng(DB_URL, pool_pre_ping=True)
-        cnt_df = pd.read_sql("SELECT COUNT(*) AS n FROM articles WHERE page_type = 'websearch' AND (content_edited = 0 OR content_edited IS NULL)", wx_engine)
-        unedited_count = int(cnt_df.iloc[0]['n']) if not cnt_df.empty else 0
-        wx_engine.dispose()
-    except Exception:
-        pass
-
-    if unedited_count > 0:
-        with st.expander(f"✏️ WebSearch 内容补录（{unedited_count} 篇待补录）", expanded=True):
-            show_edited = st.checkbox("显示已补录", value=False, key="show_edited_websearch")
-            try:
-                wx_engine2 = sa_eng(DB_URL, pool_pre_ping=True)
-                edited_filter = "" if show_edited else "AND (content_edited = 0 OR content_edited IS NULL)"
-                query = f"SELECT id, title, content, liangke_date, source_domain, content_edited, liangke_url FROM articles WHERE page_type = 'websearch' {edited_filter} ORDER BY liangke_date DESC"
-                df_wx = pd.read_sql(query, wx_engine2)
-                wx_engine2.dispose()
-            except Exception as e:
-                st.error(f"加载失败：{e}")
-                df_wx = pd.DataFrame()
-
-            if not df_wx.empty:
-                for _, row in df_wx.iterrows():
-                    is_edited = bool(row.get('content_edited', 0))
-                    current_content = row.get('content', '') or ''
-                    title = row['title'] or ''
-                    date_str = str(row.get('liangke_date', ''))[:10]
-                    source = row.get('source_domain', '') or ''
-                    status = "✅" if is_edited else "📝"
-                    link_url = row.get('liangke_url', '') or ''
-                    with st.expander(f"{status} [{date_str}] {source} | {title[:80]}", expanded=not is_edited):
-                        co_l, co_i = st.columns([1, 4])
-                        with co_l:
-                            if link_url:
-                                st.link_button("🔗 打开原文", link_url)
-                        with co_i:
-                            st.caption(f"来源：{source} | {date_str} | {len(current_content)} 字")
-                        st.text(current_content[:800] + ('...' if len(current_content) > 800 else ''))
-                        new_content = st.text_area(
-                            "粘贴完整文章内容", value=current_content if is_edited else '',
-                            height=200, key=f"ws_edit_{row['id']}",
-                            placeholder="在此粘贴文章的完整正文...")
-                        c1, c2 = st.columns([1, 4])
-                        with c1:
-                            if st.button("💾 保存", key=f"ws_save_{row['id']}"):
-                                if new_content and new_content != current_content:
-                                    try:
-                                        eng = sa_eng(DB_URL, pool_pre_ping=True)
-                                        with eng.connect() as conn:
-                                            from sqlalchemy import text as sa_text
-                                            conn.execute(sa_text("UPDATE articles SET content = :c, content_edited = 1 WHERE id = :i"), {'c': new_content, 'i': int(row['id'])})
-                                            conn.commit()
-                                        st.success(f"已保存！{len(new_content)} 字")
-                                        time.sleep(0.5)
-                                        st.rerun()
-                                    except Exception as e:
-                                        st.error(f"保存失败：{e}")
-                                else:
-                                    st.info("内容未变更")
-                        with c2:
-                            if is_edited and st.button("🔄 重新编辑", key=f"ws_reedit_{row['id']}"):
-                                try:
-                                    eng = sa_eng(DB_URL, pool_pre_ping=True)
-                                    with eng.connect() as conn:
-                                        from sqlalchemy import text as sa_text
-                                        conn.execute(sa_text("UPDATE articles SET content_edited = 0 WHERE id = :i"), {'i': int(row['id'])})
-                                        conn.commit()
-                                    st.rerun()
-                                except Exception as e:
-                                    st.error(f"失败：{e}")
-            else:
-                st.success("🎉 所有 WebSearch 文章已补录完成！")
-
     keyword = st.text_input("🔍 关键词检索（搜索全库，不限日期）", placeholder="输入关键词搜索全库...")
 
     with st.spinner("正在读取数据库..."):
@@ -629,11 +554,11 @@ def page_daily_news():
     selected_ids = []
     for _, row in df_page.iterrows():
         with st.container():
-            cols = st.columns(([0.5, 5, 1] if show_checkbox else [5, 1]))
+            cols = st.columns(([1, 5, 1] if show_checkbox else [5, 1]))
             col_idx = 0
             if show_checkbox:
                 with cols[0]:
-                    checked = st.checkbox("", key=f"sel_{source_key}_{row['id']}", label_visibility="collapsed")
+                    checked = st.checkbox("选择", key=f"sel_{source_key}_{row['id']}")
                     if checked:
                         selected_ids.append(row['id'])
                 col_idx = 1
@@ -720,6 +645,82 @@ def page_daily_news():
                 file_name=file_name,
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             )
+
+    # ── WebSearch 内容补录面板（页面底部）──
+    unedited_count = 0
+    try:
+        from sqlalchemy import create_engine as sa_eng
+        wx_engine = sa_eng(DB_URL, pool_pre_ping=True)
+        cnt_df = pd.read_sql("SELECT COUNT(*) AS n FROM articles WHERE page_type = 'websearch' AND (content_edited = 0 OR content_edited IS NULL)", wx_engine)
+        unedited_count = int(cnt_df.iloc[0]['n']) if not cnt_df.empty else 0
+        wx_engine.dispose()
+    except Exception:
+        pass
+
+    if unedited_count > 0:
+        with st.expander(f"✏️ WebSearch 内容补录（{unedited_count} 篇待补录）", expanded=False):
+            show_edited = st.checkbox("显示已补录", value=False, key="show_edited_websearch")
+            try:
+                wx_engine2 = sa_eng(DB_URL, pool_pre_ping=True)
+                edited_filter = "" if show_edited else "AND (content_edited = 0 OR content_edited IS NULL)"
+                query = f"SELECT id, title, content, liangke_date, source_domain, content_edited, liangke_url FROM articles WHERE page_type = 'websearch' {edited_filter} ORDER BY liangke_date DESC"
+                df_wx = pd.read_sql(query, wx_engine2)
+                wx_engine2.dispose()
+            except Exception as e:
+                st.error(f"加载失败：{e}")
+                df_wx = pd.DataFrame()
+
+            if not df_wx.empty:
+                for _, row in df_wx.iterrows():
+                    is_edited = bool(row.get('content_edited', 0))
+                    current_content = row.get('content', '') or ''
+                    title = row['title'] or ''
+                    date_str = str(row.get('liangke_date', ''))[:10]
+                    src = row.get('source_domain', '') or ''
+                    status = "✅" if is_edited else "📝"
+                    link_url = row.get('liangke_url', '') or ''
+                    with st.expander(f"{status} [{date_str}] {src} | {title[:80]}", expanded=not is_edited):
+                        co_l, co_i = st.columns([1, 4])
+                        with co_l:
+                            if link_url:
+                                st.link_button("🔗 打开原文", link_url)
+                        with co_i:
+                            st.caption(f"来源：{src} | {date_str} | {len(current_content)} 字")
+                        st.text(current_content[:800] + ('...' if len(current_content) > 800 else ''))
+                        new_content = st.text_area(
+                            "粘贴完整文章内容", value=current_content if is_edited else '',
+                            height=200, key=f"ws_edit_{row['id']}",
+                            placeholder="在此粘贴文章的完整正文...")
+                        c1, c2 = st.columns([1, 4])
+                        with c1:
+                            if st.button("💾 保存", key=f"ws_save_{row['id']}"):
+                                if new_content and new_content != current_content:
+                                    try:
+                                        eng = sa_eng(DB_URL, pool_pre_ping=True)
+                                        with eng.connect() as conn:
+                                            from sqlalchemy import text as sa_text
+                                            conn.execute(sa_text("UPDATE articles SET content = :c, content_edited = 1 WHERE id = :i"), {'c': new_content, 'i': int(row['id'])})
+                                            conn.commit()
+                                        st.success(f"已保存！{len(new_content)} 字")
+                                        time.sleep(0.5)
+                                        st.rerun()
+                                    except Exception as e:
+                                        st.error(f"保存失败：{e}")
+                                else:
+                                    st.info("内容未变更")
+                        with c2:
+                            if is_edited and st.button("🔄 重新编辑", key=f"ws_reedit_{row['id']}"):
+                                try:
+                                    eng = sa_eng(DB_URL, pool_pre_ping=True)
+                                    with eng.connect() as conn:
+                                        from sqlalchemy import text as sa_text
+                                        conn.execute(sa_text("UPDATE articles SET content_edited = 0 WHERE id = :i"), {'i': int(row['id'])})
+                                        conn.commit()
+                                    st.rerun()
+                                except Exception as e:
+                                    st.error(f"失败：{e}")
+            else:
+                st.success("🎉 所有 WebSearch 文章已补录完成！")
 
 
 
@@ -1602,7 +1603,17 @@ def _load_funding_from_db():
             hist_conn = sqlite3.connect(HISTORICAL_DB_PATH)
             hist_conn.row_factory = sqlite3.Row
             hist_rows = hist_conn.cursor().execute(
-                "SELECT id, title, liangke_date, tags FROM articles WHERE tags LIKE '%funding%'"
+                """SELECT id, title, liangke_date, tags FROM articles
+                   WHERE tags LIKE '%funding%'
+                     AND title NOT LIKE '%暴跌%' AND title NOT LIKE '%暴涨%'
+                     AND title NOT LIKE '%股价%' AND title NOT LIKE '%跌超%'
+                     AND title NOT LIKE '%涨超%' AND title NOT LIKE '%收盘%'
+                     AND title NOT LIKE '%开盘%' AND title NOT LIKE '%市值%'
+                     AND title NOT LIKE '%股东减持%' AND title NOT LIKE '%拟减持%'
+                     AND title NOT LIKE '%财务业绩%' AND title NOT LIKE '%财报%'
+                     AND title NOT LIKE '%季度%' AND title NOT LIKE '%持股%'
+                     AND title NOT LIKE '%资助%' AND title NOT LIKE '%拨款%'
+                """
             ).fetchall()
             hist_conn.close()
             for r in hist_rows:
@@ -1626,10 +1637,32 @@ def _load_funding_from_db():
             pass
 
         df = pd.DataFrame(data)
-        if not df.empty and df['date'].notna().any():
-            df['date'] = pd.to_datetime(df['date'], errors='coerce')
-            df['year'] = df['date'].dt.year.fillna(0).astype(int)
-            df['month'] = df['date'].dt.strftime('%Y-%m')
+        if df.empty:
+            return df
+
+        # Dedup: same company + same round + same year = keep best source
+        # Round=None events (share transfers, etc.) are NOT deduped — each is a separate transaction
+        TRUSTED = {'eastmoney.com','stcn.com','finance.sina.com.cn','cls.cn','chinaventure.com.cn','pedaily.cn'}
+        MID = {'news.qq.com','people.com.cn','xinhuanet.com','10jqka.com.cn','163.com'}
+        df['_src_score'] = df['source'].apply(
+            lambda x: 3 if x in TRUSTED else (2 if x in MID else (1 if x and x != 'historical' else 0)))
+        df['_sort_priority'] = df['page_type'].apply(lambda x: 0 if x == 'historical' else 1)
+        df = df.sort_values(['_sort_priority', '_src_score', 'date'], ascending=[False, False, False])
+
+        # Compute year BEFORE dedup
+        df['date'] = pd.to_datetime(df['date'], errors='coerce')
+        df['year'] = df['date'].dt.year.fillna(0).astype(int)
+        df['month'] = df['date'].dt.strftime('%Y-%m')
+
+        # Events WITH a round: dedup by company + round + year
+        df_with_round = df[df['round'].notna() & (df['round'] != '')].copy()
+        df_with_round = df_with_round.drop_duplicates(subset=['company', 'round', 'year'], keep='first')
+
+        # Events WITHOUT a round: keep all (each is a separate transaction)
+        df_no_round = df[df['round'].isna() | (df['round'] == '')].copy()
+
+        df = pd.concat([df_with_round, df_no_round], ignore_index=True)
+        df = df.drop(columns=['_sort_priority', '_src_score'])
         return df
     except Exception as e:
         st.error(f"数据库读取失败: {e}")
@@ -1691,6 +1724,42 @@ def page_investment():
                                xaxis=dict(showgrid=True, gridcolor='#333', tickformat='%Y-%m'))
         st.plotly_chart(fig_line, use_container_width=True)
 
+    # ── Yearly Trend (full width) ──
+    st.markdown("---")
+    st.subheader("📅 年度趋势")
+    yearly = df.groupby('year').agg(
+        deal_count=('id', 'count'),
+        total_amount=('amount', 'sum')
+    ).reset_index()
+    yearly = yearly[yearly['year'] > 0].sort_values('year')
+    yearly['total_amount_yi'] = yearly['total_amount'] / 1e8  # 元→亿元
+
+    fig_year = make_subplots(specs=[[{"secondary_y": True}]])
+    fig_year.add_trace(
+        go.Bar(x=yearly['year'], y=yearly['deal_count'], name="融资笔数",
+               marker_color='#53d8fb',
+               hovertemplate="<b>%{x}年</b><br>笔数: %{y}<extra></extra>"),
+        secondary_y=False,
+    )
+    fig_year.add_trace(
+        go.Scatter(x=yearly['year'], y=yearly['total_amount_yi'], name="投融资总额（亿元）",
+                   mode='lines+markers', line=dict(color='#e94560', width=3),
+                   marker=dict(size=8, color='#e94560'),
+                   hovertemplate="<b>%{x}年</b><br>总额: ¥%{y:.2f}亿<extra></extra>"),
+        secondary_y=True,
+    )
+    fig_year.update_layout(
+        hovermode='x unified', height=350,
+        margin=dict(t=0, b=0, l=0, r=0),
+        paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='#ccc'),
+        legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center'),
+        xaxis=dict(showgrid=True, gridcolor='#333', tickformat='d', dtick=1),
+        yaxis=dict(title="融资笔数", showgrid=True, gridcolor='#333', color='#53d8fb'),
+        yaxis2=dict(title="总额（亿元）", showgrid=False, color='#e94560'),
+    )
+    st.plotly_chart(fig_year, use_container_width=True)
+
     st.markdown("---")
 
     # ── Investor Leaderboard ──
@@ -1708,9 +1777,11 @@ def page_investment():
 
     # ── Detailed Table ──
     st.subheader("📋 融资事件明细")
+    df_display = df.sort_values('date', ascending=False)
     table_data = []
-    for _, row in df.iterrows():
+    for _, row in df_display.iterrows():
         table_data.append({
+            'ID': row.get('id', ''),
             '日期': str(row['date'])[:10] if pd.notna(row['date']) else '',
             '企业': row.get('company', ''),
             '轮次': row.get('round', ''),
@@ -1720,6 +1791,7 @@ def page_investment():
         })
     st.dataframe(pd.DataFrame(table_data), use_container_width=True, hide_index=True,
                  column_config={
+                     'ID': st.column_config.TextColumn(width='small'),
                      '日期': st.column_config.TextColumn(width='small'),
                      '企业': st.column_config.TextColumn(width='small'),
                      '轮次': st.column_config.TextColumn(width='small'),
@@ -1727,6 +1799,52 @@ def page_investment():
                      '投资方': st.column_config.TextColumn(width='medium'),
                      '标题': st.column_config.TextColumn(width='large'),
                  })
+
+
+def _load_company_papers(company_name: str):
+    """Load scientific papers for a company from its institutions.db table."""
+    import sqlite3, os
+    from collections import defaultdict
+    db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                           'institution_news', 'institutions.db')
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    table_name = f'{company_name.lower().split()[0]}_articles'
+
+    rows = []
+    c = conn.cursor()
+    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,))
+    if c.fetchone():
+        papers = c.execute(f'''
+            SELECT title, publish_date, url FROM "{table_name}"
+            WHERE source_type='scientific_paper' AND publish_date IS NOT NULL AND publish_date != ''
+            ORDER BY publish_date DESC
+        ''').fetchall()
+        by_year = defaultdict(list)
+        for p in papers:
+            y = (p['publish_date'] or '?')[:4]
+            by_year[y].append({'title': p['title'], 'url': p['url']})
+        rows = dict(sorted(by_year.items(), reverse=True))
+    conn.close()
+    return rows
+
+
+def _get_available_themes(profile_id: int) -> list:
+    """Get unique research themes from a profile's publications."""
+    import sqlite3, os
+    db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                           '..', 'competitor_profiles', 'profiles.db')
+    conn = sqlite3.connect(db_path)
+    themes = set()
+    for row in conn.execute(
+        'SELECT research_themes FROM profile_publications WHERE profile_id=? AND research_themes IS NOT NULL',
+        (profile_id,)
+    ):
+        for t in (row[0] or '').split(','):
+            if t.strip():
+                themes.add(t.strip())
+    conn.close()
+    return sorted(themes)
 
 
 def page_competitor_profiles():
@@ -1808,27 +1926,31 @@ def page_competitor_profiles():
                 st.components.v1.html(render_cross_analysis(profile), height=680, scrolling=True)
 
             # Research output
-            st.markdown(render_research_output(profile))
+            st.markdown(render_research_output(profile), unsafe_allow_html=True)
 
             # Publications list
             with st.expander("📄 完整论文列表 (可搜索)", expanded=False):
-                theme_filter = st.multiselect(
-                    "按研究方向筛选",
-                    ['quantum_algorithms', 'quantum_chemistry', 'quantum_simulation',
-                     'quantum_information', 'error_mitigation', 'tensor_networks',
-                     'machine_learning', 'quantum_biology'],
-                    default=[],
-                    format_func=lambda x: {
-                        'quantum_algorithms': '量子算法', 'quantum_chemistry': '量子化学',
-                        'quantum_simulation': '量子模拟', 'error_mitigation': '误差缓解',
-                        'tensor_networks': '张量网络', 'quantum_information': '量子信息',
-                        'machine_learning': '机器学习', 'quantum_biology': '量子生物学'
-                    }.get(x, x),
-                    key='pub_theme_filter'
-                )
+                # Dynamic theme list from this profile's publications
+                _available_themes = _get_available_themes(profile['id'])
+                theme_filter = []
+                if _available_themes:
+                    theme_filter = st.multiselect(
+                        "按研究方向筛选",
+                        options=_available_themes,
+                        default=[],
+                        format_func=lambda x: {
+                            'error_correction': '纠错与容错', 'quantum_simulation': '量子模拟',
+                            'quantum_algorithms': '量子算法', 'neutral_atoms': '中性原子',
+                            'quantum_information': '量子信息', 'quantum_chemistry': '量子化学',
+                            'hardware_platform': '硬件平台', 'error_mitigation': '误差缓解',
+                            'tensor_networks': '张量网络', 'machine_learning': '机器学习',
+                            'quantum_biology': '量子生物学',
+                        }.get(x, x),
+                        key='pub_theme_filter'
+                    )
                 search_term = st.text_input('搜索标题/作者', key='pub_search')
                 st.components.v1.html(
-                    render_publication_list(profile['id'], search_term, limit=100),
+                    render_publication_list(profile['id'], search_term, limit=100, themes=theme_filter),
                     height=600, scrolling=True)
 
             # Sources
@@ -1848,7 +1970,7 @@ def page_competitor_profiles():
                 if articles:
                     for art in articles:
                         date = art.get('publish_date', '') or '?'
-                        title = art.get('title_cn') or art.get('title', '')
+                        title = art.get('full_title') or art.get('title_cn') or art.get('title', '')
                         url = art.get('url', '')
                         src = art.get('source', '')
                         if url:
@@ -1857,6 +1979,7 @@ def page_competitor_profiles():
                             st.markdown(f"- **{date}** {title[:100]} `{src}`")
                 else:
                     st.caption("暂无相关新闻")
+
 
     conn.close()
 
