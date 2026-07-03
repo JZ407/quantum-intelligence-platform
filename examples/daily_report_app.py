@@ -944,6 +944,24 @@ def _get_weekly_llm():
     )
 
 
+def _get_weekly_tag(tags):
+    """Extract the current weekly tag (manual override > auto-tag)."""
+    if isinstance(tags, dict):
+        # Manual override takes priority
+        for tag in tags.get('weekly_manual', []):
+            if tag in ['资本运作', '产品动态', '企业资讯', '科技前沿', '宏观态势']:
+                return tag
+        # Fall back to auto-tag
+        for tag in tags.get('weekly', []):
+            if tag in ['资本运作', '产品动态', '企业资讯', '科技前沿', '宏观态势']:
+                return tag
+    elif isinstance(tags, list):
+        for tag in tags:
+            if tag in ['资本运作', '产品动态', '企业资讯', '科技前沿', '宏观态势']:
+                return tag
+    return None
+
+
 def page_weekly_report():
     st.header("周报生成")
 
@@ -997,6 +1015,8 @@ def page_weekly_report():
         st.session_state.wr_selections = {}
     if 'wr_loaded' not in st.session_state:
         st.session_state.wr_loaded = False
+    if 'wr_tag_overrides' not in st.session_state:
+        st.session_state.wr_tag_overrides = {}
 
     if load_clicked:
         with st.spinner("正在加载文章..."):
@@ -1016,21 +1036,32 @@ def page_weekly_report():
             df_tags = pd.read_sql(tag_query, engine)
             df_tags['tags'] = df_tags['tags'].apply(_parse_tags)
             st.session_state.wr_tags = dict(zip(df_tags['id'].astype(str), df_tags['tags']))
+            # Extract current weekly tag for each article (for manual override dropdown default)
+            for aid, t in st.session_state.wr_tags.items():
+                cur = _get_weekly_tag(t)
+                if cur:
+                    st.session_state.wr_tag_overrides[aid] = cur
         st.rerun()
 
     if st.session_state.wr_loaded and 'wr_articles' in st.session_state:
         df = st.session_state.wr_articles
 
-        # Classify into 5 categories using tags
+        # Classify into 5 categories using tags (manual override takes priority)
         CATS = ['资本运作', '产品动态', '企业资讯', '科技前沿', '宏观态势']
         categories = {cat: [] for cat in CATS}
         uncategorized = []
         for _, row in df.iterrows():
             aid = str(row['id'])
+            # Check manual override first
+            override = st.session_state.wr_tag_overrides.get(aid)
+            if override and override in CATS:
+                categories[override].append(row)
+                continue
+            # Fall back to auto-tag (weekly_manual > weekly)
             tags = st.session_state.wr_tags.get(aid, [])
             matched = False
             if isinstance(tags, dict):
-                for tag in tags.get('weekly', []):
+                for tag in tags.get('weekly_manual', []) + tags.get('weekly', []):
                     if tag in categories:
                         categories[tag].append(row)
                         matched = True
@@ -1073,9 +1104,23 @@ def page_weekly_report():
                     ptype = row.get('page_type', '')
                     badge = f"[{ptype}] " if ptype else ""
                     date_str = str(row.get('liangke_date', ''))[:10]
-                    label = f"{badge}{date_str} | {str(row['title'])[:120]}"
-                    checked = st.checkbox(label, value=st.session_state.wr_selections.get(aid, True), key=f"wr_cb_{aid}")
-                    st.session_state.wr_selections[aid] = checked
+                    current_tag = st.session_state.wr_tag_overrides.get(aid, cat)
+                    # Two columns: checkbox+label | tag selector
+                    ck, tg = st.columns([8, 2])
+                    with ck:
+                        label = f"{badge}{date_str} | {str(row['title'])[:120]}"
+                        checked = st.checkbox(label, value=st.session_state.wr_selections.get(aid, True), key=f"wr_cb_{aid}")
+                        st.session_state.wr_selections[aid] = checked
+                    with tg:
+                        new_tag = st.selectbox(
+                            "标签", CATS,
+                            index=CATS.index(current_tag) if current_tag in CATS else 4,
+                            key=f"wr_tag_{aid}",
+                            label_visibility="collapsed"
+                        )
+                        if new_tag != current_tag:
+                            st.session_state.wr_tag_overrides[aid] = new_tag
+                            st.rerun()
 
         st.markdown(f"**总计已选：{total_sel} / {total_all}**")
 
@@ -1138,8 +1183,28 @@ def page_weekly_report():
         if not st.session_state.wr_loaded:
             st.error("Click 'Load Preview' first")
         else:
-            with st.spinner("Generating..."):
+            with st.spinner("正在生成..."):
                 import subprocess
+                from sqlalchemy import text
+
+                # Save tag overrides to DB before generating (preserve original auto-tag)
+                _overrides = st.session_state.wr_tag_overrides
+                if _overrides:
+                    _engine = create_engine(DB_URL)
+                    with _engine.connect() as _conn:
+                        for _aid, _new_tag in _overrides.items():
+                            # Get current auto-tag
+                            _row = _conn.execute(text(
+                                "SELECT JSON_EXTRACT(tags, '$.weekly') AS auto_tag FROM articles WHERE id = :id"
+                            ), {'id': int(_aid)}).fetchone()
+                            _auto_tag = _row[0] if _row else None
+                            # Save: keep $.weekly as-is (original), add $.weekly_manual for override
+                            _conn.execute(text(
+                                "UPDATE articles SET tags = JSON_SET(COALESCE(tags, '{}'), '$.weekly_manual', JSON_ARRAY(:tag)) WHERE id = :id"
+                            ), {'tag': _new_tag, 'id': int(_aid)})
+                        _conn.commit()
+                    _engine.dispose()
+
                 temp_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'weekly_temp')
                 os.makedirs(temp_dir, exist_ok=True)
 

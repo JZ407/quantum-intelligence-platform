@@ -60,7 +60,8 @@ def classify_news(df: pd.DataFrame):
         tags = row.get('tags', [])
         # New format: dict with 'weekly' key containing category labels
         if isinstance(tags, dict):
-            weekly_tags = tags.get('weekly', [])
+            # Manual override takes priority, fall back to auto-tag
+            weekly_tags = tags.get('weekly_manual', []) + tags.get('weekly', [])
             if isinstance(weekly_tags, list):
                 for tag in weekly_tags:
                     if tag in result:
