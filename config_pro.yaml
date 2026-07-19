@@ -18,14 +18,14 @@ reranker:
 embedding:
   provider: "local"
   model: "BAAI/bge-large-zh-v1.5"  # 1024-dim, Chinese-optimized
-  api_key: null
-  api_base: null
+  api_key: "${DEEPSEEK_API_KEY}"
+  api_base: "https://api.deepseek.com/v1"
 
 llm:
   provider: "openai"
-  model: "kimi-k2.6"
-  api_key: "sk-I2CycISUgpOUOVmnj6mgF0GQ8IlcKzf4Un9EpfPAEi9OaS49"
-  api_base: "https://api.moonshot.cn/v1"
+  model: "deepseek-chat"
+  api_key: "${DEEPSEEK_API_KEY}"
+  api_base: "https://api.deepseek.com/v1"
   temperature: null
   max_tokens: 2048
   system_prompt: "你是一个专业的文档问答助手。请基于提供的参考资料回答用户问题。如果资料中没有相关信息，请明确说明。"

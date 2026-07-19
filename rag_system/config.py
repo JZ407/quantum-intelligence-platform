@@ -70,10 +70,24 @@ class Config:
     def to_dict(self) -> Dict[str, Any]:
         return dict(self._cfg)
 
+    @staticmethod
+    def _expand_env(value):
+        """Recursively resolve ${VAR} in strings."""
+        import re
+        if isinstance(value, str):
+            return re.sub(r'\$\{(\w+)\}', lambda m: os.environ.get(m.group(1), ''), value)
+        if isinstance(value, dict):
+            return {k: Config._expand_env(v) for k, v in value.items()}
+        if isinstance(value, list):
+            return [Config._expand_env(v) for v in value]
+        return value
+
     @classmethod
     def from_yaml(cls, path: str) -> "Config":
         with open(path, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f)
+        # Resolve ${ENV_VAR} references
+        data = cls._expand_env(data)
         # Merge with defaults
         merged = _deep_merge(DEFAULT_CONFIG.copy(), data or {})
         return cls(merged)

@@ -1,6 +1,6 @@
 """Unified LLM client supporting multiple providers."""
 
-import json
+import json, os, re
 import urllib.request
 from typing import List, Dict, Any, Optional, Generator
 
@@ -27,14 +27,24 @@ class LLMClient:
         },
     }
 
+    @staticmethod
+    def _resolve_env(value: str) -> str:
+        """Resolve ${ENV_VAR} references in a config value."""
+        import re
+        if not value or not isinstance(value, str):
+            return value or ""
+        def _replace(m):
+            return os.environ.get(m.group(1), "")
+        return re.sub(r'\$\{(\w+)\}', _replace, value)
+
     def __init__(self, provider: str = "openai", api_key: Optional[str] = None,
                  api_base: Optional[str] = None, model: Optional[str] = None,
                  temperature: float = 0.7, max_tokens: int = 2048,
                  timeout: int = 120):
         self.provider = provider.lower()
-        self.api_key = api_key or ""
+        self.api_key = self._resolve_env(api_key or "")
         cfg = self.PROVIDER_CONFIGS.get(self.provider, self.PROVIDER_CONFIGS["openai"])
-        self.api_base = api_base or cfg["api_base"] or ""
+        self.api_base = self._resolve_env(api_base) or cfg["api_base"] or ""
         self.model = model or cfg["default_model"] or "gpt-4o-mini"
         self.temperature = temperature
         self.max_tokens = max_tokens

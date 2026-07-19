@@ -18,13 +18,13 @@ reranker:
 embedding:
   provider: "local"  # bm25 / openai / local
   model: "all-MiniLM-L6-v2"  # for local semantic embedding
-  api_key: null
-  api_base: null
+  api_key: "${DEEPSEEK_API_KEY}"
+  api_base: "https://api.deepseek.com/v1"
 
 llm:
   provider: "openai"  # OpenAI-compatible API
   model: "deepseek-v4-pro"
-  api_key: "sk-589d0203dd0b4c96a75914a684139df3"
+  api_key: "sk-1b0b84fec64e4e2aae5ea8669e53a50a"
   api_base: "https://api.deepseek.com"
   temperature: null
   max_tokens: 2048

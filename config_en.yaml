@@ -23,9 +23,9 @@ embedding:
 
 llm:
   provider: "openai"
-  model: "kimi-k2.6"
-  api_key: "sk-I2CycISUgpOUOVmnj6mgF0GQ8IlcKzf4Un9EpfPAEi9OaS49"
-  api_base: "https://api.moonshot.cn/v1"
+  model: "deepseek-chat"
+  api_key: "${DEEPSEEK_API_KEY}"
+  api_base: "https://api.deepseek.com/v1"
   temperature: null
   max_tokens: 2048
   system_prompt: "You are a professional research assistant. Answer questions based solely on the provided references. If the references do not contain relevant information, state so explicitly."
