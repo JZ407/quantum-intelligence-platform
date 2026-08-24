@@ -50,7 +50,7 @@ embedding:
 Or set environment variables:
 ```bash
 export OPENAI_API_KEY="sk-..."
-export DEEPSEEK_API_KEY="sk-..."
+export DEEPSEEK_API_KEY_LOCALUSE="sk-..."
 export ANTHROPIC_API_KEY="sk-..."
 ```
 
@@ -96,7 +96,7 @@ rag_system/
 |----------|--------------|------------------|
 | OpenAI | `OPENAI_API_KEY` | `https://api.openai.com/v1` |
 | Claude | `ANTHROPIC_API_KEY` | `https://api.anthropic.com/v1` |
-| DeepSeek | `DEEPSEEK_API_KEY` | `https://api.deepseek.com/v1` |
+| DeepSeek | `DEEPSEEK_API_KEY_LOCALUSE` | `https://api.deepseek.com/v1` |
 | Azure | - | Provide full endpoint in `api_base` |
 
 ## Using Without Any API Key

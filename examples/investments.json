@@ -1,14 +1,1324 @@
 {
   "meta": {
-    "generated_at": "2026-06-11T11:14:51.213342",
-    "total_records": 280,
+    "generated_at": "2026-08-05T14:14:40.238280",
+    "total_records": 428,
     "source_counts": {
-      "liangke_daily": 72,
+      "liangke_daily": 231,
       "historical": 203,
       "institution": 30
     }
   },
   "investments": [
+    {
+      "id": "mysql:2772",
+      "company": "幺正量子",
+      "country": "CN",
+      "round": "Pre-A",
+      "amount_cny": 300000000,
+      "amount_usd": null,
+      "tech_route": "离子阱量子计算",
+      "investors": [
+        "幺正量子",
+        "深创投"
+      ],
+      "date": "2026-08-05",
+      "title": "从Pre-A到A轮不足四月：离子阱量子计算公司幺正量子完成数亿元A轮融资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2778",
+      "company": "MIT",
+      "country": "US",
+      "round": "Angel",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [],
+      "date": "2026-08-05",
+      "title": "无界量子完成数千万元天使轮融资，复旦科创领投",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2740",
+      "company": "IonQ",
+      "country": "US",
+      "round": null,
+      "amount_cny": 108000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "IonQ"
+      ],
+      "date": "2026-08-04",
+      "title": "IonQ与EPB计划共建田纳西量子通信研究中心，IonQ承诺将投资1500万美元",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2779",
+      "company": "玻色量子",
+      "country": "CN",
+      "round": "Seed",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "QuantumCTek",
+        "国盾量子",
+        "深创投",
+        "玻色量子"
+      ],
+      "date": "2026-08-04",
+      "title": "酉术量子完成数千万元种子轮及种子+轮融资，以原创算法打开量子科学计算通用入口",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2694",
+      "company": "IonQ",
+      "country": "US",
+      "round": "Acquisition",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "IonQ"
+      ],
+      "date": "2026-07-30",
+      "title": "IonQ获最终批准收购SkyWater，加速量子芯片制造能力布局",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2722",
+      "company": "Global",
+      "country": "US",
+      "round": null,
+      "amount_cny": 2160000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [],
+      "date": "2026-07-29",
+      "title": "美国商务部拟向GlobalFoundries投资3亿美元，加速硅光子技术研发",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2697",
+      "company": null,
+      "country": "CA",
+      "round": null,
+      "amount_cny": 21600000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-29",
+      "title": "安永加拿大主导在本地部署一台量子计算机，加速企业量子应用探索",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2676",
+      "company": "Multiverse Computing",
+      "country": "CN",
+      "round": "B",
+      "amount_cny": 4104000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-29",
+      "title": "Multiverse Computing获5.7亿美元C轮融资，估值较B轮涨5倍达17亿美元",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2729",
+      "company": "Quemix",
+      "country": "CN",
+      "round": null,
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-29",
+      "title": "Quemix的量子计算机材料模拟平台项目入选NEDO实证计划，将与东北大学合作开展",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2680",
+      "company": "瑞士量子计算公司ZuriQ",
+      "country": "CH",
+      "round": "Seed",
+      "amount_cny": 183600000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-28",
+      "title": "瑞士量子计算公司ZuriQ完成2550万美元种子轮融资，Quantonation领投",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2686",
+      "company": "David Sholl",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 143280000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-28",
+      "title": "莱斯大学获1990万美元资助，探索下一代半导体与量子材料自主制造",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2693",
+      "company": "Nord",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 7000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-28",
+      "title": "NordForsk启动G7-北欧量子技术联合计划，将资助12个量子研究合作项目",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2649",
+      "company": "Rigetti",
+      "country": "US",
+      "round": null,
+      "amount_cny": 36000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "Rigetti"
+      ],
+      "date": "2026-07-27",
+      "title": "Rigetti联手HPE与匹兹堡超算中心，获500万美元资助打造新量子-经典混合平台",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2619",
+      "company": "PsiQuantum",
+      "country": "US",
+      "round": null,
+      "amount_cny": 900000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "DARPA",
+        "PsiQuantum"
+      ],
+      "date": "2026-07-24",
+      "title": "PsiQuantum获1.25亿美元DARPA合同，将推进实用级容错量子计算测试与验证",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2617",
+      "company": "两仪万象",
+      "country": "CN",
+      "round": "A",
+      "amount_cny": 300000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "Tsinghua University",
+        "两仪万象",
+        "中信建投",
+        "君联资本"
+      ],
+      "date": "2026-07-24",
+      "title": "原子量子计算公司两仪万象完成数亿元A+轮融资，君联资本领投",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2610",
+      "company": "IBM",
+      "country": "US",
+      "round": "Acquisition",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "硅自旋量子计算",
+      "investors": [],
+      "date": "2026-07-24",
+      "title": "IBM宣布收购波音和通用共同拥有的HRL实验室，布局硅自旋量子比特技术",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2621",
+      "company": "Blue",
+      "country": "US",
+      "round": null,
+      "amount_cny": 10800000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-23",
+      "title": "BlueQubit合作参与的量子纠错项目获美国“创世纪计划”150万美元资助",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2647",
+      "company": "Infleqtion",
+      "country": "US",
+      "round": null,
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [
+        "Infleqtion"
+      ],
+      "date": "2026-07-22",
+      "title": "Infleqtion参与的三个量子研究项目获美国能源部“创世纪”计划资助",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2665",
+      "company": null,
+      "country": "US",
+      "round": null,
+      "amount_cny": 36000000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-22",
+      "title": "美国特朗普政府宣布为“创世纪”任务拨款超过50亿美元",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2573",
+      "company": "Photon Queue",
+      "country": "CN",
+      "round": "Seed",
+      "amount_cny": 28800000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [],
+      "date": "2026-07-22",
+      "title": "Photon Queue完成400万美元种子轮融资，致力于开发高效量子存储器",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2581",
+      "company": "Tsinghua University",
+      "country": "CN",
+      "round": "Angel",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "Peking University",
+        "Tsinghua University"
+      ],
+      "date": "2026-07-21",
+      "title": "中科量枢获北工量子基金独家天使轮融资，将加速量子AI全栈产品商业化",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2615",
+      "company": "中性原子量子计算初创公司Oratomic",
+      "country": "CN",
+      "round": "A",
+      "amount_cny": 2160000000,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [],
+      "date": "2026-07-21",
+      "title": "成立仅4个月！中性原子量子计算初创公司Oratomic获3亿美元A轮融资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2579",
+      "company": "Ci",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 13500000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-20",
+      "title": "QCi将额外注册发行1350万股股票，用于员工股权激励计划",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2494",
+      "company": "国测量子",
+      "country": "CN",
+      "round": "B",
+      "amount_cny": 150000000,
+      "amount_usd": null,
+      "tech_route": "量子精密测量",
+      "investors": [
+        "国测量子"
+      ],
+      "date": "2026-07-17",
+      "title": "国测量子完成超亿元Pre-B轮融资，将加速量子精密测量技术产业化落地",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2495",
+      "company": "问天量子",
+      "country": "CN",
+      "round": "B",
+      "amount_cny": 600000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-17",
+      "title": "问天量子完成6亿元B轮融资，将加速量子保密通信技术商业化进程",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2522",
+      "company": "Arq",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 10080000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [],
+      "date": "2026-07-16",
+      "title": "Arq完成140万美元种子前融资，将加速量子存储器研发并建设新实验室",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2523",
+      "company": "or SCSp根据双方于2025年12月",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 577000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-16",
+      "title": "IQM完成57.7万股新股登记，并将于今日在纳斯达克赫尔辛基市场上市交易",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2479",
+      "company": "Aqarios",
+      "country": "DE",
+      "round": null,
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-15",
+      "title": "Aqarios登陆德国资本市场，成为德国首家纯量子计算上市公司",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2492",
+      "company": "DARPA",
+      "country": "US",
+      "round": null,
+      "amount_cny": 8640000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "DARPA"
+      ],
+      "date": "2026-07-15",
+      "title": "新墨西哥州量子技术奖拨款120万美元 六家量子初创公司获资助",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2445",
+      "company": "QuantumDiamonds",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 709800000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-14",
+      "title": "QuantumDiamonds完成9100万欧元融资，从欧洲芯片法案获得制造资金支持",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2493",
+      "company": "Quantum",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 1152000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-14",
+      "title": "康涅狄格州入选NSF区域创新引擎计划，QuantumCT十年内有望获1.6亿美元资助",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2501",
+      "company": "Photon Queue",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 3600000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [],
+      "date": "2026-07-14",
+      "title": "Photon Queue获50万美元资助 在新墨西哥布局量子存储制造能力",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2776",
+      "company": "幻码跃迁",
+      "country": "CN",
+      "round": "Seed",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "光源资本"
+      ],
+      "date": "2026-07-14",
+      "title": "幻码跃迁完成数千万元种子轮融资，打造量子×AI融合创新的量子计算基础设施",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2435",
+      "company": "Labs",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 21600000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-13",
+      "title": "伊利诺伊州州长宣布为NSF量子X-Labs团队提供300万美元专项资金",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2486",
+      "company": "Toyota",
+      "country": "JP",
+      "round": null,
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [
+        "Toyota"
+      ],
+      "date": "2026-07-13",
+      "title": "日本初创公司Yaqumo获JIC VGI与丰田投资 加速中性原子量子计算机研发",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2488",
+      "company": "Pasqal",
+      "country": "FR",
+      "round": null,
+      "amount_cny": 390000000,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [
+        "Pasqal"
+      ],
+      "date": "2026-07-13",
+      "title": "投资5000万欧元的Q-PLANET项目启动 将建欧洲中性原子量子芯片生产线",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2708",
+      "company": "后量子安全公司pQCee",
+      "country": "CN",
+      "round": "Seed",
+      "amount_cny": 28080000,
+      "amount_usd": null,
+      "tech_route": "量子通信",
+      "investors": [],
+      "date": "2026-07-13",
+      "title": "后量子安全公司pQCee完成390万美元种子轮融资，将加速全球市场扩张",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2389",
+      "company": "Qorrelations",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 7800000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [],
+      "date": "2026-07-09",
+      "title": "Qorrelations项目获100万欧元资助，旨在加强超导量子芯片制造能力",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2428",
+      "company": "IBM",
+      "country": "US",
+      "round": "Seed",
+      "amount_cny": 122400000,
+      "amount_usd": null,
+      "tech_route": "量子通信",
+      "investors": [],
+      "date": "2026-07-09",
+      "title": "QIZ Security完成1700万美元种子轮融资，加速后量子密码技术布局",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2777",
+      "company": "逻辑比特",
+      "country": "CN",
+      "round": "A",
+      "amount_cny": 300000000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [
+        "逻辑比特"
+      ],
+      "date": "2026-07-09",
+      "title": "逻辑比特科技发布超导量子计算云平台，官宣数亿元A轮融资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2375",
+      "company": "Quantistry",
+      "country": "DE",
+      "round": "Acquisition",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-08",
+      "title": "IQM收购德国软件公司Quantistry部分资产，补强量子工业应用软件层",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2382",
+      "company": "量感智能",
+      "country": "CN",
+      "round": "Angel",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-08",
+      "title": "量感智能完成数千万元天使轮融资，孚腾资本领投，量子传感赛道再添新军",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2392",
+      "company": "Technologies",
+      "country": "FR",
+      "round": "Acquisition",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-08",
+      "title": "BTQ Technologies完成收购法国量子计算公司QPerfect",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2403",
+      "company": "Onfolio",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 21600000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-08",
+      "title": "Onfolio与Paramount Helium签署意向书，将获取估值约30亿美元的氦气资源",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2466",
+      "company": "上海量感智能科技有限公司",
+      "country": "CN",
+      "round": "Angel",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-08",
+      "title": "上海量感智能科技有限公司完成数千万元天使轮融资 孚腾资本领投",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2373",
+      "company": "玻色量子",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 300000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "Tsinghua University",
+        "招银国际",
+        "玻色量子"
+      ],
+      "date": "2026-07-07",
+      "title": "玻色量子正式启动A股上市辅导备案，光量子计算冲刺科创板",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2359",
+      "company": "注于容错量子计算AI驱动软件的深科技公司",
+      "country": "CN",
+      "round": "D",
+      "amount_cny": 4485000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-07",
+      "title": "MagiQware获57.5万欧元Pre-Seed轮融资，致力于利用AI优化量子计算性能",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2384",
+      "company": "Qu",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 43200000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-07",
+      "title": "美海军退役少将加入后量子密码技术公司QuSecure的联邦顾问委员会",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2388",
+      "company": "中性原子量子计算机公司Oratomic",
+      "country": "CN",
+      "round": "A",
+      "amount_cny": 2160000000,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [],
+      "date": "2026-07-07",
+      "title": "中性原子量子计算机公司Oratomic宣布完成3亿美元A轮融资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2404",
+      "company": "Ubi",
+      "country": "CN",
+      "round": "Acquisition",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-07",
+      "title": "量子点材料公司UbiQD收购一座新厂房，以扩大其制造规模",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2365",
+      "company": "MIT",
+      "country": "US",
+      "round": null,
+      "amount_cny": 7200000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-06",
+      "title": "数字信任基础设施企业Keyfactor获超10亿美元投资，加速量子安全等技术布局",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2344",
+      "company": "纳开量子",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [
+        "高瓴创投"
+      ],
+      "date": "2026-07-06",
+      "title": "纳开量子完成首轮数千万元融资，聚焦中性原子量子计算技术研发",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2338",
+      "company": "子计算硬件领域的领导者Qolab公司今日",
+      "country": "CN",
+      "round": "B",
+      "amount_cny": 390240000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [],
+      "date": "2026-07-05",
+      "title": "Qolab宣布完成由UC Investments领投的5420万美元B轮融资及融资承诺",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2340",
+      "company": "Real Asset Acquisition Corp",
+      "country": "US",
+      "round": null,
+      "amount_cny": 2628600000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [],
+      "date": "2026-07-05",
+      "title": "IQM成为首家在美国大型交易所上市的欧洲量子计算公司",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2353",
+      "company": "Real Asset Acquisition Corp",
+      "country": "CN",
+      "round": "SPAC",
+      "amount_cny": 1549860000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [],
+      "date": "2026-07-05",
+      "title": "IQM通过SPAC交易获得约1.987亿欧元净收益，加速量子计算商业化",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2298",
+      "company": "玻色量子",
+      "country": "CN",
+      "round": "Pre-IPO",
+      "amount_cny": 1000000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "招银国际",
+        "玻色量子"
+      ],
+      "date": "2026-07-03",
+      "title": "玻色量子完成数亿元Pre-IPO轮融资，10家机构联合投资，冲刺科创板",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2301",
+      "company": "NIST",
+      "country": "US",
+      "round": "A",
+      "amount_cny": 53040000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "NIST"
+      ],
+      "date": "2026-07-03",
+      "title": "Wultra完成680万欧元A轮融资，加速后量子数字身份解决方案的全球扩张",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2200",
+      "company": "未磁科技",
+      "country": "CN",
+      "round": "B",
+      "amount_cny": 300000000,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [
+        "中科创星",
+        "未磁科技"
+      ],
+      "date": "2026-07-02",
+      "title": "未磁科技完成数亿元B轮融资，将加速量子磁场测量技术商业化",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2202",
+      "company": "Perfect SAS剩余普通股的交易已",
+      "country": "FR",
+      "round": "Acquisition",
+      "amount_cny": 145019160,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-02",
+      "title": "BTQ Technologies收购量子计算公司QPerfect的交易获法国监管机构批准",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2268",
+      "company": "纳开启元",
+      "country": "CN",
+      "round": "Angel",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [
+        "高瓴创投"
+      ],
+      "date": "2026-07-02",
+      "title": "纳开启元完成数千万元天使轮融资，高瓴创投领投，nK级中性原子量子计算新锐入场",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2366",
+      "company": "光子芯片代工厂CCRAFT",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 56880000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [],
+      "date": "2026-07-02",
+      "title": "光子芯片代工厂CCRAFT获790万美元融资，将加速推进TFLN技术商业化",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2111",
+      "company": "D-Wave",
+      "country": "US",
+      "round": null,
+      "amount_cny": 11232000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [
+        "D-Wave"
+      ],
+      "date": "2026-07-01",
+      "title": "D-Wave获美国国家科学基金会156万美元资助，助力容错量子计算前沿探索",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2269",
+      "company": null,
+      "country": "CN",
+      "round": null,
+      "amount_cny": 110000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-01",
+      "title": "徽商银行累计为12家量子企业发放1.1亿元量子创新贷，央行技术流评价体系首次落地量子赛道",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2213",
+      "company": "SuperQ",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 4600000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-07-01",
+      "title": "SuperQ完成超额认购LIFE融资，筹得460万加元投向量子硬件",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2378",
+      "company": "Jamir Marino",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 7920000,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [],
+      "date": "2026-07-01",
+      "title": "布法罗大学物理学家获110万美元国防部资助，将推进中性原子量子计算研究",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2540",
+      "company": "中科量枢",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "普华资本"
+      ],
+      "date": "2026-07-01",
+      "title": "中科量枢完成数千万元天使及天使+轮融资，打造量子计算操作系统",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2110",
+      "company": "量旋科技",
+      "country": "CN",
+      "round": "D",
+      "amount_cny": 1000000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "量旋科技"
+      ],
+      "date": "2026-06-30",
+      "title": "量旋科技完成10亿元D轮融资，成为深圳首个量子计算独角兽",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1943",
+      "company": "加拿大量子技术公司Qubic",
+      "country": "CA",
+      "round": "Seed",
+      "amount_cny": 18000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-06-26",
+      "title": "加拿大量子技术公司Qubic完成250万美元种子轮融资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1952",
+      "company": "Ci",
+      "country": "CN",
+      "round": "Acquisition",
+      "amount_cny": 526320000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [],
+      "date": "2026-06-26",
+      "title": "QCi斥资7310万美元收购封装厂NHanced，加速量子与光子技术规模化与商业落地",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1867",
+      "company": "OQC",
+      "country": "GB",
+      "round": null,
+      "amount_cny": 717600000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-06-25",
+      "title": "OQC将投资9200万欧元在西班牙建全球量子开发与制造中心",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1962",
+      "company": "韩国超导纳米线单光子探测器开发商Quad",
+      "country": "KR",
+      "round": "Pre-A",
+      "amount_cny": 2100000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [],
+      "date": "2026-06-25",
+      "title": "韩国超导纳米线单光子探测器开发商Quad完成21亿韩元Pre-A轮融资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2046",
+      "company": "Se",
+      "country": "CN",
+      "round": "SPAC",
+      "amount_cny": 14400000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-06-25",
+      "title": "WISeKey与SEALSQ联手SPAC公司，计划打造估值20亿美元的纯量子技术上市公司",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2135",
+      "company": "Se",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 4140000000,
+      "amount_usd": null,
+      "tech_route": "量子通信",
+      "investors": [],
+      "date": "2026-06-25",
+      "title": "WISeKey与SEALSQ设立Quantisimo公司 拟打造在纳斯达克上市的量子平台",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1945",
+      "company": "NIST",
+      "country": "US",
+      "round": null,
+      "amount_cny": 144000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "NASA",
+        "NIST"
+      ],
+      "date": "2026-06-24",
+      "title": "美国量子虚拟实验室计划再扩容，两年2000万美元资助五支新项目团队",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1621",
+      "company": "国内量子算法初创公司伏曦量子",
+      "country": "CN",
+      "round": "Angel",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-06-22",
+      "title": "国内量子算法初创公司伏曦量子宣布完成天使轮及天使+轮融资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1616",
+      "company": "Eigen",
+      "country": "CN",
+      "round": "SPAC",
+      "amount_cny": 21600000000,
+      "amount_usd": null,
+      "tech_route": "量子通信",
+      "investors": [],
+      "date": "2026-06-21",
+      "title": "估值30亿美元！量子技术公司EigenQ将通过SPAC方式合并上市",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1607",
+      "company": "Quantum Machines",
+      "country": "CN",
+      "round": "Acquisition",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "Quantum Machines"
+      ],
+      "date": "2026-06-20",
+      "title": "Quantum Machines收购PCB Engineering，强化量子计算核心硬件构建能力",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1878",
+      "company": "Norma",
+      "country": "CN",
+      "round": "SPAC",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-06-19",
+      "title": "INNOSPACE与Norma签署谅解备忘录 欲合作探索太空量子计算技术",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1540",
+      "company": null,
+      "country": "GB",
+      "round": null,
+      "amount_cny": 91000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-06-18",
+      "title": "英国政府投资1000万英镑打造量子标准网络，欲加强量子技术在国际话语权",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1539",
+      "company": "与Serendipity达成战略合作，并",
+      "country": "CN",
+      "round": null,
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [],
+      "date": "2026-06-18",
+      "title": "Emergence Quantum与Serendipity达成战略合作，并宣布获得一笔投资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2044",
+      "company": "相干科技",
+      "country": "CN",
+      "round": "Pre-A",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [
+        "普华资本",
+        "相干科技"
+      ],
+      "date": "2026-06-17",
+      "title": "相干科技完成数千万元Pre-A+轮融资，北京市量子基金领投",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1384",
+      "company": "USTC",
+      "country": "CN",
+      "round": "Angel",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "离子阱量子计算",
+      "investors": [
+        "Tsinghua University",
+        "USTC",
+        "英诺天使"
+      ],
+      "date": "2026-06-17",
+      "title": "太微量子完成天使轮融资 量子计算核心部件国产替代 中科大博士团队",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1382",
+      "company": null,
+      "country": "CN",
+      "round": "Fund",
+      "amount_cny": 500000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-06-17",
+      "title": "北京市量子基金成立 规模5亿元 首只量子产业子基金",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1372",
+      "company": "太一量生",
+      "country": "CN",
+      "round": "Pre-A",
+      "amount_cny": 300000000,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [
+        "IDG",
+        "启赋资本",
+        "太一量生",
+        "达晨财智"
+      ],
+      "date": "2026-06-17",
+      "title": "太一量生完成3亿元Pre-A轮融资 高榕创投IDG联合领投 8天获20亿意向",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1866",
+      "company": "维刻量光",
+      "country": "CN",
+      "round": "Angel",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "离子阱量子计算",
+      "investors": [],
+      "date": "2026-06-17",
+      "title": "维刻量光完成天使轮融资，小苗朗程领投，离子阱QCCD路线",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1392",
+      "company": "Atom Computing",
+      "country": "US",
+      "round": "C",
+      "amount_cny": 720000000,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [
+        "Atom Computing",
+        "DARPA"
+      ],
+      "date": "2026-06-16",
+      "title": "中性原子量子计算公司Atom Computing完成1亿美元C轮融资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1394",
+      "company": "Zapata Quantum",
+      "country": "US",
+      "round": null,
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-06-16",
+      "title": "美国量子软件公司Zapata Quantum宣布成功升板至OTCQB市场",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1212",
+      "company": "Driver",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 7200000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-06-15",
+      "title": "罗马尼亚克将建设一座80兆瓦的量子人工智能数据中心，总投资10亿美元",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2299",
+      "company": "太一量生",
+      "country": "CN",
+      "round": "Fund",
+      "amount_cny": 3000000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "不筹量子",
+        "太一量生"
+      ],
+      "date": "2026-06-15",
+      "title": "北京经济技术开发区设立30亿元未来产业股权投资基金，重点布局量子科技",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1200",
+      "company": "IonQ",
+      "country": "US",
+      "round": null,
+      "amount_cny": 14400000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "IonQ"
+      ],
+      "date": "2026-06-12",
+      "title": "谷歌Quantum AI高管透露该公司未参与美国20亿美元量子资助计划的原因",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1201",
+      "company": "瑞典量子创企Arkeon",
+      "country": "CN",
+      "round": "Seed",
+      "amount_cny": 6500000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [],
+      "date": "2026-06-12",
+      "title": "瑞典量子创企Arkeon获近60欧元种子轮融资，致力于提升超导量子芯片良率",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1203",
+      "company": "国仪量子",
+      "country": "CN",
+      "round": "IPO",
+      "amount_cny": 1169000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "国仪量子"
+      ],
+      "date": "2026-06-11",
+      "title": "国仪量子科创板IPO注册获批，拟募资11.69亿元",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:986",
+      "company": "武汉超磁科技",
+      "country": "CN",
+      "round": "Angel",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [],
+      "date": "2026-06-11",
+      "title": "武汉超磁科技完成数千万元天使轮融资，力合科创领投，量子科研用超导磁体国产化提速",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1206",
+      "company": "Tru",
+      "country": "DE",
+      "round": null,
+      "amount_cny": 23868000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-06-11",
+      "title": "德国政府资助306万欧元启动可信量子控制与通信项目“TruQuaC”",
+      "source_db": "liangke_daily"
+    },
     {
       "id": "mysql:771",
       "company": "Quantum Computers",
@@ -20,6 +1330,19 @@
       "investors": [],
       "date": "2026-06-10",
       "title": "芬兰量子计算机公司IQM提供的F-4注册声明已获SEC批准生效",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:988",
+      "company": null,
+      "country": "CN",
+      "round": "Acquisition",
+      "amount_cny": 384000000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [],
+      "date": "2026-06-10",
+      "title": "禾信仪器3.84亿元收购量羲技术56%股权，跨界布局量子计算稀释制冷机赛道",
       "source_db": "liangke_daily"
     },
     {
@@ -35,6 +1358,62 @@
       ],
       "date": "2026-06-09",
       "title": "Quantinuum IPO收官：已60美元发行价总共募资16.8亿美元",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:911",
+      "company": "Quantum Ltd",
+      "country": "IL",
+      "round": null,
+      "amount_cny": 7200000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [],
+      "date": "2026-06-09",
+      "title": "以色列创新署资助QTREX百万美元，以开发超导量子计算专用介电材料",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1114",
+      "company": "Think",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 33540000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [],
+      "date": "2026-06-09",
+      "title": "ThinkQuantum牵头启动光子集成量子密码系统项目，获意政府430万欧元资助",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1209",
+      "company": "Qineti",
+      "country": "GB",
+      "round": null,
+      "amount_cny": 109200000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-06-09",
+      "title": "英国投1200万英镑资助混合量子算法研究 并组建量子增长联盟推动商业化",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:690",
+      "company": "华翊量子",
+      "country": "CN",
+      "round": "A",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "离子阱量子计算",
+      "investors": [
+        "Tsinghua University",
+        "中信建投",
+        "华翊量子"
+      ],
+      "date": "2026-06-08",
+      "title": "国内离子阱量子计算企业华翊量子宣布完成A++轮融资",
       "source_db": "liangke_daily"
     },
     {
@@ -200,6 +1579,22 @@
       "source_db": "liangke_daily"
     },
     {
+      "id": "mysql:1865",
+      "company": "本源量子",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 40000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "Origin Quantum",
+        "本源量子"
+      ],
+      "date": "2026-06-02",
+      "title": "联美控股子公司出资4000万元认购私募基金份额，曲线投资本源量子",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "mysql:247",
       "company": "MIT",
       "country": "US",
@@ -226,25 +1621,6 @@
       "source_db": "liangke_daily"
     },
     {
-      "id": "mysql:652",
-      "company": "华翊量子",
-      "country": "CN",
-      "round": "A",
-      "amount_cny": null,
-      "amount_usd": null,
-      "tech_route": "离子阱量子计算",
-      "investors": [
-        "Tsinghua University",
-        "中信建投",
-        "中国移动",
-        "华翊量子",
-        "君联资本"
-      ],
-      "date": "2026-06-01",
-      "title": "华翊量子完成A+轮融资，离子阱量子计算商业化全面提速",
-      "source_db": "liangke_daily"
-    },
-    {
       "id": "mysql:657",
       "company": "量坤科技",
       "country": "CN",
@@ -262,6 +1638,25 @@
       ],
       "date": "2026-06-01",
       "title": "量坤科技完成数亿元天使轮融资，开启Quantum AI for Science新范式",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:652",
+      "company": "华翊量子",
+      "country": "CN",
+      "round": "A",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "离子阱量子计算",
+      "investors": [
+        "Tsinghua University",
+        "中信建投",
+        "中国移动",
+        "华翊量子",
+        "君联资本"
+      ],
+      "date": "2026-05-30",
+      "title": "华翊量子完成A+轮融资，离子阱量子计算商业化全面提速",
       "source_db": "liangke_daily"
     },
     {
@@ -724,6 +2119,40 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1273",
+      "company": "玻色量子",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 100000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "北京金控",
+        "工银资本",
+        "玻色量子"
+      ],
+      "date": "2026-05-08",
+      "title": "京工量子生态基金筹备设立，规模1亿元，玻色量子联合北京金控、工银资本发起",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1086",
+      "company": "图灵量子",
+      "country": "CN",
+      "round": "Fund",
+      "amount_cny": 1000000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "图灵量子",
+        "达晨财智",
+        "鼎晖"
+      ],
+      "date": "2026-04-28",
+      "title": "图灵量子再获数亿元融资，国家创业投资引导基金首次布局量子赛道",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:474",
       "company": "Quantinuum",
       "country": "US",
@@ -737,6 +2166,21 @@
       "date": "2026-04-24",
       "title": "Quantinuum向美国证券交易委员会秘密提交IPO注册声明草案",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1556",
+      "company": null,
+      "country": "CN",
+      "round": null,
+      "amount_cny": 1000000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "四川振兴"
+      ],
+      "date": "2026-04-20",
+      "title": "加快打造核心增长极，四川成立三个量子科技产业平台",
+      "source_db": "liangke_daily"
     },
     {
       "id": "inst:2026",
@@ -822,6 +2266,19 @@
       "date": "2026-03-30",
       "title": "湖北成立长江量子科技投资基金 总规模达2亿元",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1271",
+      "company": "投资基金合伙企业（有限合伙）完成合伙协议",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 200000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-03-27",
+      "title": "湖北长江量子科技投资基金正式落地，总规模2亿元",
+      "source_db": "liangke_daily"
     },
     {
       "id": "mysql:649",
@@ -969,6 +2426,19 @@
       "source_db": "liangke_daily"
     },
     {
+      "id": "mysql:1197",
+      "company": "正则量子",
+      "country": "CN",
+      "round": "Pre-A",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [],
+      "date": "2026-01-22",
+      "title": "正则量子完成数千万元Pre-A轮融资，海愿资本投资，加速光量子计算产业化",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "mysql:643",
       "company": "量旋科技",
       "country": "CN",
@@ -983,6 +2453,19 @@
       ],
       "date": "2026-01-20",
       "title": "图灵量子完成B+轮数亿元融资，光量子计算赛道持续吸金",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1272",
+      "company": null,
+      "country": "CN",
+      "round": "Fund",
+      "amount_cny": 207200000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2026-01-16",
+      "title": "安徽国元量子星动能基金设立，规模2.072亿元",
       "source_db": "liangke_daily"
     },
     {
@@ -1015,6 +2498,22 @@
       ],
       "date": "2026-01-14",
       "title": "中科酷原完成近亿元战略融资，中国移动链长基金独家投资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:2514",
+      "company": "DARPA",
+      "country": "US",
+      "round": null,
+      "amount_cny": 3600000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "DARPA",
+        "NASA"
+      ],
+      "date": "2026-01-13",
+      "title": "Diffraqtion将测试面向轨道卫星的量子相机，获NASA和DARPA资助",
       "source_db": "liangke_daily"
     },
     {
@@ -1051,6 +2550,36 @@
       "source_db": "liangke_daily"
     },
     {
+      "id": "mysql:1270",
+      "company": "无量量子",
+      "country": "CN",
+      "round": "A",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [
+        "中科创星",
+        "英诺天使",
+        "蓝驰创投"
+      ],
+      "date": "2026-01-08",
+      "title": "无量量子完成A轮融资，蓝驰创投、英诺天使、中科创星等联合投资，加速中性原子量子计算研发",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1669",
+      "company": "记者从国家发展改革委",
+      "country": "CN",
+      "round": "Fund",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2025-12-26",
+      "title": "国家创业投资引导基金启动，量子科技与AI、生物制药并列为三大重点方向",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:2018",
       "company": "Quantum Desig",
       "country": "GB",
@@ -1062,6 +2591,68 @@
       "date": "2025-12-18",
       "title": "Quantum Desig英国子公司收购Oxford纳米科学部的交易获得英国政府批准",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1644",
+      "company": "本源量子",
+      "country": "CN",
+      "round": "Fund",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "Origin Quantum",
+        "本源量子"
+      ],
+      "date": "2025-12-15",
+      "title": "天阳科技拟3000万元参投创投基金，间接布局本源量子",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:985",
+      "company": null,
+      "country": "CN",
+      "round": null,
+      "amount_cny": 500000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "中科创星"
+      ],
+      "date": "2025-12-14",
+      "title": "北京未来开源量子创业投资基金发布，规模5亿元，国融工发与中科创星双GP管理",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1646",
+      "company": "国仪量子",
+      "country": "CN",
+      "round": "IPO",
+      "amount_cny": 1169000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "华泰",
+        "国仪量子"
+      ],
+      "date": "2025-12-10",
+      "title": "国仪量子科创板IPO获受理，拟募资11.69亿元",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1665",
+      "company": "频准激光",
+      "country": "CN",
+      "round": "IPO",
+      "amount_cny": 1410000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "频准激光"
+      ],
+      "date": "2025-12-10",
+      "title": "频准激光科创板IPO获受理，拟募资14.1亿元",
+      "source_db": "liangke_daily"
     },
     {
       "id": "mysql:903",
@@ -1080,6 +2671,22 @@
       "source_db": "liangke_daily"
     },
     {
+      "id": "mysql:1643",
+      "company": "本源量子",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 12000000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "Origin Quantum",
+        "本源量子"
+      ],
+      "date": "2025-11-28",
+      "title": "岭澜基金与千里马资本受让本源量子股份，整体估值120亿元",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:2252",
       "company": "Quantum",
       "country": "CN",
@@ -1091,6 +2698,19 @@
       "date": "2025-11-26",
       "title": "康涅狄格州将向QuantumCT项目投入1.21亿美元 以加速该州量子技术发展",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1555",
+      "company": null,
+      "country": "CN",
+      "round": "Fund",
+      "amount_cny": 10000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2025-11-25",
+      "title": "武汉设立量子概念验证基金，首期约1000万元",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:2268",
@@ -1147,6 +2767,22 @@
       "source_db": "liangke_daily"
     },
     {
+      "id": "mysql:1662",
+      "company": "原子矩阵",
+      "country": "CN",
+      "round": "Seed",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "中性原子量子计算",
+      "investors": [
+        "光源资本",
+        "原子矩阵"
+      ],
+      "date": "2025-11-07",
+      "title": "MatriQ原子矩阵完成种子轮融资，布局中性原子量子计算",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "inst:2875",
       "company": "IonQ",
       "country": "US",
@@ -1189,6 +2825,23 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1084",
+      "company": "国仪量子",
+      "country": "CN",
+      "round": "战略融资",
+      "amount_cny": 131000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "IDG",
+        "国仪量子",
+        "高瓴创投"
+      ],
+      "date": "2025-10-27",
+      "title": "国仪量子获1.31亿元战略融资，合肥兴泰资本投资，加速量子精密测量仪器研发",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:2754",
       "company": null,
       "country": "CN",
@@ -1200,6 +2853,36 @@
       "date": "2025-10-15",
       "title": "摩根大通推出1.5万亿美元安全与弹性计划 以支持AI与量子计算等前沿技术",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1551",
+      "company": "玻色量子",
+      "country": "CN",
+      "round": "A",
+      "amount_cny": 300000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "玻色量子"
+      ],
+      "date": "2025-10-15",
+      "title": "专注光量子计算，玻色量子完成数亿元A++轮融资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1661",
+      "company": "逻辑比特",
+      "country": "CN",
+      "round": "Pre-A",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [
+        "逻辑比特"
+      ],
+      "date": "2025-10-14",
+      "title": "逻辑比特完成数千万元Pre-A轮融资",
+      "source_db": "liangke_daily"
     },
     {
       "id": "inst:2867",
@@ -1215,6 +2898,23 @@
       "date": "2025-10-10",
       "title": "IonQ宣布20亿美元股权发行定价",
       "source_db": "institution"
+    },
+    {
+      "id": "mysql:1647",
+      "company": "本源量子",
+      "country": "CN",
+      "round": "IPO",
+      "amount_cny": 6900000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "Origin Quantum",
+        "中信建投",
+        "本源量子"
+      ],
+      "date": "2025-09-15",
+      "title": "本源量子启动IPO辅导，最新估值69亿元",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:3199",
@@ -1273,6 +2973,22 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1666",
+      "company": "本源量子",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 15980000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "Origin Quantum",
+        "本源量子"
+      ],
+      "date": "2025-08-15",
+      "title": "宏力达以1598万元受让本源量子0.2323%股份",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:3728",
       "company": null,
       "country": "US",
@@ -1284,6 +3000,67 @@
       "date": "2025-07-22",
       "title": "美国和以色列拟共建一只2亿美元联合量子基金",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1642",
+      "company": "量旋科技",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 300000000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [
+        "量旋科技"
+      ],
+      "date": "2025-07-21",
+      "title": "量旋科技完成数亿元B系列轮融资",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1657",
+      "company": "图灵量子",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 90000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "图灵量子"
+      ],
+      "date": "2025-07-21",
+      "title": "图灵量子完成亿元级战略轮融资，盛世投资领投",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1087",
+      "company": "华翊量子",
+      "country": "CN",
+      "round": "A",
+      "amount_cny": 300000000,
+      "amount_usd": null,
+      "tech_route": "离子阱量子计算",
+      "investors": [
+        "华翊量子",
+        "君联资本"
+      ],
+      "date": "2025-07-15",
+      "title": "华翊量子完成数亿元A轮融资，社保基金中关村专项基金领投，离子阱量子计算加速",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1658",
+      "company": "中科酷原",
+      "country": "CN",
+      "round": "战略融资",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "中科酷原"
+      ],
+      "date": "2025-07-15",
+      "title": "中科酷原完成数千万元战略融资，芯光量子基金等四家机构投资",
+      "source_db": "liangke_daily"
     },
     {
       "id": "inst:2866",
@@ -1342,6 +3119,19 @@
       "source_db": "institution"
     },
     {
+      "id": "mysql:1664",
+      "company": "矩阵时光",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2025-03-27",
+      "title": "矩阵时光获数千万元融资，南京未来产业天使基金首投",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:4944",
       "company": "Quantum Delta",
       "country": "NL",
@@ -1353,6 +3143,63 @@
       "date": "2025-03-26",
       "title": "荷兰量子创新生态组织QDNL调整投资战略 重点投资尖端洁净室与基础设施",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1645",
+      "company": "量旋科技",
+      "country": "CN",
+      "round": "Acquisition",
+      "amount_cny": 39500000,
+      "amount_usd": null,
+      "tech_route": "量子精密测量",
+      "investors": [
+        "USTC",
+        "量旋科技"
+      ],
+      "date": "2025-03-17",
+      "title": "国富量子更名并收购量旋科技4.27%股权，与夸密量子战略合作",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1650",
+      "company": null,
+      "country": "CN",
+      "round": "Fund",
+      "amount_cny": 50000000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2025-03-15",
+      "title": "500亿中银科创母基金启动，覆盖量子等八大领域",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1660",
+      "company": "逻辑比特",
+      "country": "CN",
+      "round": "Angel",
+      "amount_cny": 200000000,
+      "amount_usd": null,
+      "tech_route": "超导量子计算",
+      "investors": [
+        "逻辑比特"
+      ],
+      "date": "2025-03-15",
+      "title": "逻辑比特科技完成天使轮融资，东方嘉富领投",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1641",
+      "company": "森一量子连续",
+      "country": "CN",
+      "round": "Angel",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2025-03-11",
+      "title": "森一量子连续完成天使轮及Pre-A轮融资",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:5098",
@@ -1397,19 +3244,6 @@
       "source_db": "historical"
     },
     {
-      "id": "hist:5199",
-      "company": "Horizon Quantum",
-      "country": "CN",
-      "round": "SPAC",
-      "amount_cny": null,
-      "amount_usd": null,
-      "tech_route": null,
-      "investors": [],
-      "date": "2025-02-28",
-      "title": "Horizon Quantum与dMY Squared达成合并意向，将以SPAC方式公开上市",
-      "source_db": "historical"
-    },
-    {
       "id": "hist:5200",
       "company": "IonQ",
       "country": "US",
@@ -1423,6 +3257,19 @@
       ],
       "date": "2025-02-28",
       "title": "IonQ宣布将收购ID Quantique控股权并与SK电讯建立量子战略合作",
+      "source_db": "historical"
+    },
+    {
+      "id": "hist:5199",
+      "company": "Horizon Quantum",
+      "country": "CN",
+      "round": "SPAC",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2025-02-28",
+      "title": "Horizon Quantum与dMY Squared达成合并意向，将以SPAC方式公开上市",
       "source_db": "historical"
     },
     {
@@ -1523,19 +3370,35 @@
       "source_db": "historical"
     },
     {
-      "id": "hist:5435",
-      "company": "玻色量子",
+      "id": "mysql:1552",
+      "company": "中科酷原",
       "country": "CN",
-      "round": "A",
+      "round": null,
       "amount_cny": null,
       "amount_usd": null,
       "tech_route": "光量子计算",
       "investors": [
+        "中科酷原"
+      ],
+      "date": "2025-02-17",
+      "title": "武汉高科集团投资首个量子产业项目——中科酷原",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1656",
+      "company": "玻色量子",
+      "country": "CN",
+      "round": "A",
+      "amount_cny": 40000000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "北工投资",
         "玻色量子"
       ],
       "date": "2025-02-12",
-      "title": "玻色量子完成由北京市级政府引导基金领投的A+轮融资",
-      "source_db": "historical"
+      "title": "玻色量子获北京高精尖产业发展基金A+轮融资",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:5445",
@@ -1719,6 +3582,22 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1636",
+      "company": "国盾量子",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 1775000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "QuantumCTek",
+        "国盾量子"
+      ],
+      "date": "2024-11-22",
+      "title": "国盾量子再融资获注册批复，中电信量子集团17.75亿元全额认购",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:6014",
       "company": "Ci",
       "country": "CN",
@@ -1791,6 +3670,19 @@
       "date": "2024-10-31",
       "title": "专注于量子技术领域的风险投资公司QDNL Participations扩展其管理团队",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1637",
+      "company": null,
+      "country": "CN",
+      "round": "Acquisition",
+      "amount_cny": 2085000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2024-10-15",
+      "title": "禾信仪器拟收购量羲技术控制权，跨界量子硬件领域",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:6342",
@@ -1873,6 +3765,22 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1638",
+      "company": "国仪量子",
+      "country": "CN",
+      "round": "IPO",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "华泰",
+        "国仪量子"
+      ],
+      "date": "2024-09-29",
+      "title": "国仪量子启动科创板IPO辅导",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:6457",
       "company": "国仪量子",
       "country": "CN",
@@ -1941,6 +3849,23 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1654",
+      "company": "国测量子",
+      "country": "CN",
+      "round": null,
+      "amount_cny": 15789000,
+      "amount_usd": null,
+      "tech_route": "量子精密测量",
+      "investors": [
+        "Peking University",
+        "华为哈勃",
+        "国测量子"
+      ],
+      "date": "2024-09-01",
+      "title": "华为哈勃投资国测量子，持股约4.38%",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:6668",
       "company": "Pre",
       "country": "KR",
@@ -1952,6 +3877,19 @@
       "date": "2024-08-31",
       "title": "韩国量子技术公司SDT正进行Pre-IPO轮融资 200亿韩元目标已完成一半",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1640",
+      "company": null,
+      "country": "CN",
+      "round": "Fund",
+      "amount_cny": 30000000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2024-08-26",
+      "title": "中国银行设立300亿科创母基金，量子技术为重点方向",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:6721",
@@ -1991,6 +3929,23 @@
       "date": "2024-08-09",
       "title": "韩国量子技术公司Norma宣布获得淡马锡旗下投资机构的投资",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1653",
+      "company": "未磁科技",
+      "country": "CN",
+      "round": "A",
+      "amount_cny": 300000000,
+      "amount_usd": null,
+      "tech_route": "量子精密测量",
+      "investors": [
+        "中科创星",
+        "复星",
+        "未磁科技"
+      ],
+      "date": "2024-07-22",
+      "title": "未磁科技完成超亿元A+轮融资，北京机器人产业基金领投",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:7049",
@@ -2077,7 +4032,22 @@
       "source_db": "historical"
     },
     {
-      "id": "hist:7309",
+      "id": "mysql:1639",
+      "company": "中科酷原",
+      "country": "CN",
+      "round": "Fund",
+      "amount_cny": 100000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "中科酷原"
+      ],
+      "date": "2024-06-12",
+      "title": "湖北首支量子产业基金设立，首期规模1亿元",
+      "source_db": "liangke_daily"
+    },
+    {
+      "id": "mysql:1652",
       "company": "微观纪元",
       "country": "CN",
       "round": "Pre-A",
@@ -2089,8 +4059,8 @@
         "微观纪元"
       ],
       "date": "2024-06-03",
-      "title": "量子计算应用企业微观纪元完成数千万元Pre-A轮融资",
-      "source_db": "historical"
+      "title": "微观纪元完成数千万元Pre-A轮融资，合肥高投与昆仑资本联合领投",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:7318",
@@ -2196,6 +4166,19 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1655",
+      "company": null,
+      "country": "CN",
+      "round": "Acquisition",
+      "amount_cny": 8000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2024-05-22",
+      "title": "星光股份以800万元增资收购天芯量子51%股权",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:7409",
       "company": "Arqit",
       "country": "CN",
@@ -2207,6 +4190,23 @@
       "date": "2024-05-21",
       "title": "Arqit公布2024财年上半年财报 量子卫星资产已完全计提减值",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1635",
+      "company": "华翊量子",
+      "country": "CN",
+      "round": "Pre-A",
+      "amount_cny": 90000000,
+      "amount_usd": null,
+      "tech_route": "离子阱量子计算",
+      "investors": [
+        "Tsinghua University",
+        "华翊量子",
+        "联想创投"
+      ],
+      "date": "2024-05-07",
+      "title": "华翊量子完成过亿元Pre-A轮融资",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:7549",
@@ -2223,6 +4223,21 @@
       "date": "2024-04-26",
       "title": "国盾量子午盘股价飙升20%涨停，创下近2年新高！总市值达179亿元",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:987",
+      "company": "USTC",
+      "country": "CN",
+      "round": "Angel",
+      "amount_cny": 30000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "中科创星"
+      ],
+      "date": "2024-04-25",
+      "title": "瀚海量子完成数千万元天使轮融资，中科创星领投，中科大量子计算软件产业化起步",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:7619",
@@ -2444,6 +4459,23 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1634",
+      "company": "华翊量子",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 90000000,
+      "amount_usd": null,
+      "tech_route": "离子阱量子计算",
+      "investors": [
+        "Tsinghua University",
+        "中国移动",
+        "华翊量子"
+      ],
+      "date": "2024-01-23",
+      "title": "华翊量子完成近亿元战略轮融资，中移资本独家投资",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:8171",
       "company": "Sandbox",
       "country": "CN",
@@ -2485,6 +4517,24 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1631",
+      "company": "幺正量子",
+      "country": "CN",
+      "round": null,
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "USTC",
+        "幺正量子",
+        "科大讯飞",
+        "顺为资本"
+      ],
+      "date": "2023-12-18",
+      "title": "幺正量子获顺为资本、科大讯飞战略入股",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:8316",
       "company": "Crypto Quantique",
       "country": "CN",
@@ -2496,6 +4546,19 @@
       "date": "2023-12-09",
       "title": "Crypto Quantique预计将在2024年底进行一轮2500万英镑新融资",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1633",
+      "company": null,
+      "country": "CN",
+      "round": "Fund",
+      "amount_cny": 2000000000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [],
+      "date": "2023-11-16",
+      "title": "湖北省设立20亿元量子科技产业投资基金",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:8505",
@@ -2736,6 +4799,21 @@
       "date": "2023-09-01",
       "title": "量子计算势头强劲，巴克莱银行增持IonQ股票",
       "source_db": "historical"
+    },
+    {
+      "id": "mysql:1628",
+      "company": "图灵量子",
+      "country": "CN",
+      "round": null,
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "图灵量子"
+      ],
+      "date": "2023-09-01",
+      "title": "联想、东方证券等入股图灵量子",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:8993",
@@ -3005,6 +5083,22 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1632",
+      "company": "国盾量子",
+      "country": "CN",
+      "round": "战略融资",
+      "amount_cny": 19500000,
+      "amount_usd": null,
+      "tech_route": null,
+      "investors": [
+        "QuantumCTek",
+        "国盾量子"
+      ],
+      "date": "2023-06-01",
+      "title": "武汉国科量子拟增资并吸收合并湖北国科量子",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:9464",
       "company": "D-Wave",
       "country": "US",
@@ -3122,6 +5216,19 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1630",
+      "company": "硅臻量子",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": 15000000,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [],
+      "date": "2023-04-19",
+      "title": "硅臻量子完成1500万元新一轮融资，国芯科技投资",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:9592",
       "company": "额达到了2700万美元，该公司于去年7月",
       "country": "CN",
@@ -3224,6 +5331,21 @@
       "source_db": "historical"
     },
     {
+      "id": "mysql:1629",
+      "company": "玻色量子",
+      "country": "CN",
+      "round": "Unknown",
+      "amount_cny": null,
+      "amount_usd": null,
+      "tech_route": "光量子计算",
+      "investors": [
+        "玻色量子"
+      ],
+      "date": "2023-03-08",
+      "title": "玻色量子完成新一轮亿元级融资，中移基金领投",
+      "source_db": "liangke_daily"
+    },
+    {
       "id": "hist:9753",
       "company": "Quantum Delta",
       "country": "NL",
@@ -3292,7 +5414,7 @@
       "source_db": "historical"
     },
     {
-      "id": "hist:9845",
+      "id": "mysql:1627",
       "company": "图灵量子",
       "country": "CN",
       "round": "A",
@@ -3300,11 +5422,12 @@
       "amount_usd": null,
       "tech_route": "光量子计算",
       "investors": [
-        "图灵量子"
+        "图灵量子",
+        "联想创投"
       ],
       "date": "2023-01-18",
-      "title": "图灵量子完成数亿元A轮融资 中国互联网投资基金领投",
-      "source_db": "historical"
+      "title": "图灵量子完成数亿元A轮融资，中网投领投",
+      "source_db": "liangke_daily"
     },
     {
       "id": "hist:9855",
