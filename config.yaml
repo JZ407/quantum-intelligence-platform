@@ -18,14 +18,14 @@ reranker:
 embedding:
   provider: "local"  # bm25 / openai / local
   model: "all-MiniLM-L6-v2"  # for local semantic embedding
-  api_key: "${DEEPSEEK_API_KEY}"
+  api_key: "${DEEPSEEK_API_KEY_LOCALUSE}"
   api_base: "https://api.deepseek.com/v1"
 
 llm:
   provider: "openai"  # OpenAI-compatible API
-  model: "deepseek-v4-pro"
-  api_key: "sk-1b0b84fec64e4e2aae5ea8669e53a50a"
-  api_base: "https://api.deepseek.com"
+  model: "deepseek-chat"
+  api_key: "${DEEPSEEK_API_KEY_LOCALUSE}"
+  api_base: "https://api.deepseek.com/v1"
   temperature: null
   max_tokens: 2048
   system_prompt: "你是一个专业的文档问答助手。请基于提供的参考资料回答用户问题。如果资料中没有相关信息，请明确说明。"

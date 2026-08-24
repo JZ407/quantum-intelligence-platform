@@ -24,7 +24,7 @@ embedding:
 llm:
   provider: "openai"
   model: "deepseek-chat"
-  api_key: "${DEEPSEEK_API_KEY}"
+  api_key: "${DEEPSEEK_API_KEY_LOCALUSE}"
   api_base: "https://api.deepseek.com/v1"
   temperature: null
   max_tokens: 2048

@@ -103,9 +103,9 @@ class Config:
         if os.environ.get("ANTHROPIC_API_KEY"):
             cfg.set("llm.provider", "claude")
             cfg.set("llm.api_key", os.environ["ANTHROPIC_API_KEY"])
-        if os.environ.get("DEEPSEEK_API_KEY"):
+        if os.environ.get("DEEPSEEK_API_KEY_LOCALUSE"):
             cfg.set("llm.provider", "deepseek")
-            cfg.set("llm.api_key", os.environ["DEEPSEEK_API_KEY"])
+            cfg.set("llm.api_key", os.environ["DEEPSEEK_API_KEY_LOCALUSE"])
         return cfg
 
 
