@@ -7,7 +7,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(
 from llm_client import LLMClient
 import yaml
 
-DAILY_DB = 'mysql+pymysql://scraper:scraper123@127.0.0.1:3306/liangke_scraper?charset=utf8mb4'
+DAILY_DB = (f'mysql+pymysql://scraper:{os.environ.get("LIANGKE_MYSQL_PASSWORD", "")}'
+            f'@127.0.0.1:3306/liangke_scraper?charset=utf8mb4')
 HISTORICAL_DB = 'D:/Claude_code/liangke_historical/historical_final.db'
 INSTITUTION_DB = 'D:/Claude_code/institution_news/institutions.db'
 ALERT_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'report_alerts.json')

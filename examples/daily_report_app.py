@@ -34,7 +34,8 @@ from generator import synthesize_news_summary, load_news_for_company
 # ------------------------------------------------------------------
 # Config
 # ------------------------------------------------------------------
-DB_URL = 'mysql+pymysql://scraper:scraper123@127.0.0.1:3306/liangke_scraper?charset=utf8mb4'
+DB_URL = (f'mysql+pymysql://scraper:{os.environ.get("LIANGKE_MYSQL_PASSWORD", "")}'
+          f'@127.0.0.1:3306/liangke_scraper?charset=utf8mb4')
 HISTORICAL_DB_PATH = 'D:/Claude_code/liangke_historical/historical_final.db'
 INSTITUTION_DB_PATH = 'D:/Claude_code/institution_news/institutions.db'
 @st.cache_data(ttl=300)

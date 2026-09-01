@@ -30,7 +30,7 @@ def get_llm():
 
 
 def retag_batch(articles: list, client: LLMClient) -> dict:
-    """Send a batch to LLM for re-tagging. Returns {id: [tag1, tag2, ...]}."""
+    """Send a batch to LLM for re-tagging. Returns {id: 三分字典}（开发规范 3.2 统一格式）。"""
     lines = [
         f"为以下{len(articles)}篇量子科技新闻重新选择标签（每篇2-5个）。",
         f"可选标签：{', '.join(TAGS_LIST)}",
@@ -59,7 +59,11 @@ def retag_batch(articles: list, client: LLMClient) -> dict:
                     tags = [t.strip() for t in parts[1].replace('，', ',').split(',') if t.strip() in TAGS_LIST]
                     if not tags:
                         tags = ['宏观态势']  # fallback only if LLM gives nothing
-                    results[articles[idx]['id']] = tags
+                    results[articles[idx]['id']] = {
+                        'weekly': tags,
+                        'search_tags': [],
+                        'knowledge_graph': {'institutions': [], 'technologies': [], 'products': [], 'people': []},
+                    }
             except (ValueError, IndexError):
                 continue
         return results
@@ -83,7 +87,10 @@ def main():
         tags = row['tags']
         if isinstance(tags, str):
             tags = json.loads(tags)
+        # 兼容旧 flat list 与新三分字典两种格式（开发规范 3.2）
         if isinstance(tags, list) and '宏观态势' in tags:
+            retag_targets.append({'id': row['id'], 'title': row['title'], 'content': row['content']})
+        elif isinstance(tags, dict) and '宏观态势' in (tags.get('weekly') or []):
             retag_targets.append({'id': row['id'], 'title': row['title'], 'content': row['content']})
 
     total = len(retag_targets)
@@ -119,7 +126,8 @@ def main():
     for (t,) in c.fetchall():
         if isinstance(t, str):
             t = json.loads(t)
-        for tag in (t or []):
+        tag_list = t.get('weekly', []) if isinstance(t, dict) else (t or [])
+        for tag in tag_list:
             all_tags[tag] = all_tags.get(tag, 0) + 1
     print(f'\n[OK] Retag complete. Updated {updated} articles.')
     print('New tag distribution:')

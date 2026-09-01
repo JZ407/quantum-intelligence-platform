@@ -329,7 +329,8 @@ def read_mysql():
         page_type = Column(String(20))
 
     engine = create_engine(
-        'mysql+pymysql://scraper:scraper123@127.0.0.1:3306/liangke_scraper?charset=utf8mb4',
+        f'mysql+pymysql://scraper:{os.environ.get("LIANGKE_MYSQL_PASSWORD", "")}'
+        f'@127.0.0.1:3306/liangke_scraper?charset=utf8mb4',
         pool_pre_ping=True, echo=False)
     Session = sessionmaker(bind=engine)
     session = Session()

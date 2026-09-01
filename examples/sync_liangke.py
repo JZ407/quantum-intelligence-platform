@@ -22,7 +22,8 @@ import pandas as pd
 from rag_system.kb_manager import KnowledgeBaseManager
 from rag_system.config import Config
 
-DB_URL = 'mysql+pymysql://scraper:scraper123@127.0.0.1:3306/liangke_scraper?charset=utf8mb4'
+DB_URL = (f'mysql+pymysql://scraper:{os.environ.get("LIANGKE_MYSQL_PASSWORD", "")}'
+          f'@127.0.0.1:3306/liangke_scraper?charset=utf8mb4')
 OUTPUT_DIR = 'D:/Claude_code/rag_system/data_pro/liangke_daily'
 CONFIG_PATH = 'D:/Claude_code/rag_system/config_pro.yaml'
 

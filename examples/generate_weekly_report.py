@@ -21,7 +21,8 @@ from sqlalchemy import create_engine
 # ------------------------------------------------------------------
 # Config
 # ------------------------------------------------------------------
-DB_URL = 'mysql+pymysql://scraper:scraper123@127.0.0.1:3306/liangke_scraper?charset=utf8mb4'
+DB_URL = (f'mysql+pymysql://scraper:{os.environ.get("LIANGKE_MYSQL_PASSWORD", "")}'
+          f'@127.0.0.1:3306/liangke_scraper?charset=utf8mb4')
 CATEGORIES = ['宏观态势', '科技前沿', '产品动态', '企业资讯', '资本运作']
 TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'weekly_templates')
 CONF_JSON_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'conferences_zh.json')
